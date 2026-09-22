@@ -1,0 +1,69 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config';
+
+const title = 'Aviso legal';
+const description =
+  'Información legal del sitio soyarquitectodigital.info: titular, condiciones de uso, propiedad intelectual y responsabilidad.';
+---
+
+<LegalLayout title={title} description={description} updated="septiembre de 2026">
+  <h2>Titular del sitio</h2>
+  <p>
+    Este sitio web es operado por <strong>Oswaldo González Lucena</strong> (en adelante, «el
+    titular»), con correo de contacto <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+  <ul>
+    <li>NIF / identificación fiscal: <em>[pendiente de completar]</em></li>
+    <li>Domicilio fiscal: <em>[pendiente de completar]</em></li>
+    <li>Sitio web: <a href={site.url}>soyarquitectodigital.info</a></li>
+  </ul>
+
+  <h2>Objeto</h2>
+  <p>
+    El sitio tiene carácter informativo y comercial: presenta los servicios profesionales de
+    auditoría de ecosistemas digitales, implementación de arquitectura y dirección tecnológica
+    (CTO-as-a-Service), y ofrece herramientas gratuitas de autodiagnóstico.
+  </p>
+
+  <h2>Herramientas de autodiagnóstico</h2>
+  <p>
+    Las herramientas (como el Diagnóstico de Ecosistema Digital) tienen una finalidad orientativa y
+    educativa. El resultado se calcula en tu navegador a partir de tus propias respuestas y
+    <strong>no constituye una auditoría técnica ni asesoría profesional vinculante</strong>. La
+    auditoría de 5 días es el servicio que sí produce un diagnóstico formal con blueprint y roadmap.
+  </p>
+
+  <h2>Condiciones de uso</h2>
+  <p>
+    El acceso al sitio es libre y gratuito. El usuario se compromete a utilizar los contenidos de
+    forma lícita, sin vulnerar derechos de terceros ni realizar un uso que pueda dañar el
+    funcionamiento del sitio.
+  </p>
+
+  <h2>Propiedad intelectual</h2>
+  <p>
+    Los textos, marcas, logotipos, estructura, diseño y las herramientas del sitio son propiedad del
+    titular o se utilizan con autorización. No se permite su reproducción total o parcial sin
+    consentimiento expreso, salvo cita con referencia a la fuente.
+  </p>
+
+  <h2>Responsabilidad</h2>
+  <p>
+    Los contenidos se ofrecen con fines informativos y no constituyen asesoría técnica vinculante
+    para casos concretos. El titular no se responsabiliza de decisiones tomadas exclusivamente a
+    partir del contenido publicado ni de interrupciones del servicio ajenas a su control.
+  </p>
+
+  <h2>Enlaces externos</h2>
+  <p>
+    El sitio incluye enlaces a terceros (WhatsApp, Calendly, LinkedIn, TikTok, YouTube e Instagram).
+    El titular no controla ni asume responsabilidad por los contenidos o políticas de dichos sitios.
+  </p>
+
+  <h2>Legislación aplicable</h2>
+  <p>
+    Este aviso se rige por la legislación vigente aplicable al titular. Para cualquier controversia,
+    las partes procurarán una solución amistosa antes de acudir a la vía judicial.
+  </p>
+</LegalLayout>

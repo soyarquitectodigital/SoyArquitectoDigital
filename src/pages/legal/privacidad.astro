@@ -1,0 +1,91 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config';
+
+const title = 'Política de privacidad';
+const description =
+  'Qué datos personales recoge el diagnóstico de ecosistema digital, con qué finalidad, dónde se guardan y qué derechos tienes.';
+---
+
+<LegalLayout title={title} description={description} updated="septiembre de 2026">
+  <h2>Responsable del tratamiento</h2>
+  <p>
+    <strong>Oswaldo González Lucena</strong> — correo de contacto:
+    <a href={`mailto:${site.email}`}>{site.email}</a>. Datos fiscales completos:
+    <em>[pendiente de completar]</em>.
+  </p>
+
+  <h2>Qué datos se recogen</h2>
+  <ul>
+    <li>
+      <strong>Formulario de descarga del informe</strong> (herramienta de diagnóstico): nombre y
+      apellido, correo electrónico, teléfono, tipo de negocio, el resultado del diagnóstico
+      (puntaje, semáforo por capa y resumen) y la fecha.
+    </li>
+    <li>
+      <strong>Formulario de contacto</strong>, cuando exista: los datos que decidas enviar.
+    </li>
+    <li>
+      <strong>Almacenamiento local en tu navegador</strong> (<em>localStorage</em>): el progreso del
+      cuestionario, tus respuestas y, si lo envías, los datos del formulario, para que no tengas que
+      volver a escribirlos. Esta información no sale de tu equipo salvo que envíes el formulario.
+    </li>
+  </ul>
+
+  <h2>Finalidad y base legal</h2>
+  <ul>
+    <li>
+      <strong>Entregarte el informe del diagnóstico</strong> y hacer seguimiento del mismo: base
+      legal el <strong>consentimiento</strong> que otorgas al marcar la casilla y enviar el formulario.
+    </li>
+    <li>
+      <strong>Informarte de nuevas soluciones y contenidos</strong> relacionados: misma base legal, el
+      consentimiento, que puedes retirar en cualquier momento.
+    </li>
+    <li>
+      <strong>Gestionar la relación profesional</strong> si contratas un servicio: base legal la
+      ejecución del contrato.
+    </li>
+  </ul>
+  <p>No se usan tus datos para enviarte publicidad de terceros ni se venden a nadie.</p>
+
+  <h2>Destinatarios</h2>
+  <p>
+    Para operar el sitio y gestionar las comunicaciones se utilizan proveedores que actúan como
+    encargados del tratamiento (alojamiento web, proveedor de correo electrónico y el servicio que
+    registra los formularios enviados: <em>[pendiente de completar]</em>). Todos ellos con medidas
+    de seguridad adecuadas y, cuando corresponde, con garantías para transferencias internacionales.
+  </p>
+  <p>
+    Si decides agendar una sesión, el enlace abre <strong>Calendly</strong> (servicio externo con su
+    propia política de privacidad). Si abres el chat de <strong>WhatsApp</strong>, se aplica la
+    política de WhatsApp. En ambos casos la conversación solo se inicia si tú lo decides.
+  </p>
+
+  <h2>Conservación</h2>
+  <p>
+    Los datos del formulario se conservan mientras exista interés mutuo en la relación comercial y,
+    si hay contratación, durante los plazos legales aplicables. Cuando dejan de ser necesarios se
+    eliminan de forma segura. Puedes solicitar su supresión antes escribiendo al correo de contacto.
+  </p>
+
+  <h2>Tus derechos</h2>
+  <p>
+    Puedes solicitar el acceso, la rectificación, la supresión, la limitación, la portabilidad o la
+    oposición al tratamiento, así como retirar tu consentimiento, escribiendo a
+    <a href={`mailto:${site.email}`}>{site.email}</a>. También puedes presentar una reclamación ante
+    la autoridad de protección de datos competente en tu país.
+  </p>
+
+  <h2>Seguridad</h2>
+  <p>
+    Se aplican medidas técnicas y organizativas razonables para proteger los datos frente a accesos
+    no autorizados, pérdida o alteración, y el sitio se sirve siempre por conexión cifrada (HTTPS).
+  </p>
+
+  <h2>Menores</h2>
+  <p>
+    Las herramientas y servicios de este sitio están dirigidos a profesionales y empresas. No se
+    recogen conscientemente datos de menores de edad.
+  </p>
+</LegalLayout>

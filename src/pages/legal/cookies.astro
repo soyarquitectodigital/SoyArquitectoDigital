@@ -1,0 +1,49 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+import { site } from '../../config';
+
+const title = 'Política de cookies';
+const description =
+  'Este sitio no usa cookies de seguimiento ni publicidad. Aquí explicamos qué almacenamiento local utiliza y por qué.';
+---
+
+<LegalLayout title={title} description={description} updated="septiembre de 2026">
+  <h2>Resumen</h2>
+  <p>
+    Este sitio <strong>no utiliza cookies propias de seguimiento ni de publicidad</strong>, y no
+    carga analítica de terceros ni píxeles con fines comerciales.
+  </p>
+
+  <h2>Almacenamiento local técnico (localStorage)</h2>
+  <p>
+    Para que las herramientas funcionen sin registro, el sitio guarda información en el
+    almacenamiento local de tu navegador. Nunca se envía a ningún servidor:
+  </p>
+  <ul>
+    <li><strong>Progreso del diagnóstico</strong>: tus respuestas y el paso en que te quedaste, para poder continuar después.</li>
+    <li><strong>Datos del formulario de descarga</strong>, solo si lo envías, para no tener que reescribirlos.</li>
+    <li><strong>Preferencias de la interfaz</strong>: si fuerzas las animaciones cuando tu sistema pide movimiento reducido.</li>
+  </ul>
+  <p>Puedes borrar todo esto en cualquier momento desde los ajustes de tu navegador.</p>
+
+  <h2>Servicios externos que abres tú</h2>
+  <p>
+    Algunos botones abren sitios de terceros, que aplican sus propias políticas y pueden usar
+    cookies: <strong>WhatsApp</strong> (chat), <strong>Calendly</strong> (agenda de la sesión) y las
+    redes sociales enlazadas en el pie (<strong>LinkedIn, TikTok, YouTube, Instagram</strong>). No se
+    carga ninguno de ellos automáticamente: solo cuando haces clic.
+  </p>
+
+  <h2>Si en el futuro se añade analítica</h2>
+  <p>
+    Si se incorpora una herramienta de medición, se priorizará una solución sin cookies y, si
+    implicara cookies no exentas, se actualizará esta política y se pedirá el consentimiento antes
+    de activarla.
+  </p>
+
+  <h2>Más información</h2>
+  <p>
+    Si tienes dudas sobre esta política, escríbeme a
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</LegalLayout>

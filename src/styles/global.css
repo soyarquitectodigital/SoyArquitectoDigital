@@ -1126,6 +1126,68 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
   color: #86efac;
 }
 
+
+/* P?ginas legales */
+.legal h2 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.legal h2:first-child {
+  margin-top: 0;
+}
+
+.legal p {
+  margin-top: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-copy);
+}
+
+.legal ul {
+  margin-top: 0.85rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.legal li {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-copy);
+}
+
+.legal li::marker {
+  color: var(--color-brand-ink);
+}
+
+.legal strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.legal a {
+  color: var(--color-brand-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+
+.legal a:hover {
+  color: var(--color-text);
+}
+
+.legal em {
+  color: var(--color-warn);
+  font-style: normal;
+  font-weight: 600;
+}
+
 /* Scrollbar discreta */
 @media (min-width: 1024px) {
   html {
