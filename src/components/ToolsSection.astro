@@ -64,9 +64,9 @@ const soon = upcomingTools;
         </div>
       </div>
 
-      <ul class="grid gap-4 sm:grid-cols-2">
-        {featured && <ToolCard tool={featured} class="sm:col-span-2" />}
-        {soon.map((tool, index) => <ToolCard tool={tool} delay={(index + 1) * 80} />)}
+      <ul class="grid gap-4">
+        {featured && <ToolCard tool={featured} variant="wide" />}
+        {soon.map((tool, index) => <ToolCard tool={tool} variant="row" delay={(index + 1) * 70} />)}
       </ul>
     </div>
   </div>

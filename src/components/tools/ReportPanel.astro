@@ -5,19 +5,32 @@ import { quiz } from '../../data/tools/diagnostico';
 const auditUrl = bookingUrl('Hola Oswaldo, hice el diagnóstico de ecosistema digital.');
 ---
 
-<div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:p-10">
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
-      Informe de diagnóstico
-    </p>
-    <p class="font-mono text-[11px] tracking-[0.18em] text-dim uppercase" data-report-type>
-      —
-    </p>
-  </div>
-
-  <div class="mt-8 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+<article class="report rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:p-10">
+  <!-- Cabecera -->
+  <header class="report-block flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
     <div>
-      <div class="flex items-center gap-6">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
+        Informe de diagnóstico
+      </p>
+      <h2 class="font-heading mt-2 text-2xl font-semibold text-text">{quiz.title}</h2>
+      <p class="mt-1 text-sm text-copy" data-report-meta>
+        <span data-report-type>—</span>
+      </p>
+    </div>
+    <div class="text-right">
+      <p class="font-mono text-[10px] tracking-[0.18em] text-dim uppercase">Preparado para</p>
+      <p class="mt-1 text-sm font-semibold text-text" data-report-name>—</p>
+      <p class="mt-0.5 font-mono text-[10px] tracking-[0.16em] text-dim uppercase" data-report-date>
+        —
+      </p>
+    </div>
+  </header>
+
+  <!-- Resumen ejecutivo -->
+  <section class="report-block mt-8 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+    <div>
+      <p class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">Resumen ejecutivo</p>
+      <div class="mt-5 flex items-center gap-6">
         <div class="score-ring" data-score-ring style="--p:0" role="img" aria-label="Puntaje del ecosistema">
           <svg viewBox="0 0 120 120" aria-hidden="true">
             <circle class="score-ring-track" cx="60" cy="60" r="52"></circle>
@@ -109,13 +122,64 @@ const auditUrl = bookingUrl('Hola Oswaldo, hice el diagnóstico de ecosistema di
           ))
         }
       </ul>
-
-      <div class="mt-9 border-t border-line pt-6">
-        <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
-          Tus prioridades
-        </p>
-        <ul class="mt-4 space-y-3" data-recommendations></ul>
-      </div>
     </div>
-  </div>
-</div>
+  </section>
+
+  <!-- Diagnóstico capa por capa -->
+  <section class="mt-10">
+    <div class="report-block">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">Diagnóstico capa por capa</p>
+      <p class="mt-2 max-w-3xl text-sm leading-relaxed text-copy">
+        Para cada capa: cómo está hoy, qué respondiste y qué conviene hacer. Las capas están ordenadas
+        de mayor a menor prioridad.
+      </p>
+    </div>
+    <div class="mt-6 space-y-4" data-layer-detail></div>
+  </section>
+
+  <!-- Plan de acción -->
+  <section class="mt-10">
+    <div class="report-block">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">Plan sugerido</p>
+      <h3 class="font-heading mt-3 text-xl font-semibold text-text sm:text-2xl">
+        Por dónde empezar, en 90 días
+      </h3>
+    </div>
+    <ol class="mt-5 grid gap-4 lg:grid-cols-3" data-action-plan></ol>
+  </section>
+
+  <!-- Prioridades y cierre -->
+  <section class="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="report-block">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
+        Tus prioridades inmediatas
+      </p>
+      <ul class="mt-4 space-y-3" data-recommendations></ul>
+    </div>
+
+    <div class="report-block rounded-card border border-line bg-paper p-6">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">Cómo leer este informe</p>
+      <ul class="mt-4 space-y-3 text-sm leading-relaxed text-copy">
+        <li>
+          <strong class="text-text">Puntaje 0–100.</strong> Normalizado sobre el máximo posible, así que
+          un 40 % significa lo mismo con cualquier combinación de respuestas.
+        </li>
+        <li>
+          <strong class="text-text">Semáforo.</strong> 0–40 % Red Alert · 41–70 % Warning · 71–100 %
+          Healthy, aplicado al global y a cada capa.
+        </li>
+        <li>
+          <strong class="text-text">Detalle.</strong> Cada capa muestra tus propias respuestas; si una
+          capa baja no es crítica para tu negocio, prioriza según impacto y esfuerzo.
+        </li>
+        <li>
+          <strong class="text-text">Siguiente paso.</strong> La auditoría de 5 días convierte este
+          diagnóstico en un blueprint con roadmap priorizado y presupuesto.
+        </li>
+      </ul>
+      <p class="mt-5 font-mono text-[10px] tracking-[0.16em] text-dim uppercase">
+        Generado con {quiz.title.toLowerCase()} · {quiz.durationLabel}
+      </p>
+    </div>
+  </section>
+</article>

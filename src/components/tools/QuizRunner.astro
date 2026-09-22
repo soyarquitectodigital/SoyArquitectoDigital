@@ -188,14 +188,24 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
 </div>
 
 <script>
-  import { scoreQuiz, summaryText } from '../../lib/quiz';
+  import { scoreQuiz, summaryText, bandFor, questionsFor } from '../../lib/quiz';
   import type { BusinessTypeId, QuizResult } from '../../lib/quiz';
   import { quiz } from '../../data/tools/diagnostico';
   import { whatsapp, leadCapture, web3formsKey } from '../../config';
 
+  const STATUS_LABEL: Record<string, string> = {
+    critical: 'Red Alert',
+    warning: 'Warning',
+    healthy: 'Healthy',
+  };
+
   const root = document.querySelector<HTMLElement>('[data-quiz]');
 
-  if (root) startQuiz(root);
+  // Evita doble inicialización (recargas de HMR en desarrollo).
+  if (root && root.dataset.quizReady !== '1') {
+    root.dataset.quizReady = '1';
+    startQuiz(root);
+  }
 
   function startQuiz(root: HTMLElement) {
     const storageKey = `sad:${quiz.slug}`;
@@ -311,6 +321,17 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       }
       if (arc) arc.dataset.band = result.band;
 
+      const dateEl = root.querySelector<HTMLElement>('[data-report-date]');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('es-ES', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+      }
+      const nameEl = root.querySelector<HTMLElement>('[data-report-name]');
+      if (nameEl && !nameEl.textContent?.trim()) nameEl.textContent = 'Diagnóstico anónimo';
+
       root.querySelectorAll<HTMLElement>('[data-score-band]').forEach((el) => {
         el.textContent = result.bandLabel;
         el.dataset.band = result.band;
@@ -336,6 +357,144 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
         const bar = item.querySelector<HTMLElement>('[data-layer-bar]');
         if (bar) bar.style.width = `${row.percent}%`;
       });
+
+      // Diagnóstico capa por capa (con las respuestas del visitante)
+      const detailHost = root.querySelector<HTMLElement>('[data-layer-detail]');
+      if (detailHost) {
+        detailHost.innerHTML = '';
+        const allQuestions = questionsFor(quiz, result.type);
+        const ordered = [...result.details].sort((a, b) => a.percent - b.percent);
+
+        ordered.forEach((row, position) => {
+          const block = document.createElement('div');
+          block.className = 'qc-detail report-block';
+          block.dataset.band = row.band;
+
+          const head = document.createElement('div');
+          head.className = 'flex flex-wrap items-center justify-between gap-3';
+          const title = document.createElement('div');
+          title.className = 'flex items-center gap-3';
+          const index = document.createElement('span');
+          index.className = 'qc-detail-index';
+          index.textContent = String(position + 1).padStart(2, '0');
+          const name = document.createElement('h4');
+          name.className = 'font-heading text-lg font-semibold text-text sm:text-xl';
+          name.textContent = row.layer.name;
+          title.append(index, name);
+          const meta = document.createElement('div');
+          meta.className = 'flex items-center gap-3';
+          const chip = document.createElement('span');
+          chip.className = 'qc-chip';
+          chip.dataset.band = row.band;
+          chip.textContent = row.status;
+          const percent = document.createElement('span');
+          percent.className = 'font-mono text-sm text-dim';
+          percent.textContent = `${row.percent}%`;
+          meta.append(chip, percent);
+          head.append(title, meta);
+          block.append(head);
+
+          const bar = document.createElement('div');
+          bar.className = 'qc-layer-bar mt-3';
+          const fill = document.createElement('span');
+          fill.style.width = `${row.percent}%`;
+          bar.append(fill);
+          block.append(bar);
+
+          const description = document.createElement('p');
+          description.className = 'mt-3 text-sm leading-relaxed text-copy';
+          description.textContent = row.layer.description;
+          block.append(description);
+
+          const columns = document.createElement('div');
+          columns.className = 'mt-5 grid gap-5 sm:grid-cols-2';
+
+          const answersColumn = document.createElement('div');
+          const answersTitle = document.createElement('p');
+          answersTitle.className = 'font-mono text-[10px] tracking-[0.18em] text-dim uppercase';
+          answersTitle.textContent = 'Tus respuestas';
+          const answersList = document.createElement('ul');
+          answersList.className = 'mt-3 space-y-3';
+          allQuestions
+            .filter((question) => question.layer === row.layer.id)
+            .forEach((question) => {
+              const chosen = question.options.find((option) => option.score === answers[question.id]);
+              const maxScore = Math.max(...question.options.map((option) => option.score));
+              const score = answers[question.id];
+              const item = document.createElement('li');
+              item.className = 'qc-answer';
+              const text = document.createElement('p');
+              text.className = 'text-sm font-medium text-text';
+              text.textContent = question.text;
+              const line = document.createElement('p');
+              line.className = 'mt-1 flex items-baseline gap-2 text-xs leading-relaxed text-copy';
+              const value = document.createElement('span');
+              value.className = 'font-mono text-[11px] text-dim';
+              value.textContent = typeof score === 'number' ? `${score}/${maxScore}` : '—';
+              const label = document.createElement('span');
+              label.textContent = chosen ? chosen.label : 'Sin responder';
+              line.append(value, label);
+              item.append(text, line);
+              answersList.append(item);
+            });
+          answersColumn.append(answersTitle, answersList);
+
+          const todoColumn = document.createElement('div');
+          const todoTitle = document.createElement('p');
+          todoTitle.className = 'font-mono text-[10px] tracking-[0.18em] text-brand-ink uppercase';
+          todoTitle.textContent = 'Qué hacer en esta capa';
+          const todoList = document.createElement('ul');
+          todoList.className = 'mt-3 space-y-2.5';
+          const texts = row.recommendations.length
+            ? row.recommendations
+            : ['Esta capa está sana: mantén la medición y revisa los indicadores cada trimestre.'];
+          texts.forEach((text) => {
+            const item = document.createElement('li');
+            item.className = 'flex gap-2.5 text-sm leading-relaxed text-copy';
+            const dot = document.createElement('span');
+            dot.className = 'mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-ink';
+            const span = document.createElement('span');
+            span.textContent = text;
+            item.append(dot, span);
+            todoList.append(item);
+          });
+          todoColumn.append(todoTitle, todoList);
+
+          columns.append(answersColumn, todoColumn);
+          block.append(columns);
+          detailHost.append(block);
+        });
+      }
+
+      // Plan sugerido a 90 días
+      const planHost = root.querySelector<HTMLElement>('[data-action-plan]');
+      if (planHost) {
+        planHost.innerHTML = '';
+        result.actionPlan.forEach((step) => {
+          const item = document.createElement('li');
+          item.className = 'qc-plan report-block';
+          item.dataset.band = bandFor(step.percent);
+
+          const window_ = document.createElement('p');
+          window_.className = 'font-mono text-[10px] tracking-[0.18em] text-brand-ink uppercase';
+          window_.textContent = step.window;
+
+          const title = document.createElement('p');
+          title.className = 'font-heading mt-3 text-lg font-semibold text-text';
+          title.textContent = step.layer.name;
+
+          const percent = document.createElement('p');
+          percent.className = 'mt-1 font-mono text-[11px] tracking-[0.16em] text-dim uppercase';
+          percent.textContent = `${step.percent}% hoy · ${STATUS_LABEL[bandFor(step.percent)]}`;
+
+          const text = document.createElement('p');
+          text.className = 'mt-3 text-sm leading-relaxed text-copy';
+          text.textContent = step.text;
+
+          item.append(window_, title, percent, text);
+          planHost.append(item);
+        });
+      }
 
       const list = root.querySelector<HTMLElement>('[data-recommendations]');
       if (list) {
@@ -525,6 +684,8 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       }
 
       gateComplete = true;
+      const nameEl = root.querySelector<HTMLElement>('[data-report-name]');
+      if (nameEl && lead.name) nameEl.textContent = lead.name;
       if (note) {
         note.dataset.state = sent ? 'ok' : 'local';
         note.textContent = sent

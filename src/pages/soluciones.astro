@@ -13,6 +13,9 @@ const description =
 
 const auditUrl = bookingUrl('Hola Oswaldo, vi las soluciones y quiero la auditoría de 5 días.');
 
+const featured = liveTools[0];
+const soon = upcomingTools;
+
 const breadcrumbs = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -37,7 +40,7 @@ const itemListSchema = {
 ---
 
 <BaseLayout title={title} description={description} schema={[itemListSchema, breadcrumbs]}>
-  <section class="section-pad tint-brand bg-paper pt-28 sm:pt-32">
+  <section class="tint-brand bg-paper pt-28 pb-20 sm:pt-32">
     <div class="container-page">
       <nav aria-label="Ruta de navegación">
         <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
@@ -47,36 +50,65 @@ const itemListSchema = {
         </ol>
       </nav>
 
-      <div class="mt-8" data-reveal>
-        <Eyebrow number="—">Soluciones</Eyebrow>
-        <h1 class="mt-6 max-w-3xl font-heading display-xl font-semibold text-text">
-          Las soluciones que estoy <span class="text-gradient-brand">construyendo</span>
-        </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-copy">
-          Herramientas propias para diagnosticar y ordenar ecosistemas digitales: las mismas que uso
-          en mis auditorías, abiertas para que puedas medir tu situación antes de invertir. Sin
-          registro, sin coste y calculadas en tu navegador.
-        </p>
-        <p class="mt-5 max-w-2xl text-sm leading-relaxed text-dim">
-          Publico una nueva cada mes. Si necesitas alguna que no está en la lista, escríbeme y lo
-          valoramos: {liveTools.length} disponible{liveTools.length === 1 ? '' : 's'} y{' '}
-          {upcomingTools.length} en preparación.
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16" data-reveal>
+        <div>
+          <Eyebrow number="—">Soluciones</Eyebrow>
+          <h1 class="mt-6 font-heading display-xl font-semibold text-text">
+            Las soluciones que estoy <span class="text-gradient-brand">construyendo</span>
+          </h1>
+        </div>
+
+        <div class="lg:pb-2">
+          <p class="text-lg leading-relaxed text-copy">
+            Herramientas propias para diagnosticar y ordenar ecosistemas digitales: las mismas que uso
+            en mis auditorías, abiertas para que midas tu situación antes de invertir. Sin registro,
+            sin coste y calculadas en tu navegador.
+          </p>
+          <dl class="mt-7 grid grid-cols-2 gap-4 border-t border-line pt-5">
+            <div>
+              <dt class="font-mono text-[10px] tracking-[0.18em] text-dim uppercase">Disponibles</dt>
+              <dd class="font-heading mt-1 text-3xl leading-none text-brand-ink">
+                {liveTools.length}
+              </dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[10px] tracking-[0.18em] text-dim uppercase">
+                En preparación
+              </dt>
+              <dd class="font-heading mt-1 text-3xl leading-none text-text">{soon.length}</dd>
+            </div>
+          </dl>
+          <p class="mt-5 text-sm leading-relaxed text-dim">
+            Publico una nueva cada mes. Si necesitas alguna que no está en la lista, escríbeme y lo
+            valoramos.
+          </p>
+        </div>
+      </div>
+
+      <ul class="mt-14 grid gap-5">
+        {featured && <ToolCard tool={featured} variant="wide" />}
+      </ul>
+
+      <div class="mt-14 flex flex-wrap items-end justify-between gap-4" data-reveal>
+        <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">En preparación</h2>
+        <p class="max-w-md text-sm leading-relaxed text-copy">
+          Las siguientes herramientas del catálogo. Si alguna te urge, escríbeme y la priorizo.
         </p>
       </div>
 
-      <ul class="mt-12 grid gap-5 lg:grid-cols-2 xl:gap-6">
-        {tools.map((tool, index) => <ToolCard tool={tool} delay={index * 80} />)}
+      <ul class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {soon.map((tool, index) => <ToolCard tool={tool} variant="compact" delay={index * 80} />)}
       </ul>
 
-      <div class="mt-14 rounded-card border border-line bg-surface p-6 shadow-card sm:p-8" data-reveal>
+      <div class="mt-16 rounded-card border border-line bg-surface p-6 shadow-card sm:p-8" data-reveal>
         <div class="flex flex-wrap items-center justify-between gap-6">
           <div class="max-w-xl">
             <h2 class="font-heading text-2xl font-semibold text-text">
               ¿Necesitas el diagnóstico hecho por mí?
             </h2>
             <p class="mt-3 text-sm leading-relaxed text-copy">
-              La auditoría de 5 días incluye la revisión técnica completa, el blueprint del
-              ecosistema y un roadmap priorizado de 90 días con recomendaciones sobre tu caso.
+              La auditoría de 5 días incluye la revisión técnica completa, el blueprint del ecosistema
+              y un roadmap priorizado de 90 días con recomendaciones sobre tu caso.
             </p>
           </div>
           <Button href={auditUrl} size="lg" external>Reservar auditoría de 5 días</Button>

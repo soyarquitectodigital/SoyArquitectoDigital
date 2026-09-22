@@ -3,12 +3,12 @@ import type { Tool } from '../../data/tools';
 
 interface Props {
   tool: Tool;
-  compact?: boolean;
+  variant?: 'wide' | 'card' | 'compact' | 'row';
   delay?: number;
   class?: string;
 }
 
-const { tool, compact = false, delay = 0, class: className = '' } = Astro.props;
+const { tool, variant = 'card', delay = 0, class: className = '' } = Astro.props;
 
 const icons: Record<string, string> = {
   diagnostico: 'M10.5 4.5a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM15.2 15.2 19.5 19.5',
@@ -16,103 +16,193 @@ const icons: Record<string, string> = {
   checklist: 'M4.5 6.5l2 2 3-3M4.5 12.5l2 2 3-3M4.5 18.5l2 2 3-3M12 7.5h8M12 13.5h8M12 19.5h8',
   auditoria: 'M12 3v3M12 18v3M3 12h3M18 12h3M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z',
 };
+
+const checkPath = 'm5 12.5 4.5 4.5L19 7.5';
+const isLive = tool.status === 'live';
+const statusLabel = isLive ? 'Disponible' : 'En preparación';
 ---
 
-<li
-  class:list={[
-    'card hairline spotlight relative flex flex-col',
-    compact ? 'p-5' : 'p-6 sm:p-7',
-    className,
-  ]}
-  data-reveal
-  data-glow
-  style={`--delay:${delay}ms`}
->
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <span
+{
+  variant === 'row' ? (
+    <li
       class:list={[
-        'grid place-items-center rounded-2xl border border-line bg-paper text-brand-ink',
-        compact ? 'size-9' : 'size-11',
+        'flex items-center gap-4 rounded-2xl border border-line bg-surface px-4 py-3.5 transition duration-300 hover:border-line-strong',
+        className,
       ]}
+      data-reveal
+      style={`--delay:${delay}ms`}
     >
-      <svg
-        viewBox="0 0 24 24"
-        class:list={[compact ? 'size-4' : 'size-5']}
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d={icons[tool.icon]}
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path>
-      </svg>
-    </span>
-    <span
-      class:list={[
-        'font-mono text-[11px] tracking-[0.2em] uppercase',
-        tool.status === 'live' ? 'text-brand-ink' : 'text-dim',
-      ]}
+      <span class="grid size-9 shrink-0 place-items-center rounded-xl border border-line bg-paper text-dim">
+        <svg viewBox="0 0 24 24" class="size-4" fill="none" aria-hidden="true">
+          <path
+            d={icons[tool.icon]}
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+      <span class="min-w-0 flex-1">
+        <span class="block truncate text-sm font-semibold text-text">{tool.name}</span>
+        <span class="block truncate text-xs text-dim">{tool.duration}</span>
+      </span>
+      <span class="shrink-0 font-mono text-[10px] tracking-[0.16em] text-dim uppercase">
+        {statusLabel}
+      </span>
+    </li>
+  ) : variant === 'compact' ? (
+    <li
+      class:list={['card hairline spotlight relative flex flex-col p-5', className]}
+      data-reveal
+      data-glow
+      style={`--delay:${delay}ms`}
     >
-      {tool.status === 'live' ? 'Disponible' : 'En preparación'}
-    </span>
-  </div>
+      <div class="flex items-center justify-between gap-3">
+        <span class="grid size-9 place-items-center rounded-xl border border-line bg-paper text-dim">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" aria-hidden="true">
+            <path
+              d={icons[tool.icon]}
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="font-mono text-[10px] tracking-[0.18em] text-dim uppercase">{statusLabel}</span>
+      </div>
+      <h3 class="font-heading mt-4 text-base leading-snug font-semibold text-text">{tool.name}</h3>
+      <p class="mt-2 flex-1 text-xs leading-relaxed text-copy">{tool.tagline}</p>
+      <p class="mt-4 font-mono text-[10px] tracking-[0.18em] text-dim uppercase">{tool.duration}</p>
+    </li>
+  ) : variant === 'wide' ? (
+    <li
+      class:list={['card hairline spotlight relative p-6 shadow-card sm:p-8', className]}
+      data-reveal
+      data-glow
+      style={`--delay:${delay}ms`}
+    >
+      <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+        <div>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="grid size-12 place-items-center rounded-2xl border border-line bg-paper text-brand-ink">
+              <svg viewBox="0 0 24 24" class="size-6" fill="none" aria-hidden="true">
+                <path
+                  d={icons[tool.icon]}
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span class="pill border-brand/30 bg-brand/8 text-brand-ink">{statusLabel}</span>
+            <span class="font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+              {tool.duration}
+            </span>
+          </div>
 
-  <h3
-    class:list={[
-      'font-heading font-semibold text-text',
-      compact ? 'mt-4 text-sm' : 'mt-6 text-2xl leading-tight',
-    ]}
-  >
-    {tool.name}
-  </h3>
-  <p
-    class:list={[
-      'text-copy',
-      compact ? 'mt-1.5 text-xs leading-relaxed' : 'mt-3 flex-1 text-sm leading-relaxed',
-    ]}
-  >
-    {tool.tagline}
-  </p>
+          <h3 class="font-heading mt-6 text-2xl leading-tight font-semibold text-text sm:text-3xl">
+            {tool.name}
+          </h3>
+          <p class="mt-4 max-w-xl text-base leading-relaxed text-copy">{tool.tagline}</p>
+        </div>
 
-  {
-    !compact && tool.bullets.length > 0 && (
-      <ul class="mt-5 space-y-2">
-        {tool.bullets.map((bullet) => (
-          <li class="flex items-start gap-2.5 text-sm text-copy">
-            <svg
-              viewBox="0 0 24 24"
-              class="mt-0.5 size-4 shrink-0 text-brand-ink"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="m5 12.5 4.5 4.5L19 7.5"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            {bullet}
-          </li>
-        ))}
-      </ul>
-    )
-  }
+        <div class="flex flex-col justify-between gap-6 lg:border-l lg:border-line lg:pl-12">
+          {tool.bullets.length > 0 && (
+            <ul class="space-y-3">
+              {tool.bullets.map((bullet) => (
+                <li class="flex items-start gap-2.5 text-sm text-copy">
+                  <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-brand-ink" fill="none" aria-hidden="true">
+                    <path
+                      d={checkPath}
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+          )}
 
-  <p
-    class:list={[
-      'font-mono tracking-[0.18em] text-dim uppercase',
-      compact ? 'mt-4 text-[10px]' : 'mt-5 text-[11px]',
-    ]}
-  >
-    {tool.duration}
-  </p>
+          <div>
+            {tool.href ? (
+              <a href={tool.href} class="qc-btn-primary">
+                Abrir solución
+                <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                  <path
+                    d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+            ) : (
+              <p class="text-sm text-dim">La publico en las próximas semanas.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </li>
+  ) : (
+    <li
+      class:list={['card hairline spotlight relative flex flex-col p-6 sm:p-7', className]}
+      data-reveal
+      data-glow
+      style={`--delay:${delay}ms`}
+    >
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="grid size-11 place-items-center rounded-2xl border border-line bg-paper text-brand-ink">
+          <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
+            <path
+              d={icons[tool.icon]}
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span
+          class:list={[
+            'font-mono text-[11px] tracking-[0.2em] uppercase',
+            isLive ? 'text-brand-ink' : 'text-dim',
+          ]}
+        >
+          {statusLabel}
+        </span>
+      </div>
 
-  {
-    !compact && (
+      <h3 class="font-heading mt-6 text-2xl leading-tight font-semibold text-text">{tool.name}</h3>
+      <p class="mt-3 flex-1 text-sm leading-relaxed text-copy">{tool.tagline}</p>
+
+      {tool.bullets.length > 0 && (
+        <ul class="mt-5 space-y-2">
+          {tool.bullets.map((bullet) => (
+            <li class="flex items-start gap-2.5 text-sm text-copy">
+              <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0 text-brand-ink" fill="none" aria-hidden="true">
+                <path
+                  d={checkPath}
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              {bullet}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <p class="mt-5 font-mono text-[11px] tracking-[0.18em] text-dim uppercase">{tool.duration}</p>
+
       <div class="mt-6 border-t border-line pt-5">
         {tool.href ? (
           <a href={tool.href} class="qc-btn-primary">
@@ -133,6 +223,6 @@ const icons: Record<string, string> = {
           </p>
         )}
       </div>
-    )
-  }
-</li>
+    </li>
+  )
+}

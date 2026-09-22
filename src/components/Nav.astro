@@ -7,13 +7,15 @@ const diagnosisUrl = bookingUrl(
   'Hola Oswaldo, quiero agendar una llamada de diagnóstico para revisar mi ecosistema digital.',
 );
 
+// El orden del menú sigue el orden real de las secciones de la landing.
 const links = [
+  { href: '/#problema', label: 'El problema' },
+  { href: '/soluciones', label: 'Soluciones' },
   { href: '/#servicios', label: 'Servicios' },
   { href: '/#enfoque', label: 'Enfoque' },
   { href: '/#trayectoria', label: 'Trayectoria' },
-  { href: '/#problema', label: 'El problema', secondary: true },
+  { href: '/#para-quien', label: 'Para quién', secondary: true },
   { href: '/#preguntas', label: 'Preguntas', secondary: true },
-  { href: '/soluciones', label: 'Soluciones' },
 ];
 
 const currentPath = Astro.url.pathname;

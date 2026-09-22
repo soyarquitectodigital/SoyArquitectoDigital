@@ -109,6 +109,18 @@ export interface LayerResult {
   questions: number;
 }
 
+export interface LayerDetail extends LayerResult {
+  status: string;
+  recommendations: string[];
+}
+
+export interface ActionStep {
+  window: string;
+  layer: QuizLayer;
+  percent: number;
+  text: string;
+}
+
 export interface QuizResult {
   percent: number;
   band: Band;
@@ -118,9 +130,18 @@ export interface QuizResult {
   answered: number;
   total: number;
   layers: LayerResult[];
+  details: LayerDetail[];
+  weakest: LayerDetail[];
+  actionPlan: ActionStep[];
   recommendations: string[];
   type: BusinessTypeId;
 }
+
+const STATUS_BY_LEVEL: Record<Level, string> = {
+  bad: 'Prioridad alta',
+  warn: 'Por optimizar',
+  good: 'Sólido',
+};
 
 export function scoreQuiz(
   quiz: Quiz,
@@ -166,6 +187,31 @@ export function scoreQuiz(
 
   const layerPercentById = new Map(layers.map((row) => [row.layer.id, row.percent]));
 
+  const recommendationsByLayer = new Map<LayerId, string[]>();
+  quiz.recommendations.forEach((rec) => {
+    const list = recommendationsByLayer.get(rec.layer) ?? [];
+    list.push(rec.text);
+    recommendationsByLayer.set(rec.layer, list);
+  });
+
+  const details: LayerDetail[] = layers.map((row) => ({
+    ...row,
+    status: STATUS_BY_LEVEL[row.level],
+    recommendations: (recommendationsByLayer.get(row.layer.id) ?? []).slice(0, 3),
+  }));
+
+  const weakest = [...details].sort((a, b) => a.percent - b.percent).slice(0, 3);
+
+  const windows = ['Primeros 30 días', 'Días 31 a 60', 'Días 61 a 90'];
+  const actionPlan: ActionStep[] = weakest.map((row, index) => ({
+    window: windows[index] ?? `Fase ${index + 1}`,
+    layer: row.layer,
+    percent: row.percent,
+    text:
+      row.recommendations[0] ??
+      `Mantener ${row.layer.short.toLowerCase()} bajo medición y revisar los indicadores cada mes.`,
+  }));
+
   const recommendations = quiz.recommendations
     .filter((rec) => (layerPercentById.get(rec.layer) ?? 100) <= rec.maxPercent)
     .sort((a, b) => (layerPercentById.get(a.layer) ?? 100) - (layerPercentById.get(b.layer) ?? 100))
@@ -184,6 +230,9 @@ export function scoreQuiz(
     answered,
     total: questions.length,
     layers,
+    details,
+    weakest,
+    actionPlan,
     recommendations: recommendations.length ? recommendations : [quiz.healthyNote],
     type,
   };
