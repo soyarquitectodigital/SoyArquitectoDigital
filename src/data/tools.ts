@@ -12,10 +12,10 @@ export interface Tool {
 }
 
 /**
- * Registro de herramientas. Para publicar una nueva:
+ * Registro de soluciones/herramientas. Para publicar una nueva:
  * 1) añade la entrada aquí, 2) crea su contenido en src/data/tools/<slug>/,
- * 3) crea su página en src/pages/herramientas/<slug>.astro.
- * Nada más: la sección de la landing y el índice se actualizan solos.
+ * 3) crea su página en src/pages/soluciones/<slug>.astro.
+ * Nada más: la sección de la landing y el catálogo se actualizan solos.
  */
 export const tools: Tool[] = [
   {
@@ -26,11 +26,11 @@ export const tools: Tool[] = [
     duration: '3 min · 17 preguntas',
     status: 'live',
     icon: 'diagnostico',
-    href: '/herramientas/diagnostico-ecosistema-digital',
+    href: '/soluciones/diagnostico-ecosistema-digital',
     bullets: [
       'Puntaje 0–100 y semáforo por cada capa',
       'Recomendaciones priorizadas según tus resultados',
-      'Informe listo para guardar en PDF',
+      'Informe listo para descargar en PDF',
     ],
   },
   {

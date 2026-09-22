@@ -5,7 +5,7 @@ import Button from '../../components/Button.astro';
 import { quiz } from '../../data/tools/diagnostico';
 import { site, bookingUrl } from '../../config';
 
-const path = '/herramientas/diagnostico-ecosistema-digital';
+const path = '/soluciones/diagnostico-ecosistema-digital';
 const title = `${quiz.title} — herramienta gratuita`;
 const description = quiz.tagline;
 
@@ -29,7 +29,7 @@ const breadcrumbs = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
-    { '@type': 'ListItem', position: 2, name: 'Herramientas', item: new URL('/herramientas', site.url).href },
+    { '@type': 'ListItem', position: 2, name: 'Soluciones', item: new URL('/soluciones', site.url).href },
     { '@type': 'ListItem', position: 3, name: quiz.title, item: new URL(path, site.url).href },
   ],
 };
@@ -44,7 +44,7 @@ const auditUrl = bookingUrl('Hola Oswaldo, hice el diagnóstico de ecosistema di
         <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
           <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
           <li aria-hidden="true">/</li>
-          <li><a href="/herramientas" class="transition-colors hover:text-text">Herramientas</a></li>
+          <li><a href="/soluciones" class="transition-colors hover:text-text">Soluciones</a></li>
           <li aria-hidden="true">/</li>
           <li class="text-text">Diagnóstico</li>
         </ol>

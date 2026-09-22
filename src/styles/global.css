@@ -1230,6 +1230,23 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
   background: var(--color-ok-ink);
 }
 
+/* Puerta de descarga del informe */
+.gate-required {
+  box-shadow:
+    0 0 0 2px var(--color-brand),
+    var(--shadow-card);
+}
+
+[data-lead-note][data-state="warn"] {
+  color: var(--color-warn);
+  font-weight: 600;
+}
+
+[data-lead-note][data-state="ok"] {
+  color: var(--color-ok-ink);
+  font-weight: 600;
+}
+
 /* Informe imprimible */
 @media print {
   #site-nav,

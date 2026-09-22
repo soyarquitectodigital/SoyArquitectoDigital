@@ -125,50 +125,56 @@ teléfono, enlaces o cargo, se edita directamente en el HTML de la firma.
 
 ---
 
-## Herramientas
+## Soluciones y herramientas
 
-La sección **Herramientas** (en la landing, tras *El problema*) y el índice `/herramientas` se generan
-desde un registro único, de modo que cada herramienta es independiente y se puede añadir sin tocar las
-demás.
+`/soluciones` es el catálogo de las soluciones/herramientas que estoy construyendo (por ahora, el
+Diagnóstico de Ecosistema Digital y tres más en preparación). El botón **Soluciones** está al final
+del nav y la landing tiene una sección propia (`#soluciones`) que invita a entrar y usarlas.
 
 | Archivo | Rol |
 | --- | --- |
 | `src/data/tools.ts` | **Registro**: nombre, descripción, duración, estado (`live` / `soon`), icono y ruta. |
-| `src/data/tools/<slug>/` | Contenido propio de cada herramienta (preguntas, pesos, recomendaciones). |
+| `src/data/tools/<slug>/` | Contenido propio de cada solución (preguntas, pesos, recomendaciones). |
 | `src/lib/quiz.ts` | **Motor puro** de cuestionarios: normalización 0–100, bandas, semáforo por capa y recomendaciones. Sin UI. |
-| `src/components/tools/` | UI genérica: `QuizRunner` (flujo), `ReportPanel` (informe) y `LeadStep` (captura opcional). |
-| `src/pages/herramientas/` | Índice + una página por herramienta. |
+| `src/components/tools/` | UI genérica: `QuizRunner` (flujo), `ReportPanel` (informe), `LeadStep` (puerta de descarga) y `ToolCard` (tarjeta reutilizable). |
+| `src/components/ToolsSection.astro` | Sección de la landing que lleva a `/soluciones`. |
+| `src/pages/soluciones/` | Catálogo + una página por solución. |
 
-### Añadir una herramienta nueva
+Las rutas antiguas `/herramientas` y `/herramientas/diagnostico-ecosistema-digital` redirigen 301
+(ver `redirects` en `astro.config.mjs`).
+
+### Añadir una solución nueva
 
 1. Crea su contenido en `src/data/tools/<slug>/index.ts` (o el formato que necesite).
 2. Añade la entrada en `src/data/tools.ts` con `status: 'live'` y su `href`.
-3. Crea la página en `src/pages/herramientas/<slug>.astro` (3 líneas: `BaseLayout` + el componente).
+3. Crea la página en `src/pages/soluciones/<slug>.astro`.
 
-La sección de la landing, el índice, el sitemap y el schema se actualizan solos.
+La sección de la landing, el catálogo, el sitemap y el schema se actualizan solos.
 
-### Herramienta 1 — Diagnóstico de Ecosistema Digital
+### Diagnóstico de Ecosistema Digital
 
-`/herramientas/diagnostico-ecosistema-digital`
+`/soluciones/diagnostico-ecosistema-digital`
 
-- **Flujo**: tipo de negocio (B2B · B2C · E-commerce · SaaS) → 17 preguntas (15 base + 2 específicas del tipo) → informe inmediato → bloque de email opcional.
+- **Flujo**: tipo de negocio (B2B · B2C · E-commerce · SaaS) → 17 preguntas (15 base + 2 específicas) → informe inmediato → **descarga del PDF con datos**.
 - **Evaluación**: 5 capas (captación, experiencia, datos, automatización, infraestructura) con puntaje
   normalizado 0–100 y bandas **0–40 Red Alert · 41–70 Warning · 71–100 Healthy**.
-- **Informe**: puntaje global, semáforo por capa, recomendaciones priorizadas, copiar resumen,
-  *Guardar como PDF* (estilos de impresión, sin librerías) y CTA a la auditoría con el resultado.
-- **Datos**: nada se envía a ningún servidor. Las respuestas y el progreso se guardan en `localStorage`.
+- **Informe**: puntaje global, semáforo por capa, recomendaciones priorizadas, copiar resumen y CTA a la auditoría.
 
-### Captura de leads
+### Puerta de descarga del PDF
 
-Se controla con una constante en `src/config.ts`:
+El informe completo se ve siempre en pantalla, pero **la descarga en PDF requiere nombre, correo y
+teléfono** (más el consentimiento). Al completar el formulario se guarda el lead con el resultado del
+diagnóstico y se abre el diálogo de impresión (`Guardar como PDF`).
+
+El envío de esos datos se controla con `leadCapture` en `src/config.ts`:
 
 ```ts
-export const leadCapture: 'off' | 'local' | 'remote' = 'local';
+export const leadCapture: 'local' | 'remote' = 'local';
 ```
 
-- `'off'` → el paso de email no se muestra.
-- `'local'` → los datos se guardan solo en el navegador del visitante (situación actual).
-- `'remote'` → se envían por Web3Forms con `web3formsKey` (requiere antes página de privacidad).
+- `'local'` → los datos quedan solo en el navegador del visitante (situación actual). La propia página lo avisa.
+- `'remote'` → además se envían por Web3Forms usando `web3formsKey`. Para activarlo hay que pegar la
+  clave y publicar la página de privacidad.
 
 ---
 

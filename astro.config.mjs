@@ -25,6 +25,10 @@ const devNoStore = {
 export default defineConfig({
   site: 'https://soyarquitectodigital.info',
   trailingSlash: 'ignore',
+  redirects: {
+    '/herramientas': '/soluciones',
+    '/herramientas/diagnostico-ecosistema-digital': '/soluciones/diagnostico-ecosistema-digital',
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404') && !page.includes('/gracias'),

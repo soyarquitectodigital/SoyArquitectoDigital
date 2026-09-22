@@ -191,7 +191,7 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
   import { scoreQuiz, summaryText } from '../../lib/quiz';
   import type { BusinessTypeId, QuizResult } from '../../lib/quiz';
   import { quiz } from '../../data/tools/diagnostico';
-  import { whatsapp } from '../../config';
+  import { whatsapp, leadCapture, web3formsKey } from '../../config';
 
   const root = document.querySelector<HTMLElement>('[data-quiz]');
 
@@ -424,8 +424,40 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       state.show(stepType);
     });
 
+    // --- Puerta de descarga: el PDF requiere nombre, correo y teléfono ---
+    const gate = root.querySelector<HTMLElement>('[data-lead-block]');
+    const gateKey = `sad:gate:${quiz.slug}`;
+    let gateComplete = false;
+
+    try {
+      gateComplete = window.localStorage.getItem(gateKey) === '1';
+    } catch {
+      gateComplete = false;
+    }
+
+    function askForData() {
+      if (!gate) {
+        window.print();
+        return;
+      }
+      gate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      gate.classList.add('gate-required');
+      const note = gate.querySelector<HTMLElement>('[data-lead-note]');
+      if (note) {
+        note.textContent = 'Completa nombre, correo y teléfono para descargar el informe en PDF.';
+        note.dataset.state = 'warn';
+      }
+      const first = gate.querySelector<HTMLInputElement>('input');
+      window.setTimeout(() => first?.focus({ preventScroll: true }), 350);
+      window.setTimeout(() => gate.classList.remove('gate-required'), 3600);
+    }
+
     root.querySelector<HTMLButtonElement>('[data-quiz-print]')?.addEventListener('click', () => {
-      window.print();
+      if (gateComplete || !gate) {
+        window.print();
+        return;
+      }
+      askForData();
     });
 
     root.querySelector<HTMLButtonElement>('[data-quiz-copy]')?.addEventListener('click', async (event) => {
@@ -444,31 +476,67 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
     });
 
     const leadForm = root.querySelector<HTMLFormElement>('[data-lead-form]');
-    leadForm?.addEventListener('submit', (event) => {
+    leadForm?.addEventListener('submit', async (event) => {
       event.preventDefault();
       const note = root.querySelector<HTMLElement>('[data-lead-note]');
       if (!leadForm.reportValidity()) return;
+
       const data = new FormData(leadForm);
       const lead = {
         name: String(data.get('name') ?? ''),
         email: String(data.get('email') ?? ''),
-        company: String(data.get('company') ?? ''),
+        phone: String(data.get('phone') ?? ''),
         type: businessType,
         percent: lastResult?.percent ?? null,
+        summary: lastResult ? summaryText(quiz, lastResult) : '',
         date: new Date().toISOString(),
       };
+
+      // 1) guardado local (siempre)
       try {
         const key = `sad:leads:${quiz.slug}`;
         const previous = JSON.parse(window.localStorage.getItem(key) ?? '[]');
         window.localStorage.setItem(key, JSON.stringify([...previous, lead]));
+        window.localStorage.setItem(gateKey, '1');
       } catch {
         /* sin almacenamiento */
       }
-      leadForm.reset();
-      if (note) {
-        note.textContent =
-          'Guardado en este navegador. Te avisaré por correo cuando active el envío del informe.';
+
+      // 2) envío remoto (solo si está activado y hay clave)
+      let sent = false;
+      if (leadCapture === 'remote' && web3formsKey) {
+        try {
+          const payload = new FormData();
+          payload.append('access_key', web3formsKey);
+          payload.append('subject', `Diagnóstico de ecosistema digital — ${lead.percent ?? 0}%`);
+          payload.append('from_name', 'Soluciones · Soy Arquitecto Digital');
+          payload.append('name', lead.name);
+          payload.append('email', lead.email);
+          payload.append('phone', lead.phone);
+          payload.append('message', lead.summary || 'Sin resumen');
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: payload,
+          });
+          sent = response.ok;
+        } catch {
+          sent = false;
+        }
       }
+
+      gateComplete = true;
+      if (note) {
+        note.dataset.state = sent ? 'ok' : 'local';
+        note.textContent = sent
+          ? 'Datos enviados. Abriendo el PDF…'
+          : 'Datos guardados. Abriendo el PDF…';
+      }
+      const submit = leadForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submit) {
+        submit.textContent = 'PDF desbloqueado';
+        submit.disabled = true;
+      }
+      window.setTimeout(() => window.print(), 420);
     });
 
     const saved = restore();
