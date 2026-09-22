@@ -10,7 +10,7 @@ export const site = {
   studio: 'Olah · Arquitectura Digital',
   person: 'Oswaldo González Lucena',
   role: 'Arquitecto de Ecosistemas Digitales',
-  email: 'progoswa@gmail.com',
+  email: 'ayuda@soyarquitectodigital.info',
   linkedin: 'https://www.linkedin.com/in/soyarquitectodigital',
   location: 'Venezuela · Remoto',
   calendarUrl,

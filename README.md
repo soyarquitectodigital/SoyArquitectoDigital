@@ -154,7 +154,7 @@ public/              # favicon.svg, og-default.png, robots.txt
 - [ ] **Páginas legales**: aviso legal, política de privacidad y cookies.
 - [ ] **Versión en inglés** (`/en`) para el mercado de EE.UU.
 - [ ] **Core Web Vitals**: preconnect a Calendly/WhatsApp, preload de fuentes y auditoría Lighthouse + accesibilidad (axe).
-- [ ] **Email profesional del dominio** (`hola@soyarquitectodigital.info`) — hoy el contacto público es `progoswa@gmail.com`.
+- [x] **Email profesional del dominio** — contacto público: `ayuda@soyarquitectodigital.info`.
 - [ ] **Google Business Profile + Search Console + Bing Webmaster** y envío del `sitemap`.
 - [ ] **Monitoreo de uptime** (UptimeRobot / BetterStack).
 - [ ] **Publicación automática**: `git push` a `main` con deploy en Vercel.
