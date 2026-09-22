@@ -167,25 +167,21 @@ html.reduce-motion .pulse-dot::after {
   opacity: 0;
 }
 
-/* Acento del logotipo según el fondo */
+/* Acento del logotipo: lo define el contenedor con .on-dark */
 .wordmark-accent {
-  color: var(--color-brand-light);
+  color: var(--wordmark-accent, var(--color-brand-2));
 }
 
 .wordmark-dot {
-  background-color: var(--color-brand-light);
+  background-color: var(--wordmark-accent, var(--color-brand-2));
 }
 
-#site-nav.is-solid .wordmark-accent,
-#site-nav.is-solid .wordmark-dot {
-  color: var(--color-brand-2);
+.on-dark {
+  --wordmark-accent: var(--color-brand-light);
 }
 
-#site-nav.is-solid .wordmark-dot {
-  background-color: var(--color-brand-2);
-}
-
-/* Nav: cambia de translúcido oscuro a vidrio claro al salir del hero */
+/* Nav: vidrio claro por defecto (visible sobre fondos claros).
+   En páginas con hero oscuro se marca <html class="nav-on-dark"> y arranca transparente. */
 #site-nav {
   transition:
     background-color 0.35s ease,
@@ -195,10 +191,6 @@ html.reduce-motion .pulse-dot::after {
 }
 
 #site-nav .nav-shell {
-  border-color: transparent;
-}
-
-#site-nav.is-solid .nav-shell {
   background: rgba(255, 255, 255, 0.92);
   border-color: var(--color-line);
   backdrop-filter: blur(16px);
@@ -206,57 +198,66 @@ html.reduce-motion .pulse-dot::after {
 }
 
 #site-nav .nav-logo {
-  color: #ffffff;
-}
-
-#site-nav.is-solid .nav-logo {
   color: var(--color-text);
 }
 
 #site-nav .nav-link {
-  color: rgba(255, 255, 255, 0.74);
-}
-
-#site-nav .nav-link:hover {
-  color: #ffffff;
-}
-
-#site-nav.is-solid .nav-link {
   color: var(--color-copy);
 }
 
-#site-nav.is-solid .nav-link:hover {
+#site-nav .nav-link:hover {
   color: var(--color-text);
 }
 
 #site-nav .nav-burger {
-  color: #ffffff;
-  border-color: var(--color-line-dark);
-}
-
-#site-nav.is-solid .nav-burger {
   color: var(--color-text);
   border-color: var(--color-line);
 }
 
 #site-nav .nav-cta-ghost {
-  color: #ffffff;
-  border-color: var(--color-line-dark);
-}
-
-#site-nav .nav-cta-ghost:hover {
-  border-color: var(--color-line-dark-strong);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-#site-nav.is-solid .nav-cta-ghost {
   color: var(--color-text);
   border-color: var(--color-line);
 }
 
-#site-nav.is-solid .nav-cta-ghost:hover {
+#site-nav .nav-cta-ghost:hover {
   border-color: var(--color-line-strong);
   background: rgba(9, 25, 51, 0.04);
+}
+
+/* Variante sobre hero oscuro (solo la landing) */
+html.nav-on-dark #site-nav:not(.is-solid) .nav-shell {
+  background: transparent;
+  border-color: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  --wordmark-accent: var(--color-brand-light);
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-logo {
+  color: #ffffff;
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-link {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-link:hover {
+  color: #ffffff;
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-burger {
+  color: #ffffff;
+  border-color: var(--color-line-dark);
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost {
+  color: #ffffff;
+  border-color: var(--color-line-dark);
+}
+
+html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
+  border-color: var(--color-line-dark-strong);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* Flotante de WhatsApp: aparece tras el hero */
@@ -524,7 +525,7 @@ details[open] .faq-answer {
 
 /* Enlace activo del nav (scrollspy) */
 #site-nav .nav-link.is-active {
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 #site-nav .nav-link.is-active::after {
@@ -535,16 +536,16 @@ details[open] .faq-answer {
   width: 1rem;
   height: 2px;
   border-radius: 9999px;
-  background: var(--color-brand-light);
+  background: var(--color-brand);
   transform: translateX(-50%);
 }
 
-#site-nav.is-solid .nav-link.is-active {
-  color: var(--color-text);
+html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active {
+  color: #ffffff;
 }
 
-#site-nav.is-solid .nav-link.is-active::after {
-  background: var(--color-brand);
+html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
+  background: var(--color-brand-light);
 }
 
 /* ============================================================

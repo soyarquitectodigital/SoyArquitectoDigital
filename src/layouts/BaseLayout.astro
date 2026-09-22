@@ -16,6 +16,8 @@ interface Props {
   image?: string;
   schema?: Record<string, unknown>[];
   noindex?: boolean;
+  /** true solo en páginas cuyo hero es oscuro: el nav arranca transparente. */
+  navOnDark?: boolean;
 }
 
 const {
@@ -24,6 +26,7 @@ const {
   image = '/og-default.png',
   schema = [],
   noindex = false,
+  navOnDark = false,
 } = Astro.props;
 
 const siteName = site.name;
@@ -39,7 +42,7 @@ const ogImage = new URL(image, Astro.site);
 ---
 
 <!doctype html>
-<html lang="es" class="js">
+<html lang="es" class:list={['js', navOnDark && 'nav-on-dark']}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -232,11 +235,13 @@ const ogImage = new URL(image, Astro.site);
       // Scrollspy: resalta la sección visible en el nav
       (function () {
         if (!('IntersectionObserver' in window)) return;
-        var links = document.querySelectorAll('#site-nav .nav-link[href^="#"]');
+        var links = document.querySelectorAll('#site-nav .nav-link[href*="#"]');
         if (!links.length) return;
         var map = {};
         links.forEach(function (link) {
-          map[link.getAttribute('href').slice(1)] = link;
+          var href = link.getAttribute('href') || '';
+          var hash = href.slice(href.indexOf('#') + 1);
+          if (hash) map[hash] = link;
         });
         var sections = Object.keys(map)
           .map(function (id) {

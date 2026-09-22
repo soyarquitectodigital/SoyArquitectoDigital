@@ -172,6 +172,21 @@ export const leadCapture: 'off' | 'local' | 'remote' = 'local';
 
 ---
 
+## Soluciones
+
+`/soluciones` es el catálogo de lo que ofreces, en dos bloques:
+
+1. **Tres formas de trabajar** — se genera desde `src/data/services.ts` (auditoría de 5 días, implementación e CTO externo), así que es la misma fuente que usa la landing.
+2. **Soluciones por capa** — las cinco capas del ecosistema (captación, experiencia, datos, automatización e infraestructura), definidas en `src/data/solutions.ts`.
+
+Cada capa enlaza con WhatsApp para consultarla y con el diagnóstico para medir cómo está hoy.
+Para añadir o editar soluciones, se toca solo `src/data/solutions.ts`; la página y el schema
+(`OfferCatalog`) se actualizan solos.
+
+El botón **Soluciones** vive en el nav (marcado automáticamente como activo en esa página) y en el footer.
+
+---
+
 ## Estructura
 
 ```
@@ -179,11 +194,13 @@ src/
   components/        # Nav, Hero, AuthorityBar, ProblemSection, ServicesSection,
                      # ApproachSection, ExperienceSection, CtaSection, FaqSection,
                      # Footer, Button, Wordmark, Eyebrow, SocialLinks, WhatsAppFloat
-  data/              # contenido editable (servicios, FAQ, CV, capas…)
+  data/              # contenido editable (servicios, soluciones, FAQ, CV, capas, herramientas…)
   layouts/
     BaseLayout.astro # <head>, SEO, schema, badge dev, scripts globales
   pages/
     index.astro      # ensambla la landing y declara los schemas
+    soluciones.astro # catálogo de soluciones (servicios + soluciones por capa)
+    herramientas/    # índice de herramientas y una página por herramienta
     404.astro        # página de error brandeada (noindex)
   styles/global.css  # tokens, utilidades y todas las animaciones
 docker/nginx/        # configuración de nginx para producción
