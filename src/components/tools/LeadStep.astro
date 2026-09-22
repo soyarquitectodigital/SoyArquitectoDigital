@@ -1,0 +1,67 @@
+---
+import { leadCapture } from '../../config';
+
+const visible = leadCapture !== 'off';
+---
+
+{
+  visible && (
+    <div class="mt-6 rounded-card border border-line bg-paper p-6 print-hide sm:p-7" data-lead-block>
+      <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">Opcional</p>
+      <h3 class="mt-3 font-heading text-xl font-semibold text-text">
+        ¿Te aviso cuando active el informe en PDF y las siguientes herramientas?
+      </h3>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-copy">
+        Con transparencia: tus datos se guardan <strong class="text-text">solo en este navegador</strong>,
+        no se envían a ningún servidor. El envío por correo se activa próximamente, así que hoy esto
+        sirve para que no tengas que reescribir tus datos cuando llegue.
+      </p>
+
+      <form data-lead-form class="mt-5 grid gap-3 sm:grid-cols-3" novalidate>
+        <label class="qc-field">
+          <span class="sr-only">Nombre</span>
+          <input name="name" type="text" placeholder="Nombre" class="qc-input" autocomplete="name" />
+        </label>
+        <label class="qc-field">
+          <span class="sr-only">Email</span>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            class="qc-input"
+            autocomplete="email"
+            required
+          />
+        </label>
+        <label class="qc-field">
+          <span class="sr-only">Empresa</span>
+          <input
+            name="company"
+            type="text"
+            placeholder="Empresa"
+            class="qc-input"
+            autocomplete="organization"
+          />
+        </label>
+
+        <label class="flex items-start gap-2.5 text-xs leading-relaxed text-copy sm:col-span-3">
+          <input type="checkbox" required class="mt-0.5 size-4 shrink-0 accent-[#2563eb]" />
+          <span>
+            Acepto que estos datos se guarden en mi navegador para futuras mejoras del informe.
+          </span>
+        </label>
+
+        <div class="sm:col-span-3">
+          <button
+            type="submit"
+            class="inline-flex h-11 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5"
+          >
+            Guardar mis datos
+          </button>
+        </div>
+      </form>
+
+      <p class="mt-3 text-xs text-dim" data-lead-note role="status" aria-live="polite"></p>
+    </div>
+  )
+}

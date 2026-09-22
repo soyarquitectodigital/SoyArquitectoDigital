@@ -1,0 +1,484 @@
+---
+import ReportPanel from './ReportPanel.astro';
+import LeadStep from './LeadStep.astro';
+import { quiz } from '../../data/tools/diagnostico';
+
+const orderedQuestions = quiz.layers.flatMap((layer) => [
+  ...quiz.questions.filter((question) => question.layer === layer.id),
+  ...quiz.typeQuestions.filter((question) => question.layer === layer.id),
+]);
+
+const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.name ?? '';
+---
+
+<div class="quiz" data-quiz>
+  <!-- Paso 1 · Presentación -->
+  <div data-step="intro" tabindex="-1">
+    <div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:p-10">
+      <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+        <div>
+          <p class="pill border-line bg-paper text-copy">
+            <span class="size-1.5 rounded-full bg-brand-ink" aria-hidden="true"></span>
+            {quiz.durationLabel}
+          </p>
+          <h2 class="mt-5 font-heading display-lg font-semibold text-text">
+            ¿Tu ecosistema digital está <span class="text-gradient-brand">sano</span> o se está cayendo
+            por las grietas?
+          </h2>
+          <p class="mt-5 max-w-xl leading-relaxed text-copy">
+            Responde {quiz.questions.length + 2} preguntas y obtén un puntaje de 0 a 100 con semáforo
+            por capa, el nivel de madurez de tu ecosistema y las prioridades concretas para mejorar.
+          </p>
+
+          <ul class="mt-7 space-y-2.5 text-sm text-copy">
+            <li class="flex items-center gap-2.5">
+              <span class="size-1.5 rounded-full bg-brand-ink" aria-hidden="true"></span>
+              Sin registro y sin coste: el informe se genera en tu navegador.
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="size-1.5 rounded-full bg-brand-ink" aria-hidden="true"></span>
+              Resultado inmediato con recomendaciones priorizadas.
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="size-1.5 rounded-full bg-brand-ink" aria-hidden="true"></span>
+              Puedes guardarlo en PDF al terminar.
+            </li>
+          </ul>
+
+          <div class="mt-9 flex flex-wrap items-center gap-4">
+            <button type="button" data-quiz-start class="qc-btn-primary">
+              Empezar el diagnóstico
+              <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                <path
+                  d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+            </button>
+            <button type="button" data-quiz-resume class="qc-btn-ghost" hidden>
+              Continuar donde lo dejé
+            </button>
+          </div>
+        </div>
+
+        <div class="rounded-card border border-line bg-paper p-6">
+          <p class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">Las 5 capas que evalúa</p>
+          <ol class="mt-5 space-y-4">
+            {
+              quiz.layers.map((layer, index) => (
+                <li class="flex gap-4">
+                  <span class="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border border-line bg-surface font-mono text-[10px] text-brand-ink">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block text-sm font-semibold text-text">{layer.name}</span>
+                    <span class="mt-1 block text-xs leading-relaxed text-copy">
+                      {layer.description}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 2 · Tipo de negocio -->
+  <div data-step="type" tabindex="-1" hidden>
+    <div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:p-10">
+      <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">Paso 1 de 2</p>
+      <h2 class="mt-4 font-heading text-2xl font-semibold text-text sm:text-3xl">
+        ¿Qué tipo de negocio tienes?
+      </h2>
+      <p class="mt-3 max-w-xl text-sm leading-relaxed text-copy">
+        Adapta dos preguntas a tu modelo para que el diagnóstico no sea genérico.
+      </p>
+
+      <div class="mt-7 grid gap-3 sm:grid-cols-2">
+        {
+          quiz.businessTypes.map((type) => (
+            <button type="button" class="qc-type-card" data-quiz-type={type.id}>
+              <span class="block text-base font-semibold text-text">{type.label}</span>
+              <span class="mt-1 block text-sm leading-relaxed text-copy">{type.hint}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="mt-7">
+        <button type="button" data-quiz-back-intro class="qc-btn-ghost">← Volver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 3 · Preguntas -->
+  {
+    orderedQuestions.map((question) => (
+      <div
+        data-step="question"
+        data-question={question.id}
+        data-layer={question.layer}
+        data-types={question.types ? question.types.join(',') : ''}
+        tabindex="-1"
+        hidden
+      >
+        <div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8 lg:p-10">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <p class="font-mono text-[11px] tracking-[0.2em] text-brand-ink uppercase" data-quiz-layer>
+              {layerName(question.layer)}
+            </p>
+            <p class="font-mono text-[11px] tracking-[0.2em] text-dim" data-quiz-counter></p>
+          </div>
+
+          <div
+            class="qc-progress mt-4"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            aria-label="Progreso del diagnóstico"
+            data-quiz-progress
+          >
+            <span data-quiz-progress-bar style="width:0%"></span>
+          </div>
+
+          <fieldset class="mt-8">
+            <legend class="font-heading text-xl leading-snug font-semibold text-text sm:text-2xl">
+              {question.text}
+            </legend>
+            {question.help && <p class="mt-2 text-sm text-dim">{question.help}</p>}
+
+            <div class="mt-6 grid gap-2.5">
+              {question.options.map((option) => (
+                <label class="qc-option">
+                  <input
+                    type="radio"
+                    name={question.id}
+                    value={option.score}
+                    class="qc-option-input"
+                    data-quiz-option
+                  />
+                  <span class="qc-option-marker" aria-hidden="true"></span>
+                  <span class="qc-option-text">{option.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="mt-8 flex items-center justify-between gap-4">
+            <button type="button" data-quiz-back class="qc-btn-ghost">← Atrás</button>
+            <button type="button" data-quiz-next class="qc-btn-primary" disabled>
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+
+  <!-- Paso 4 · Informe -->
+  <div data-step="report" tabindex="-1" hidden>
+    <ReportPanel />
+    <LeadStep />
+  </div>
+</div>
+
+<script>
+  import { scoreQuiz, summaryText } from '../../lib/quiz';
+  import type { BusinessTypeId, QuizResult } from '../../lib/quiz';
+  import { quiz } from '../../data/tools/diagnostico';
+  import { whatsapp } from '../../config';
+
+  const root = document.querySelector<HTMLElement>('[data-quiz]');
+
+  if (root) startQuiz(root);
+
+  function startQuiz(root: HTMLElement) {
+    const storageKey = `sad:${quiz.slug}`;
+    const stepIntro = root.querySelector<HTMLElement>('[data-step="intro"]');
+    const stepType = root.querySelector<HTMLElement>('[data-step="type"]');
+    const stepReport = root.querySelector<HTMLElement>('[data-step="report"]');
+    const questionSteps = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-step="question"]'),
+    );
+
+    const progressWrap = root.querySelector<HTMLElement>('[data-quiz-progress]');
+    const progressBar = root.querySelector<HTMLElement>('[data-quiz-progress-bar]');
+    const counter = root.querySelector<HTMLElement>('[data-quiz-counter]');
+    const layerLabel = root.querySelector<HTMLElement>('[data-quiz-layer]');
+    const resumeButton = root.querySelector<HTMLButtonElement>('[data-quiz-resume]');
+
+    const answers: Record<string, number> = {};
+    let businessType: BusinessTypeId | null = null;
+    let sequence: HTMLElement[] = [];
+    let index = 0;
+    let lastResult: QuizResult | null = null;
+
+    const state = { show(el: HTMLElement | null) {
+      [stepIntro, stepType, stepReport, ...questionSteps].forEach((step) => {
+        if (step) step.hidden = true;
+      });
+      if (!el) return;
+      el.hidden = false;
+      el.focus({ preventScroll: true });
+      window.scrollTo({ top: root.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+    } };
+
+    function activeQuestions(): HTMLElement[] {
+      return questionSteps.filter((step) => {
+        const types = (step.dataset.types ?? '').split(',').filter(Boolean);
+        return types.length === 0 || (businessType && types.includes(businessType));
+      });
+    }
+
+    function persist() {
+      try {
+        window.localStorage.setItem(
+          storageKey,
+          JSON.stringify({ businessType, answers, index }),
+        );
+      } catch {
+        /* almacenamiento no disponible */
+      }
+    }
+
+    function restore() {
+      try {
+        const raw = window.localStorage.getItem(storageKey);
+        if (!raw) return null;
+        const saved = JSON.parse(raw) as {
+          businessType: BusinessTypeId | null;
+          answers: Record<string, number>;
+          index: number;
+        };
+        return saved;
+      } catch {
+        return null;
+      }
+    }
+
+    function paintProgress() {
+      const total = sequence.length;
+      const current = Math.min(index + 1, total);
+      const filled = total ? Math.round(((index + 1) / total) * 100) : 0;
+      if (progressBar) progressBar.style.width = `${filled}%`;
+      if (counter) counter.textContent = `Pregunta ${current} de ${total}`;
+      if (progressWrap) progressWrap.setAttribute('aria-valuenow', String(filled));
+      const step = sequence[index];
+      if (step && layerLabel) {
+        const layer = quiz.layers.find((item) => item.id === step.dataset.layer);
+        layerLabel.textContent = layer ? layer.name : '';
+      }
+    }
+
+    function showQuestion(position: number) {
+      sequence = activeQuestions();
+      index = Math.max(0, Math.min(position, sequence.length - 1));
+      const step = sequence[index];
+      if (!step) return;
+      state.show(step);
+      paintProgress();
+
+      const question = quiz.questions.concat(quiz.typeQuestions).find((item) => item.id === step.dataset.question);
+      const chosen = question ? answers[question.id] : undefined;
+      step.querySelectorAll<HTMLInputElement>('[data-quiz-option]').forEach((input) => {
+        input.checked = chosen !== undefined && Number(input.value) === chosen;
+      });
+      const next = step.querySelector<HTMLButtonElement>('[data-quiz-next]');
+      if (next) next.disabled = chosen === undefined;
+      persist();
+    }
+
+    function finish() {
+      if (!businessType) return;
+      const result = scoreQuiz(quiz, answers, businessType);
+      lastResult = result;
+      renderReport(result);
+      state.show(stepReport);
+      persist();
+    }
+
+    function renderReport(result: QuizResult) {
+      const ring = root.querySelector<HTMLElement>('[data-score-ring]');
+      const arc = root.querySelector<SVGCircleElement>('[data-score-arc]');
+      if (ring) {
+        ring.style.setProperty('--p', String(result.percent));
+        ring.dataset.band = result.band;
+      }
+      if (arc) arc.dataset.band = result.band;
+
+      root.querySelectorAll<HTMLElement>('[data-score-band]').forEach((el) => {
+        el.textContent = result.bandLabel;
+        el.dataset.band = result.band;
+      });
+      const summary = root.querySelector<HTMLElement>('[data-score-summary]');
+      if (summary) summary.textContent = result.bandSummary;
+      const value = root.querySelector<HTMLElement>('[data-score-value]');
+      if (value) value.textContent = `${result.percent}%`;
+      const answered = root.querySelector<HTMLElement>('[data-score-answered]');
+      if (answered) answered.textContent = `${result.answered} de ${result.total}`;
+      const typeLabel = root.querySelector<HTMLElement>('[data-report-type]');
+      if (typeLabel) {
+        const type = quiz.businessTypes.find((item) => item.id === result.type);
+        typeLabel.textContent = type ? type.label : '';
+      }
+
+      result.layers.forEach((row) => {
+        const item = root.querySelector<HTMLElement>(`[data-layer-row="${row.layer.id}"]`);
+        if (!item) return;
+        item.dataset.band = row.band;
+        const percentEl = item.querySelector<HTMLElement>('[data-layer-percent]');
+        if (percentEl) percentEl.textContent = `${row.percent}%`;
+        const bar = item.querySelector<HTMLElement>('[data-layer-bar]');
+        if (bar) bar.style.width = `${row.percent}%`;
+      });
+
+      const list = root.querySelector<HTMLElement>('[data-recommendations]');
+      if (list) {
+        list.innerHTML = '';
+        result.recommendations.forEach((text) => {
+          const li = document.createElement('li');
+          li.className = 'flex gap-3 text-sm leading-relaxed text-copy';
+          const dot = document.createElement('span');
+          dot.className = 'mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-ink';
+          const span = document.createElement('span');
+          span.textContent = text;
+          li.append(dot, span);
+          list.append(li);
+        });
+      }
+
+      const wa = root.querySelector<HTMLAnchorElement>('[data-cta-whatsapp]');
+      if (wa) {
+        wa.href = whatsapp(
+          `Hola Oswaldo, hice el diagnóstico de ecosistema digital y obtuve ${result.percent}% (${result.bandLabel}). Quiero revisar los resultados y las prioridades.`,
+        );
+      }
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-quiz-start]').forEach((button) => {
+      button.addEventListener('click', () => {
+        state.show(stepType);
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-quiz-type]').forEach((button) => {
+      button.addEventListener('click', () => {
+        businessType = button.dataset.quizType as BusinessTypeId;
+        sequence = activeQuestions();
+        index = 0;
+        showQuestion(0);
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-quiz-back-intro]').forEach((button) => {
+      button.addEventListener('click', () => state.show(stepIntro));
+    });
+
+    questionSteps.forEach((step) => {
+      step.querySelectorAll<HTMLInputElement>('[data-quiz-option]').forEach((input) => {
+        input.addEventListener('change', () => {
+          const id = step.dataset.question;
+          if (!id) return;
+          answers[id] = Number(input.value);
+          const next = step.querySelector<HTMLButtonElement>('[data-quiz-next]');
+          if (next) next.disabled = false;
+          persist();
+          window.setTimeout(() => {
+            if (index < sequence.length - 1) {
+              showQuestion(index + 1);
+            } else {
+              finish();
+            }
+          }, 260);
+        });
+      });
+
+      const next = step.querySelector<HTMLButtonElement>('[data-quiz-next]');
+      next?.addEventListener('click', () => {
+        if (index < sequence.length - 1) showQuestion(index + 1);
+        else finish();
+      });
+
+      const back = step.querySelector<HTMLButtonElement>('[data-quiz-back]');
+      back?.addEventListener('click', () => {
+        if (index > 0) showQuestion(index - 1);
+        else state.show(stepType);
+      });
+    });
+
+    root.querySelector<HTMLButtonElement>('[data-quiz-restart]')?.addEventListener('click', () => {
+      Object.keys(answers).forEach((key) => delete answers[key]);
+      businessType = null;
+      index = 0;
+      try {
+        window.localStorage.removeItem(storageKey);
+      } catch {
+        /* sin almacenamiento */
+      }
+      if (resumeButton) resumeButton.hidden = true;
+      state.show(stepType);
+    });
+
+    root.querySelector<HTMLButtonElement>('[data-quiz-print]')?.addEventListener('click', () => {
+      window.print();
+    });
+
+    root.querySelector<HTMLButtonElement>('[data-quiz-copy]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget as HTMLButtonElement;
+      if (!lastResult) return;
+      const text = summaryText(quiz, lastResult);
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = 'Resumen copiado';
+      } catch {
+        button.textContent = 'No se pudo copiar';
+      }
+      window.setTimeout(() => {
+        button.textContent = 'Copiar resumen';
+      }, 2200);
+    });
+
+    const leadForm = root.querySelector<HTMLFormElement>('[data-lead-form]');
+    leadForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const note = root.querySelector<HTMLElement>('[data-lead-note]');
+      if (!leadForm.reportValidity()) return;
+      const data = new FormData(leadForm);
+      const lead = {
+        name: String(data.get('name') ?? ''),
+        email: String(data.get('email') ?? ''),
+        company: String(data.get('company') ?? ''),
+        type: businessType,
+        percent: lastResult?.percent ?? null,
+        date: new Date().toISOString(),
+      };
+      try {
+        const key = `sad:leads:${quiz.slug}`;
+        const previous = JSON.parse(window.localStorage.getItem(key) ?? '[]');
+        window.localStorage.setItem(key, JSON.stringify([...previous, lead]));
+      } catch {
+        /* sin almacenamiento */
+      }
+      leadForm.reset();
+      if (note) {
+        note.textContent =
+          'Guardado en este navegador. Te avisaré por correo cuando active el envío del informe.';
+      }
+    });
+
+    const saved = restore();
+    if (saved && saved.businessType) {
+      businessType = saved.businessType;
+      Object.assign(answers, saved.answers ?? {});
+      if (resumeButton) {
+        resumeButton.hidden = false;
+        resumeButton.addEventListener('click', () => showQuestion(saved.index ?? 0));
+      }
+    }
+  }
+</script>

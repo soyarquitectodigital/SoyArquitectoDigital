@@ -66,3 +66,12 @@ export const socials: Social[] = [
 export function bookingUrl(message: string): string {
   return site.calendarUrl || whatsapp(message);
 }
+
+/**
+ * Captura de leads de las herramientas.
+ * 'off'    → no se pide ningún dato.
+ * 'local'  → se guarda solo en el navegador del visitante (nada sale de su equipo).
+ * 'remote' → se envía por Web3Forms usando web3formsKey (requiere página de privacidad).
+ */
+export const leadCapture: 'off' | 'local' | 'remote' = 'local';
+export const web3formsKey = '';

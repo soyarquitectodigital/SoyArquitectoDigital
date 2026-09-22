@@ -125,6 +125,53 @@ teléfono, enlaces o cargo, se edita directamente en el HTML de la firma.
 
 ---
 
+## Herramientas
+
+La sección **Herramientas** (en la landing, tras *El problema*) y el índice `/herramientas` se generan
+desde un registro único, de modo que cada herramienta es independiente y se puede añadir sin tocar las
+demás.
+
+| Archivo | Rol |
+| --- | --- |
+| `src/data/tools.ts` | **Registro**: nombre, descripción, duración, estado (`live` / `soon`), icono y ruta. |
+| `src/data/tools/<slug>/` | Contenido propio de cada herramienta (preguntas, pesos, recomendaciones). |
+| `src/lib/quiz.ts` | **Motor puro** de cuestionarios: normalización 0–100, bandas, semáforo por capa y recomendaciones. Sin UI. |
+| `src/components/tools/` | UI genérica: `QuizRunner` (flujo), `ReportPanel` (informe) y `LeadStep` (captura opcional). |
+| `src/pages/herramientas/` | Índice + una página por herramienta. |
+
+### Añadir una herramienta nueva
+
+1. Crea su contenido en `src/data/tools/<slug>/index.ts` (o el formato que necesite).
+2. Añade la entrada en `src/data/tools.ts` con `status: 'live'` y su `href`.
+3. Crea la página en `src/pages/herramientas/<slug>.astro` (3 líneas: `BaseLayout` + el componente).
+
+La sección de la landing, el índice, el sitemap y el schema se actualizan solos.
+
+### Herramienta 1 — Diagnóstico de Ecosistema Digital
+
+`/herramientas/diagnostico-ecosistema-digital`
+
+- **Flujo**: tipo de negocio (B2B · B2C · E-commerce · SaaS) → 17 preguntas (15 base + 2 específicas del tipo) → informe inmediato → bloque de email opcional.
+- **Evaluación**: 5 capas (captación, experiencia, datos, automatización, infraestructura) con puntaje
+  normalizado 0–100 y bandas **0–40 Red Alert · 41–70 Warning · 71–100 Healthy**.
+- **Informe**: puntaje global, semáforo por capa, recomendaciones priorizadas, copiar resumen,
+  *Guardar como PDF* (estilos de impresión, sin librerías) y CTA a la auditoría con el resultado.
+- **Datos**: nada se envía a ningún servidor. Las respuestas y el progreso se guardan en `localStorage`.
+
+### Captura de leads
+
+Se controla con una constante en `src/config.ts`:
+
+```ts
+export const leadCapture: 'off' | 'local' | 'remote' = 'local';
+```
+
+- `'off'` → el paso de email no se muestra.
+- `'local'` → los datos se guardan solo en el navegador del visitante (situación actual).
+- `'remote'` → se envían por Web3Forms con `web3formsKey` (requiere antes página de privacidad).
+
+---
+
 ## Estructura
 
 ```
@@ -170,10 +217,12 @@ public/              # favicon.svg, og-default.png, robots.txt
 - [ ] **Comparativa** freelancer vs agencia vs arquitecto de ecosistemas.
 - [ ] **Retrato profesional** (se decidió sin foto; en B2B la cara sube confianza).
 - [ ] **Newsletter + lead magnet** (checklist "7 señales de que tu ecosistema necesita arquitectura").
-- [ ] **Quiz interactivo** "¿qué necesita tu ecosistema?" para capturar leads cualificados.
 
 ### Conversión e infraestructura
 
+- [x] **Sección Herramientas** con motor de cuestionarios modular y primera herramienta: Diagnóstico de Ecosistema Digital (17 preguntas, semáforo por capa, informe en PDF).
+- [ ] **Activar el envío de leads** (`leadCapture: 'remote'` + Web3Forms) y publicar la página de privacidad.
+- [ ] **Siguientes herramientas**: calculadora del coste oculto, checklist de 7 señales y auditoría express de rendimiento.
 - [ ] **Formulario de contacto** + página `/gracias` (autoresponder y checkbox de privacidad).
 - [ ] **Analítica sin cookies** (Plausible/Umami) + eventos por CTA, servicio y profundidad de scroll.
 - [ ] **Páginas legales**: aviso legal, política de privacidad y cookies.

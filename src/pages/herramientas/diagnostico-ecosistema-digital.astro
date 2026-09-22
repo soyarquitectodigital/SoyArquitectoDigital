@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import QuizRunner from '../../components/tools/QuizRunner.astro';
+import Button from '../../components/Button.astro';
+import { quiz } from '../../data/tools/diagnostico';
+import { site, bookingUrl } from '../../config';
+
+const path = '/herramientas/diagnostico-ecosistema-digital';
+const title = `${quiz.title} — herramienta gratuita`;
+const description = quiz.tagline;
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: quiz.title,
+  description: quiz.tagline,
+  url: new URL(path, site.url).href,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  inLanguage: 'es',
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  author: { '@type': 'Person', name: site.person, url: site.url },
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+};
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Herramientas', item: new URL('/herramientas', site.url).href },
+    { '@type': 'ListItem', position: 3, name: quiz.title, item: new URL(path, site.url).href },
+  ],
+};
+
+const auditUrl = bookingUrl('Hola Oswaldo, hice el diagnóstico de ecosistema digital.');
+---
+
+<BaseLayout title={title} description={description} schema={[webAppSchema, breadcrumbs]}>
+  <section class="tint-brand bg-paper pt-28 pb-16 sm:pt-32 sm:pb-20">
+    <div class="container-page">
+      <nav class="print-hide" aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+          <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/herramientas" class="transition-colors hover:text-text">Herramientas</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-text">Diagnóstico</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 print-hide" data-reveal>
+        <p class="pill border-line bg-surface text-copy">
+          <span class="size-1.5 rounded-full bg-brand-ink" aria-hidden="true"></span>
+          Gratis · {quiz.durationLabel} · sin registro
+        </p>
+        <h1 class="mt-6 max-w-3xl font-heading display-xl font-semibold text-text">
+          {quiz.title}
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-copy">{quiz.tagline}</p>
+        <p class="mt-5 max-w-2xl text-sm leading-relaxed text-dim">
+          Diseñado por {site.person}, arquitecto de ecosistemas digitales: es el mismo análisis que
+          aplico en la auditoría de 5 días, resumido en {quiz.questions.length + 2} preguntas.
+        </p>
+      </div>
+
+      <div class="mt-12">
+        <QuizRunner />
+      </div>
+
+      <div class="mt-14 grid gap-6 print-hide lg:grid-cols-[1.1fr_0.9fr]" data-reveal>
+        <div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8">
+          <h2 class="font-heading text-2xl font-semibold text-text">Cómo leer tu resultado</h2>
+          <ul class="mt-5 space-y-4 text-sm leading-relaxed text-copy">
+            <li class="flex gap-3">
+              <span class="mt-1.5 size-2 shrink-0 rounded-full" style="background:#b91c1c"></span>
+              <span>
+                <strong class="text-text">0–40 % · Red Alert.</strong> Desconexión severa, fuga de
+                presupuesto o falta de trazabilidad. Aquí lo urgente es ordenar antes de invertir más.
+              </span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-1.5 size-2 shrink-0 rounded-full" style="background:#b45309"></span>
+              <span>
+                <strong class="text-text">41–70 % · Warning.</strong> Hay canales y herramientas
+                activas, pero falta optimización, automatización e integración de datos.
+              </span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-1.5 size-2 shrink-0 rounded-full" style="background:#177a45"></span>
+              <span>
+                <strong class="text-text">71–100 % · Healthy.</strong> Ecosistema maduro, escalable y
+                guiado por datos. El siguiente salto es optimizar, no apagar fuegos.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="rounded-card border border-line bg-surface p-6 shadow-card sm:p-8">
+          <h2 class="font-heading text-2xl font-semibold text-text">¿Y ahora qué?</h2>
+          <p class="mt-4 text-sm leading-relaxed text-copy">
+            El informe te da el orden. Si quieres que lo revise contigo, la auditoría de 5 días
+            incluye el blueprint del ecosistema y un roadmap priorizado de 90 días con
+            recomendaciones sobre tu caso concreto.
+          </p>
+          <div class="mt-6">
+            <Button href={auditUrl} size="lg" external>Reservar auditoría de 5 días</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
