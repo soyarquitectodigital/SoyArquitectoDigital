@@ -1,0 +1,51 @@
+---
+import { capabilities, environments, clientsAndTech } from '../data/stats';
+
+const rowTech = [...capabilities, ...capabilities];
+const rowProof = [...clientsAndTech, ...environments, ...clientsAndTech, ...environments];
+---
+
+<section class="border-b border-line bg-paper py-10 sm:py-12" aria-label="Autoridad y prueba social">
+  <div class="container-page">
+    <p
+      class="mx-auto max-w-3xl text-center font-heading text-xl leading-snug font-semibold text-text sm:text-2xl"
+      data-reveal
+    >
+      Más de 10 años conectando <span class="text-brand-ink">software</span>,{' '}
+      <span class="text-brand-ink">infraestructura física</span> y{' '}
+      <span class="text-brand-ink">estrategia digital</span>.
+    </p>
+  </div>
+
+  <div class="mt-8 space-y-3 sm:mt-10">
+    <div class="marquee-mask overflow-hidden">
+      <div class="marquee-track">
+        {
+          rowTech.map((item) => (
+            <span class="chip mr-3 shrink-0 px-4 py-2 text-sm whitespace-nowrap">
+              <span class="size-1.5 rounded-full bg-brand-2" aria-hidden="true" />
+              {item}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="marquee-mask overflow-hidden">
+      <div class="marquee-track marquee-reverse">
+        {
+          rowProof.map((item) => (
+            <span class="mr-3 inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-ink px-4 py-2 text-sm font-medium whitespace-nowrap text-white">
+              <span class="size-1.5 rounded-full bg-brand-light" aria-hidden="true" />
+              {item}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <p class="mt-6 text-center font-mono text-[11px] tracking-[0.2em] text-dim uppercase">
+    Tecnología · Entornos · Equipos con los que he trabajado
+  </p>
+</section>

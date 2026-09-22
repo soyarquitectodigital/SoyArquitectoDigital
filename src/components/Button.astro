@@ -1,0 +1,75 @@
+﻿---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ink' | 'ghost-dark' | 'ghost-light';
+  size?: 'md' | 'lg';
+  class?: string;
+  external?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className = '',
+  external = false,
+  ariaLabel,
+} = Astro.props;
+
+const base =
+  'group/btn btn-shine inline-flex items-center justify-center gap-2.5 rounded-full font-body font-semibold transition-all duration-300';
+
+const sizes = {
+  md: 'h-12 pl-5 pr-1.5 text-[15px]',
+  lg: 'h-14 pl-7 pr-1.5 text-base',
+};
+
+const variants = {
+  primary: 'bg-brand text-on-brand shadow-soft hover:-translate-y-0.5 hover:shadow-lift',
+  ink: 'bg-text text-white shadow-card hover:-translate-y-0.5 hover:shadow-lift',
+  'ghost-dark':
+    'border border-line-dark bg-white/5 text-white backdrop-blur-md hover:-translate-y-0.5 hover:border-line-dark-strong',
+  'ghost-light':
+    'border border-line bg-surface text-text shadow-card hover:-translate-y-0.5 hover:border-line-strong',
+};
+
+const circle = {
+  primary: 'bg-on-brand/10 text-on-brand',
+  ink: 'bg-white/15 text-brand-light',
+  'ghost-dark': 'bg-brand text-on-brand',
+  'ghost-light': 'bg-text text-brand-light',
+};
+---
+
+<a
+  href={href}
+  class={`${base} ${sizes[size]} ${variants[variant]} ${className}`}
+  aria-label={ariaLabel}
+  {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+>
+  <span class="z-0"><slot /></span>
+  <span
+    class={`z-0 inline-grid size-10 shrink-0 place-items-center overflow-hidden rounded-full duration-200 group-hover/btn:bg-brand group-hover/btn:text-on-brand ${circle[variant]}`}
+  >
+    <svg
+      viewBox="0 0 20 20"
+      class="size-5 transition-transform duration-300 group-hover/btn:translate-x-0.5"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4.16663 10H15.8333"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+      <path
+        d="M10 4.16666 15.8333 10 10 15.8333"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </span>
+</a>

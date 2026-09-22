@@ -1,0 +1,427 @@
+---
+import Button from './Button.astro';
+import { bookingUrl, whatsappDefault } from '../config';
+import { stats } from '../data/stats';
+import { layers } from '../data/layers';
+
+const auditUrl = bookingUrl(
+  'Hola Oswaldo, quiero reservar la auditoría digital de 5 días para mi negocio.',
+);
+
+const layerIcons: Record<string, string> = {
+  identity: 'M12 4l1.7 4.4L18 10l-4.3 1.6L12 16l-1.7-4.4L6 10l4.3-1.6z',
+  experience: 'M4 6.5h16v11H4zM4 10.2h16',
+  growth: 'M4 17.5l5-6.5 4 3 7-9',
+  infra: 'M4 6.2h16v4.6H4zM4 13.2h16v4.6H4z',
+};
+
+const layerStatus = ['Operativa', 'Conectada', 'Midiendo'];
+
+const headline = [
+  { text: 'Arquitectura' },
+  { text: 'de' },
+  { text: 'ecosistemas' },
+  { text: 'digitales' },
+  { text: 'y' },
+  { text: 'CTO-as-a-Service', accent: true },
+  { text: 'para' },
+  { text: 'empresas' },
+  { text: 'en' },
+  { text: 'crecimiento.' },
+];
+---
+
+<section id="inicio" class="grain vignette relative overflow-hidden bg-ink">
+  <div class="hero-aurora" aria-hidden="true">
+    <span class="aurora aurora-1"></span>
+    <span class="aurora aurora-2"></span>
+    <span class="aurora aurora-3"></span>
+    <span class="aurora aurora-4"></span>
+  </div>
+  <div class="hero-sweep" aria-hidden="true"></div>
+  <div class="bg-mesh animate-mesh absolute inset-0" aria-hidden="true"></div>
+  <div
+    class="bg-grid-dark grid-drift absolute inset-0 opacity-35 [mask-image:radial-gradient(85%_65%_at_50%_18%,black,transparent_78%)]"
+    aria-hidden="true"
+  >
+  </div>
+  <canvas id="ecosystem-canvas" class="absolute inset-0 h-full w-full" aria-hidden="true"
+  ></canvas>
+  <div
+    class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent to-ink"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative pt-32 pb-14 sm:pt-36 lg:pt-44 lg:pb-20 xl:pt-52">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] xl:gap-20">
+      <div class="min-w-0">
+        <p class="pill animate-float text-white">
+          <span class="relative inline-flex size-2 text-brand-light">
+            <span class="pulse-dot absolute inset-0 rounded-full bg-brand-light"></span>
+            <span class="relative inline-block size-2 rounded-full bg-brand-light"></span>
+          </span>
+          Disponible para nuevos proyectos
+        </p>
+
+        <h1
+          class="mt-6 max-w-2xl font-heading display-xl font-semibold text-white xl:max-w-4xl"
+        >
+          {
+            headline.map((token, index) => (
+              <>
+                <span class="word-mask">
+                  <span
+                    class:list={['word-in', token.accent && 'text-gradient-light']}
+                    style={`--d:${120 + index * 70}ms`}
+                  >
+                    {token.text}
+                  </span>
+                </span>{' '}
+              </>
+            ))
+          }
+        </h1>
+
+        <p class="mt-7 flex items-center gap-2.5 font-mono text-sm text-copy-dark sm:text-[15px]">
+          <span class="text-brand-light" aria-hidden="true">&gt;</span>
+          <span class="text-white" data-typewriter data-words="Integro tus sistemas: APIs, CRM y ERP|Automatizo procesos con n8n e IA|Desarrollo aplicaciones web a medida|Dirijo tu tecnología como CTO externo">Integro tus sistemas: APIs, CRM y ERP</span>
+          <span class="type-caret text-brand-light" aria-hidden="true">&nbsp;</span>
+        </p>
+
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-copy-dark">
+          Diseño e implemento la infraestructura, desarrollo las aplicaciones y automatizo tus
+          procesos para conectar la tecnología directamente con los objetivos de tu negocio.
+        </p>
+
+        <div class="mt-9 flex flex-wrap items-center gap-4">
+          <Button href={auditUrl} size="lg" external>Reservar auditoría de 5 días</Button>
+          <Button href={whatsappDefault} variant="ghost-dark" size="lg" external>
+            Hablemos por WhatsApp
+          </Button>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-2.5">
+          <span class="pill text-white">
+            <span class="size-1.5 rounded-full bg-brand-light" aria-hidden="true"></span>
+            +600 proyectos entregados
+          </span>
+          <span class="pill text-white">
+            <span class="size-1.5 rounded-full bg-brand-light" aria-hidden="true"></span>
+            Liderazgo técnico en EE. UU. y LATAM
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="card-dark spotlight spotlight-dark hairline hairline-dark relative min-w-0 p-6 transition-transform duration-500 ease-out sm:p-7"
+        data-reveal
+        data-glow
+        data-parallax
+      >
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="font-mono text-[11px] tracking-[0.22em] text-dim-dark uppercase">
+              Ecosistema del cliente
+            </p>
+            <p class="font-heading mt-1 text-xl text-white">Un solo plano, tres capas</p>
+          </div>
+          <span class="pill text-brand-light whitespace-nowrap">
+            <span class="relative inline-flex size-1.5 text-brand-light">
+              <span class="pulse-dot absolute inset-0 rounded-full bg-brand-light"></span>
+              <span class="relative inline-block size-1.5 rounded-full bg-brand-light"></span>
+            </span>
+            En línea
+          </span>
+        </div>
+
+        <ul class="mt-6 space-y-2.5">
+          {
+            layers.map((layer, index) => (
+              <li
+                class="group flex items-center gap-4 rounded-2xl border border-line-dark bg-ink/40 px-4 py-3.5 transition-colors hover:border-line-dark-strong hover:bg-ink/70"
+              >
+                <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-brand-light/12 text-brand-light">
+                  <svg viewBox="0 0 20 20" class="size-5" fill="none" aria-hidden="true">
+                    <path
+                      d={layerIcons[layer.icon]}
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-sm font-semibold text-white">
+                    {layer.name}
+                  </span>
+                  <span class="mt-0.5 block text-xs leading-relaxed text-dim-dark">
+                    {layer.description}
+                  </span>
+                </span>
+                <span class="hidden shrink-0 font-mono text-[11px] tracking-[0.14em] text-brand-light uppercase sm:block">
+                  {layerStatus[index]}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-6 grid grid-cols-3 gap-3 border-t border-line-dark pt-5">
+          <div>
+            <p class="font-heading text-gradient-light text-xl">99,9%</p>
+            <p class="mt-1 text-xs leading-relaxed text-dim-dark">infraestructura monitoreada</p>
+          </div>
+          <div>
+            <p class="font-heading text-gradient-light text-xl">24/7</p>
+            <p class="mt-1 text-xs leading-relaxed text-dim-dark">automatizaciones activas</p>
+          </div>
+          <div>
+            <p class="font-heading text-gradient-light text-xl">1:1</p>
+            <p class="mt-1 text-xs leading-relaxed text-dim-dark">un solo responsable</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 xl:gap-6">
+      {
+        stats.map((stat, index) => (
+          <div
+            class="card-dark spotlight spotlight-dark relative flex flex-col gap-3 p-5"
+            data-reveal
+            data-glow
+            style={`--delay:${index * 90}ms`}
+          >
+            <span class="font-mono text-[11px] tracking-[0.22em] text-dim-dark">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            {stat.count ? (
+              <p
+                class="font-heading text-gradient-light text-3xl leading-none"
+                data-count={stat.count}
+                data-prefix={stat.prefix ?? ''}
+                data-suffix={stat.suffix ?? ''}
+              >
+                {`${stat.prefix ?? ''}${stat.count}${stat.suffix ?? ''}`}
+              </p>
+            ) : (
+              <p class="font-heading text-gradient-light text-3xl leading-none">{stat.value}</p>
+            )}
+            <p class="text-sm leading-relaxed text-copy-dark">{stat.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const canvas = document.getElementById('ecosystem-canvas') as HTMLCanvasElement | null;
+  const hero = document.getElementById('inicio');
+
+  if (canvas && hero) {
+    const ctx = canvas.getContext('2d');
+    const prefersReduced = window.__motion
+      ? !window.__motion.allowed
+      : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+    let visible = true;
+    let time = 0;
+    let nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
+    const pointer = { x: -9999, y: -9999 };
+    const pulses: { a: number; b: number; t: number; speed: number }[] = [];
+
+    const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    function spawnPulse(link: number) {
+      for (let attempt = 0; attempt < 18; attempt++) {
+        const i = Math.floor(Math.random() * nodes.length);
+        const j = Math.floor(Math.random() * nodes.length);
+        if (i === j) continue;
+        const a = nodes[i];
+        const b = nodes[j];
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (dist > 46 && dist < link) {
+          pulses.push({ a: i, b: j, t: 0, speed: 0.008 + Math.random() * 0.013 });
+          return;
+        }
+      }
+    }
+
+    function resize() {
+      if (!canvas || !hero) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = hero.clientWidth;
+      height = hero.clientHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const target = Math.round(Math.min(58, Math.max(20, (width * height) / 36000)));
+      nodes = Array.from({ length: target }, () => ({
+        x: rand(0, width),
+        y: rand(0, height),
+        vx: rand(-0.24, 0.24),
+        vy: rand(-0.24, 0.24),
+        r: rand(1.1, 2.3),
+      }));
+      pulses.length = 0;
+    }
+
+    function draw() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      const link = width < 720 ? 112 : 152;
+
+      for (const node of nodes) {
+        if (!prefersReduced) {
+          node.x += node.vx;
+          node.y += node.vy;
+        }
+        if (node.x < -24) node.x = width + 24;
+        if (node.x > width + 24) node.x = -24;
+        if (node.y < -24) node.y = height + 24;
+        if (node.y > height + 24) node.y = -24;
+
+        const dx = pointer.x - node.x;
+        const dy = pointer.y - node.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist > 0 && dist < 190) {
+          node.x += (dx / dist) * 0.32;
+          node.y += (dy / dist) * 0.32;
+        }
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (dist < link) {
+            const alpha = (1 - dist / link) * 0.34;
+            ctx.strokeStyle = `rgba(124, 180, 255, ${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Pulsos de datos viajando por las conexiones del ecosistema
+      if (!prefersReduced) {
+        time += 1;
+        if (time % 32 === 0 && pulses.length < 14) spawnPulse(link);
+
+        for (let k = pulses.length - 1; k >= 0; k--) {
+          const pulse = pulses[k];
+          const a = nodes[pulse.a];
+          const b = nodes[pulse.b];
+          if (!a || !b) {
+            pulses.splice(k, 1);
+            continue;
+          }
+
+          pulse.t += pulse.speed;
+          if (pulse.t >= 1) {
+            pulses.splice(k, 1);
+            continue;
+          }
+
+          const x = a.x + (b.x - a.x) * pulse.t;
+          const y = a.y + (b.y - a.y) * pulse.t;
+          const tailT = Math.max(0, pulse.t - 0.18);
+          const tailX = a.x + (b.x - a.x) * tailT;
+          const tailY = a.y + (b.y - a.y) * tailT;
+
+          const trail = ctx.createLinearGradient(tailX, tailY, x, y);
+          trail.addColorStop(0, 'rgba(34, 211, 238, 0)');
+          trail.addColorStop(1, 'rgba(124, 180, 255, 0.85)');
+          ctx.strokeStyle = trail;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+
+          ctx.save();
+          ctx.shadowColor = 'rgba(124, 180, 255, 0.95)';
+          ctx.shadowBlur = 14;
+          ctx.fillStyle = 'rgba(226, 240, 255, 0.95)';
+          ctx.beginPath();
+          ctx.arc(x, y, 1.9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      for (const node of nodes) {
+        const radius = prefersReduced
+          ? node.r
+          : node.r + Math.sin((time + node.x * 0.35) * 0.03) * 0.35;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, Math.max(0.6, radius), 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function loop() {
+      draw();
+      if (visible) raf = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      cancelAnimationFrame(raf);
+      if (prefersReduced) {
+        draw();
+        return;
+      }
+      if (visible) raf = requestAnimationFrame(loop);
+    }
+
+    resize();
+    start();
+
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        resize();
+        start();
+      }, 160);
+    });
+
+    hero.addEventListener('pointermove', (event) => {
+      const rect = hero.getBoundingClientRect();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+    });
+
+    hero.addEventListener('pointerleave', () => {
+      pointer.x = -9999;
+      pointer.y = -9999;
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          visible = entries[0]?.isIntersecting ?? true;
+          if (visible) {
+            start();
+          } else {
+            cancelAnimationFrame(raf);
+          }
+        },
+        { threshold: 0.05 },
+      );
+      observer.observe(hero);
+    }
+  }
+</script>

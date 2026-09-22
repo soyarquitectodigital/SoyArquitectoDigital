@@ -1,0 +1,32 @@
+# Contenedor de DESARROLLO: hot-reload con la carpeta del proyecto montada.
+# Cada guardado se refleja al instante en http://localhost (sin rebuild).
+#
+#   npm run dev:docker        -> levanta en segundo plano
+#   npm run dev:docker:logs   -> ver el log del servidor
+#   npm run dev:docker:down   -> detener
+#
+# Nota: usa el puerto 80 igual que producción, así que detén uno antes de
+# levantar el otro (npm run prod:docker:down / npm run dev:docker:down).
+services:
+  web:
+    image: node:24-alpine
+    container_name: soyarquitectodigital-landing-dev
+    working_dir: /app
+    command: >
+      sh -c "if [ ! -x node_modules/.bin/astro ]; then
+               echo 'Instalando dependencias (solo la primera vez)...' && npm ci --no-audit --no-fund;
+             fi;
+             npm run dev -- --host 0.0.0.0 --port 80"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: 'true'
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    ports:
+      - '${DEV_PORT:-80}:80'
+      - '${DEV_ALT_PORT:-4321}:80'
+    restart: unless-stopped
+
+volumes:
+  node_modules:

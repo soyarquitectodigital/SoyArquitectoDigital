@@ -1,0 +1,72 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { signals } from '../data/signals';
+---
+
+<section id="problema" class="section-pad tint-brand scroll-mt-24 bg-paper">
+  <div class="container-page">
+    <Eyebrow number="01">El problema</Eyebrow>
+
+    <div class="mt-8 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
+      <div data-reveal>
+        <h2 class="font-heading display-lg font-semibold text-text">
+          Señales de que tu tecnología <span class="text-brand-ink">frena el crecimiento</span>
+        </h2>
+        <p class="mt-5 leading-relaxed text-copy">
+          Casi nunca aparece como un fallo grave. Se nota en decisiones que se atascan, datos que no
+          cuadran y tareas que nadie sabe de quién son. Es lo que llamo un
+          <span class="font-semibold text-text">Frankenstein digital</span>: piezas correctas que
+          no se hablan entre sí.
+        </p>
+
+        <figure class="mt-8 rounded-card border border-line bg-surface p-6 shadow-card">
+          <blockquote class="font-heading text-lg leading-snug text-text">
+            «Un ecosistema no se rompe de golpe: se desordena una herramienta cada vez.»
+          </blockquote>
+          <figcaption class="mt-4 font-mono text-[11px] tracking-[0.18em] text-dim uppercase">
+            Oswaldo González · Arquitecto de ecosistemas
+          </figcaption>
+        </figure>
+
+        <p class="mt-8 text-sm leading-relaxed text-copy">
+          Si reconoces
+          <span class="font-semibold text-text"> dos o más señales</span> en tu operación, la
+          auditoría de 5 días te va a ahorrar meses de prueba y error.
+        </p>
+      </div>
+
+      <ul class="grid gap-3 sm:grid-cols-2 xl:gap-5"> 
+        {
+          signals.map((signal, index) => (
+            <li
+              class="group card hairline spotlight relative p-6 transition duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-lift"
+              data-reveal
+              data-glow
+              style={`--delay:${index * 90}ms`}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span class="font-mono text-[11px] tracking-[0.2em] text-brand-ink">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span class="grid size-8 place-items-center rounded-full bg-paper text-brand-ink transition-colors group-hover:bg-brand group-hover:text-on-brand">
+                  <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                    <path
+                      d="M10 6.5v4M10 13.5h.01"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+              </div>
+              <h3 class="font-heading mt-3 text-[17px] leading-snug font-semibold text-text">
+                {signal.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-copy">{signal.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

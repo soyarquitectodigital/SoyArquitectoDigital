@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://soyarquitectodigital.info/sitemap-index.xml

@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import AuthorityBar from '../components/AuthorityBar.astro';
+import ProblemSection from '../components/ProblemSection.astro';
+import ServicesSection from '../components/ServicesSection.astro';
+import ApproachSection from '../components/ApproachSection.astro';
+import ExperienceSection from '../components/ExperienceSection.astro';
+import CtaSection from '../components/CtaSection.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { site, socials, calendarAuditUrl } from '../config';
+import { faqs } from '../data/faq';
+
+const title = 'Arquitectura de Ecosistemas Digitales y CTO-as-a-Service';
+const description =
+  'Diseño e implemento la infraestructura, desarrollo las aplicaciones y automatizo tus procesos para conectar la tecnología con los objetivos de tu negocio. Auditoría de 5 días, proyectos de 4–12 semanas y CTO externo.';
+
+const socialUrls = socials.map((social) => social.url);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.person,
+  url: site.url,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  sameAs: socialUrls,
+  worksFor: { '@type': 'Organization', name: site.studio },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Universidad Bolivariana de Venezuela (UBV)',
+  },
+  knowsAbout: [
+    'Arquitectura de software',
+    'Ecosistemas digitales',
+    'Integración de sistemas',
+    'Automatización de procesos',
+    'Blockchain',
+    'Inteligencia artificial aplicada',
+  ],
+};
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  description:
+    'Auditoría de ecosistemas digitales (5 días), implementación de proyectos (4–12 semanas) y dirección tecnológica continua (CTO externo / Fractional CTO).',
+  url: site.url,
+  email: `mailto:${site.email}`,
+  founder: { '@type': 'Person', name: site.person },
+  sameAs: socialUrls,
+  areaServed: ['España', 'Latinoamérica', 'Estados Unidos'],
+  serviceType: [
+    'Auditoría de Ecosistemas Digitales',
+    'Implementación de Proyectos',
+    'CTO Externo / Fractional CTO',
+  ],
+  availableLanguage: 'es',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de arquitectura digital',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        url: calendarAuditUrl,
+        itemOffered: { '@type': 'Service', name: 'Auditoría de Ecosistemas (5 días)' },
+      },
+      { '@type': 'Service', name: 'Implementación de Proyectos' },
+      { '@type': 'Service', name: 'CTO Externo / Fractional CTO' },
+    ],
+  },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  inLanguage: 'es',
+  publisher: { '@type': 'Person', name: site.person },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  schema={[personSchema, businessSchema, websiteSchema, faqSchema]}
+>
+  <Hero />
+  <AuthorityBar />
+  <ProblemSection />
+  <ServicesSection />
+  <ApproachSection />
+  <ExperienceSection />
+  <CtaSection />
+  <FaqSection />
+</BaseLayout>

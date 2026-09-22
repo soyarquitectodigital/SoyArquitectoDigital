@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { whatsappDefault } from '../config';
+
+const title = 'Página no encontrada';
+const description =
+  'La página que buscas no existe o cambió de sitio. Vuelve al inicio o cuéntame qué necesitas.';
+---
+
+<BaseLayout title={title} description={description} noindex>
+  <section class="grain vignette relative overflow-hidden bg-ink">
+    <div class="hero-aurora" aria-hidden="true">
+      <span class="aurora aurora-1"></span>
+      <span class="aurora aurora-3"></span>
+    </div>
+    <div class="bg-grid-dark absolute inset-0 opacity-25" aria-hidden="true"></div>
+
+    <div
+      class="container-page relative flex min-h-[78vh] flex-col justify-center py-24 sm:py-28 lg:py-32"
+    >
+      <p class="pill text-white">
+        <span class="size-1.5 rounded-full bg-brand-light" aria-hidden="true"></span>
+        Error 404
+      </p>
+
+      <h1 class="mt-6 max-w-3xl font-heading display-xl font-semibold text-white">
+        Esta página no existe, <span class="text-gradient-light">igual que un ecosistema sin plano</span>.
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-copy-dark">
+        El enlace que seguiste no está aquí. Puede que haya cambiado de sitio o que nunca existiera.
+        Nada que un buen diagnóstico no resuelva.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <Button href="/" size="lg">Volver al inicio</Button>
+        <Button href={whatsappDefault} variant="ghost-dark" size="lg" external>
+          Contarme qué buscabas
+        </Button>
+      </div>
+
+      <div class="mt-12 flex flex-wrap gap-x-8 gap-y-3 border-t border-line-dark pt-8 text-sm text-copy-dark">
+        <a href="/#servicios" class="transition-colors hover:text-white">Servicios</a>
+        <a href="/#enfoque" class="transition-colors hover:text-white">Enfoque integral</a>
+        <a href="/#trayectoria" class="transition-colors hover:text-white">Trayectoria</a>
+        <a href="/#preguntas" class="transition-colors hover:text-white">Preguntas frecuentes</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

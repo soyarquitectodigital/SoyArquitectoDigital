@@ -1,0 +1,137 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { services } from '../data/services';
+import { bookingUrl, whatsapp } from '../config';
+
+const checkPath = 'm5 12.5 4.5 4.5L19 7.5';
+
+const serviceIcons = [
+  'M10.5 4.5a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM15.2 15.2 19.5 19.5',
+  'M8.5 7.5 4.5 12l4 4.5M15.5 7.5l4 4.5-4 4.5',
+  'M12 3v3M12 18v3M3 12h3M18 12h3M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z',
+];
+---
+
+<section id="servicios" class="section-pad tint-brand scroll-mt-24 bg-paper">
+  <div class="container-page">
+    <Eyebrow number="02">La solución</Eyebrow>
+
+    <div class="mt-8 flex flex-wrap items-end justify-between gap-6" data-reveal>
+      <h2 class="max-w-xl font-heading display-lg font-semibold text-text xl:max-w-2xl">
+        Tres formas de resolverlo, según el momento de tu negocio
+      </h2>
+      <p class="max-w-sm text-sm leading-relaxed text-copy">
+        Empieza por donde duele menos: un diagnóstico de 5 días. Si ya tienes el plano claro,
+        pasamos directo a construir o a dirigir tu tecnología.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-3 xl:gap-6">
+      {
+        services.map((service, index) => (
+          <article
+            class="group tilt spotlight spotlight-dark hairline hairline-dark relative flex flex-col overflow-hidden rounded-card border border-line-dark bg-ink p-6 shadow-soft transition-shadow duration-300 hover:border-line-dark-strong hover:shadow-lift sm:p-7"
+            data-reveal
+            data-glow
+            data-tilt
+            style={`--delay:${index * 110}ms`}
+          >
+            <div
+              class="gradient-secondary pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              aria-hidden="true"
+            />
+            <div class="relative flex flex-1 flex-col">
+              <div class="flex items-center justify-between gap-4">
+                <span class="inline-flex items-center gap-3">
+                  <span class="grid size-11 place-items-center rounded-2xl border border-line-dark bg-white/6 text-brand-light">
+                    <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
+                      <path
+                        d={serviceIcons[index]}
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="font-mono text-[11px] tracking-[0.22em] text-brand-light">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </span>
+                <span class="pill text-[11px]">{service.meta}</span>
+              </div>
+
+              <h3 class="font-heading mt-7 text-2xl leading-tight font-semibold text-white">
+                {service.name}
+              </h3>
+              <p class="mt-4 text-sm leading-relaxed text-copy-dark">{service.description}</p>
+
+              <ul class="mt-6 flex-1 space-y-2.5">
+                {service.deliverables.map((item) => (
+                  <li class="flex items-start gap-2.5 text-sm text-copy-dark">
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="mt-0.5 size-4 shrink-0 text-brand-light"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d={checkPath}
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div class="mt-7 flex items-end justify-between gap-4 border-t border-line-dark pt-5">
+                <span class="flex min-w-0 flex-col gap-1">
+                  <span class="font-mono text-[10px] tracking-[0.18em] text-dim-dark uppercase">
+                    {service.priceLabel}
+                  </span>
+                  <span class="text-sm font-semibold text-white">{service.price}</span>
+                </span>
+                <a
+                  href={service.booking
+                    ? bookingUrl(`Hola Oswaldo, quiero reservar la ${service.name}.`)
+                    : whatsapp(`Hola Oswaldo, me interesa el servicio de ${service.name}. ¿Lo vemos?`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line-dark bg-white/6 px-4 py-2 text-sm font-semibold whitespace-nowrap text-brand-light transition duration-300 group-hover:border-brand-light/45 group-hover:bg-brand-light/12"
+                >
+                  {service.booking ? 'Reservar auditoría' : 'Consultar'}
+                  <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                    <path
+                      d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="mt-10 text-center text-sm text-copy" data-reveal>
+      ¿No sabes cuál te toca?{" "}
+      <a
+        href={whatsapp('Hola Oswaldo, no sé qué servicio necesito. ¿Me ayudas a identificar por dónde empezar?')}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-semibold text-brand-ink underline decoration-brand decoration-2 underline-offset-4 transition-colors hover:text-text"
+      >
+        Escríbeme
+      </a>{" "}
+      y en 15 minutos te digo qué haría primero.
+    </p>
+  </div>
+</section>

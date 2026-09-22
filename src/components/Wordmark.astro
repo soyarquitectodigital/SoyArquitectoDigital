@@ -1,0 +1,20 @@
+﻿---
+interface Props {
+  class?: string;
+  size?: 'md' | 'lg';
+}
+
+const { class: className = '', size = 'md' } = Astro.props;
+
+const sizes = {
+  md: 'text-[17px]',
+  lg: 'text-xl',
+};
+---
+
+<span class={`inline-flex items-baseline gap-0.5 leading-none font-body ${sizes[size]} ${className}`}>
+  <span class="font-semibold tracking-tight">soy</span>
+  <span class="font-heading wordmark-accent font-semibold">arquitecto</span>
+  <span class="font-semibold tracking-tight">digital</span>
+  <span class="wordmark-dot ml-0.5 size-1.5 shrink-0 self-center rounded-full" aria-hidden="true"></span>
+</span>

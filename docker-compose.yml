@@ -1,0 +1,9 @@
+services:
+  web:
+    build:
+      context: .
+    image: soyarquitectodigital-landing:latest
+    container_name: soyarquitectodigital-landing
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"

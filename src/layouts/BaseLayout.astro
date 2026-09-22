@@ -1,0 +1,454 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { site } from '../config';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/og-default.png',
+  schema = [],
+  noindex = false,
+} = Astro.props;
+
+const siteName = site.name;
+const isDev = import.meta.env.DEV;
+const devStamp = new Date().toLocaleTimeString('es-ES');
+const fullTitle = isDev
+  ? `[dev ${devStamp}] ${title}`
+  : title.includes(siteName)
+    ? title
+    : `${title} · ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="es" class="js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="theme-color" content="#071b3a" />
+    <script is:inline>
+      // Decide si se permiten animaciones: se respeta "reducir movimiento" del
+      // sistema, salvo que se fuercen con ?motion=on o el interruptor del badge.
+      (function () {
+        var forced = false;
+        try {
+          forced = window.localStorage.getItem('force-motion') === '1';
+        } catch (error) {
+          forced = false;
+        }
+        if (window.location.search.indexOf('motion=on') !== -1) forced = true;
+        var reduced = false;
+        try {
+          reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        } catch (error) {
+          reduced = false;
+        }
+        var allowed = forced || !reduced;
+        window.__motion = { reduced: reduced, forced: forced, allowed: allowed };
+        if (!allowed) document.documentElement.classList.add('reduce-motion');
+      })();
+    </script>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {schema.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
+  </head>
+  <body>
+    <div id="scroll-progress" aria-hidden="true"></div>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+    >
+      Saltar al contenido
+    </a>
+    <Nav />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFloat />
+    {
+      isDev && (
+        <div
+          class="fixed bottom-3 left-3 z-[90] rounded-full border border-brand-light/40 bg-ink/90 px-3 py-1 font-mono text-[10px] tracking-[0.14em] text-brand-light uppercase shadow-lift backdrop-blur-md sm:top-2.5 sm:bottom-auto sm:left-1/2 sm:-translate-x-1/2 sm:px-4 sm:py-1.5 sm:text-[11px]"
+        >
+          <span class="mr-2 inline-block size-1.5 rounded-full bg-brand-light align-middle"></span>
+          <span aria-hidden="true">dev · versión {devStamp} ·</span>
+          <button
+            type="button"
+            id="dev-motion"
+            class="cursor-pointer underline decoration-dotted underline-offset-2"
+          >
+            animaciones
+          </button>
+        </div>
+      )
+    }
+    <script is:inline>
+      document.documentElement.classList.add('js');
+
+      document.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+        var menuBtn = target.closest('[data-menu-toggle]');
+        if (menuBtn) {
+          var panel = document.getElementById('menu-movil');
+          if (!panel) return;
+          var open = panel.classList.toggle('hidden');
+          menuBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+        }
+        var closeBtn = target.closest('[data-menu-close]');
+        if (closeBtn) {
+          var panelClose = document.getElementById('menu-movil');
+          if (!panelClose) return;
+          panelClose.classList.add('hidden');
+          var toggle = document.querySelector('[data-menu-toggle]');
+          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      (function () {
+        var nav = document.getElementById('site-nav');
+        var float = document.getElementById('wa-float');
+        function onScroll() {
+          var y = window.scrollY || 0;
+          if (nav) {
+            nav.classList.toggle(
+              'is-solid',
+              y > Math.max(320, window.innerHeight * 0.72),
+            );
+          }
+          if (float) {
+            float.classList.toggle('is-on', y > 480);
+          }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        var nodes = document.querySelectorAll('[data-reveal]');
+        if (!nodes.length) return;
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        nodes.forEach(function (node) {
+          observer.observe(node);
+        });
+      })();
+
+      // Barra de progreso de lectura
+      (function () {
+        var bar = document.getElementById('scroll-progress');
+        if (!bar) return;
+        var ticking = false;
+        function update() {
+          ticking = false;
+          var doc = document.documentElement;
+          var max = doc.scrollHeight - window.innerHeight;
+          var progress = max > 0 ? (window.scrollY || 0) / max : 0;
+          bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, progress)).toFixed(4) + ')';
+        }
+        function request() {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+        window.addEventListener('scroll', request, { passive: true });
+        window.addEventListener('resize', request);
+        update();
+      })();
+
+      // Luz que sigue al cursor en tarjetas con [data-glow]
+      (function () {
+        if (window.matchMedia('(hover: none)').matches) return;
+        var active = null;
+        document.addEventListener(
+          'pointermove',
+          function (event) {
+            var target = event.target;
+            var el = target instanceof Element ? target.closest('[data-glow]') : null;
+            if (active && active !== el) {
+              active.style.removeProperty('--mx');
+              active.style.removeProperty('--my');
+            }
+            active = el;
+            if (!el) return;
+            var rect = el.getBoundingClientRect();
+            el.style.setProperty('--mx', (((event.clientX - rect.left) / rect.width) * 100).toFixed(2) + '%');
+            el.style.setProperty('--my', (((event.clientY - rect.top) / rect.height) * 100).toFixed(2) + '%');
+          },
+          { passive: true },
+        );
+      })();
+
+      // Scrollspy: resalta la sección visible en el nav
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        var links = document.querySelectorAll('#site-nav .nav-link[href^="#"]');
+        if (!links.length) return;
+        var map = {};
+        links.forEach(function (link) {
+          map[link.getAttribute('href').slice(1)] = link;
+        });
+        var sections = Object.keys(map)
+          .map(function (id) {
+            return document.getElementById(id);
+          })
+          .filter(Boolean);
+        if (!sections.length) return;
+        var current = null;
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var link = map[entry.target.id];
+              if (!link || link === current) return;
+              if (current) current.classList.remove('is-active');
+              link.classList.add('is-active');
+              current = link;
+            });
+          },
+          { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+        );
+        sections.forEach(function (section) {
+          observer.observe(section);
+        });
+      })();
+
+      var preferReduced = window.__motion
+        ? !window.__motion.allowed
+        : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var noHover = window.matchMedia('(hover: none)').matches;
+
+      // Textos que se escriben solos
+      (function () {
+        var nodes = document.querySelectorAll('[data-typewriter]');
+        if (!nodes.length) return;
+        nodes.forEach(function (el) {
+          var words = (el.getAttribute('data-words') || '')
+            .split('|')
+            .map(function (word) {
+              return word.trim();
+            })
+            .filter(Boolean);
+          if (!words.length) return;
+          if (preferReduced) {
+            el.textContent = words[0];
+            el.classList.remove('text-transparent');
+            return;
+          }
+          var wordIndex = 0;
+          var charIndex = 0;
+          var deleting = false;
+          function tick() {
+            var word = words[wordIndex];
+            charIndex += deleting ? -1 : 1;
+            el.textContent = word.slice(0, charIndex);
+            var delay = deleting ? 26 : 58;
+            if (!deleting && charIndex === word.length) {
+              deleting = true;
+              delay = 2000;
+            } else if (deleting && charIndex === 0) {
+              deleting = false;
+              wordIndex = (wordIndex + 1) % words.length;
+              delay = 340;
+            }
+            window.setTimeout(tick, delay);
+          }
+          tick();
+        });
+      })();
+
+      // Cifras que cuentan hacia arriba
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        var nodes = document.querySelectorAll('[data-count]');
+        if (!nodes.length) return;
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var el = entry.target;
+              observer.unobserve(el);
+              var target = parseFloat(el.getAttribute('data-count') || '0');
+              var prefix = el.getAttribute('data-prefix') || '';
+              var suffix = el.getAttribute('data-suffix') || '';
+              if (preferReduced) {
+                el.textContent = prefix + target + suffix;
+                return;
+              }
+              var start = performance.now();
+              var duration = 1500;
+              function frame(now) {
+                var progress = Math.min(1, (now - start) / duration);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = prefix + Math.round(target * eased) + suffix;
+                if (progress < 1) requestAnimationFrame(frame);
+              }
+              requestAnimationFrame(frame);
+            });
+          },
+          { threshold: 0.5 },
+        );
+        nodes.forEach(function (el) {
+          observer.observe(el);
+        });
+      })();
+
+      // Inclinación 3D de tarjetas con [data-tilt]
+      if (!noHover && !preferReduced) {
+        document.querySelectorAll('[data-tilt]').forEach(function (el) {
+          el.addEventListener('pointermove', function (event) {
+            var rect = el.getBoundingClientRect();
+            var px = (event.clientX - rect.left) / rect.width - 0.5;
+            var py = (event.clientY - rect.top) / rect.height - 0.5;
+            el.style.setProperty('--rx', (-py * 6).toFixed(2) + 'deg');
+            el.style.setProperty('--ry', (px * 8).toFixed(2) + 'deg');
+          });
+          el.addEventListener('pointerleave', function () {
+            el.style.setProperty('--rx', '0deg');
+            el.style.setProperty('--ry', '0deg');
+          });
+        });
+      }
+
+      // Paralaje suave del panel del hero y de las auroras de fondo
+      (function () {
+        var hero = document.getElementById('inicio');
+        var card = document.querySelector('[data-parallax]');
+        var auroras = document.querySelector('.hero-aurora');
+        if (!hero || noHover || preferReduced) return;
+        var raf = 0;
+        hero.addEventListener('pointermove', function (event) {
+          if (raf) return;
+          raf = requestAnimationFrame(function () {
+            raf = 0;
+            var rect = hero.getBoundingClientRect();
+            var x = (event.clientX - rect.left) / rect.width - 0.5;
+            var y = (event.clientY - rect.top) / rect.height - 0.5;
+            if (card) {
+              card.style.transform =
+                'translate3d(' + (x * -14).toFixed(2) + 'px, ' + (y * -10).toFixed(2) + 'px, 0)';
+            }
+            if (auroras) {
+              auroras.style.transform =
+                'translate3d(' + (x * 28).toFixed(2) + 'px, ' + (y * 18).toFixed(2) + 'px, 0)';
+            }
+          });
+        });
+        hero.addEventListener('pointerleave', function () {
+          if (card) card.style.transform = 'translate3d(0, 0, 0)';
+          if (auroras) auroras.style.transform = 'translate3d(0, 0, 0)';
+        });
+      })();
+
+      // Interruptor de animaciones del badge de desarrollo
+      (function () {
+        var button = document.getElementById('dev-motion');
+        if (!button) return;
+        var motion = window.__motion || { reduced: false, forced: false, allowed: true };
+        if (!motion.allowed) {
+          button.textContent = 'animaciones OFF por tu sistema → activar';
+        } else if (motion.forced) {
+          button.textContent = 'animaciones forzadas (tu sistema las reduce)';
+        } else {
+          button.textContent = 'animaciones ON';
+        }
+        button.addEventListener('click', function () {
+          try {
+            window.localStorage.setItem('force-motion', motion.forced ? '0' : '1');
+          } catch (error) {
+            /* sin almacenamiento: recarga igual */
+          }
+          window.location.reload();
+        });
+      })();
+
+      // Ciclo de capas iluminadas en la sección de enfoque
+      (function () {
+        var rows = document.querySelectorAll('[data-layer-row]');
+        if (!rows.length || preferReduced) return;
+        var section = document.getElementById('enfoque');
+        var index = 0;
+        var timer = null;
+        function step() {
+          rows.forEach(function (row) {
+            row.classList.remove('is-active');
+          });
+          rows[index % rows.length].classList.add('is-active');
+          index += 1;
+        }
+        function start() {
+          if (timer) return;
+          step();
+          timer = window.setInterval(step, 2800);
+        }
+        function stop() {
+          if (timer) window.clearInterval(timer);
+          timer = null;
+          rows.forEach(function (row) {
+            row.classList.remove('is-active');
+          });
+        }
+        if (section && 'IntersectionObserver' in window) {
+          var observer = new IntersectionObserver(
+            function (entries) {
+              entries[0].isIntersecting ? start() : stop();
+            },
+            { threshold: 0.25 },
+          );
+          observer.observe(section);
+        } else {
+          start();
+        }
+      })();
+    </script>
+  </body>
+</html>

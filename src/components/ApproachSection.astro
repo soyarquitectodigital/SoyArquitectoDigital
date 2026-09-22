@@ -1,0 +1,111 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import Button from './Button.astro';
+import { layers } from '../data/layers';
+import { principles } from '../data/cv';
+
+const layerIcons: Record<string, string> = {
+  identity: 'M12 4l1.7 4.4L18 10l-4.3 1.6L12 16l-1.7-4.4L6 10l4.3-1.6z',
+  experience: 'M4 6.5h16v11H4zM4 10.2h16',
+  growth: 'M4 17.5l5-6.5 4 3 7-9',
+  infra: 'M4 6.2h16v4.6H4zM4 13.2h16v4.6H4z',
+};
+---
+
+<section id="enfoque" class="grain section-pad scroll-mt-24 relative overflow-hidden bg-ink-soft">
+  <div class="bg-grid-dark absolute inset-0 opacity-20" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-32 right-[-12%] size-[34rem] rounded-full bg-brand/10 blur-[130px]"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative">
+    <Eyebrow number="03" tone="dark">Enfoque integral</Eyebrow>
+
+    <div class="mt-8 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 xl:gap-24">
+      <div data-reveal>
+        <h2 class="font-heading display-lg font-semibold text-white">
+          Un enfoque integral, <span class="text-brand-light">no piezas sueltas</span>
+        </h2>
+        <p class="mt-5 leading-relaxed text-copy-dark">
+          Un desarrollador ejecuta una parte. Una agencia cubre un canal. Un arquitecto de
+          ecosistemas responde por las tres capas al mismo tiempo: lo físico, lo digital y lo que
+          el negocio necesita de ambas.
+        </p>
+
+        <ol class="mt-10 relative">
+          {
+            layers.map((layer, index) => (
+              <li class="layer-row relative flex items-start gap-5 rounded-2xl p-4" data-layer-row>
+                {index < layers.length - 1 && (
+                  <span
+                    class="line-draw absolute top-14 -bottom-1 left-[35px] w-px bg-gradient-to-b from-brand-light/50 to-white/10"
+                    aria-hidden="true"
+                  />
+                )}
+                <span class="layer-icon relative z-10 grid size-10 shrink-0 place-items-center rounded-full border border-line-dark bg-ink text-brand-light transition-colors duration-500">
+                  <svg viewBox="0 0 20 20" class="size-5" fill="none" aria-hidden="true">
+                    <path
+                      d={layerIcons[layer.icon]}
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div class="min-w-0 pt-0.5">
+                  <p class="font-mono text-[11px] tracking-[0.2em] text-dim-dark">{layer.number}</p>
+                  <h3 class="font-heading mt-1 text-lg font-semibold text-white">
+                    {layer.name}
+                  </h3>
+                  <p class="mt-1 text-sm leading-relaxed text-copy-dark">{layer.description}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="mt-6 text-sm text-dim-dark">Cada capa se decide pensando en las demás.</p>
+      </div>
+
+      <div data-reveal>
+        <div class="rounded-card hairline hairline-dark spotlight spotlight-dark border border-line-dark bg-white/5 p-6 backdrop-blur-xl sm:p-8" data-glow>
+          <p class="font-mono text-[11px] tracking-[0.22em] text-brand-light uppercase">
+            Lo que puedes esperar
+          </p>
+          <ul class="mt-6 space-y-5">
+            {
+              principles.map((principle) => (
+                <li class="flex gap-4">
+                  <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-brand-light/15 text-brand-light">
+                    <svg viewBox="0 0 20 20" class="size-3.5" fill="none" aria-hidden="true">
+                      <path
+                        d="m5 10.5 3.2 3.2L15 6.5"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3 class="font-heading text-base font-semibold text-white">
+                      {principle.title}
+                    </h3>
+                    <p class="mt-1 text-sm leading-relaxed text-copy-dark">{principle.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="mt-8 border-t border-line-dark pt-6">
+            <Button href="#servicios" variant="ghost-dark">Ver los tres servicios</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
