@@ -191,7 +191,7 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
   import { scoreQuiz, summaryText, bandFor, questionsFor } from '../../lib/quiz';
   import type { BusinessTypeId, QuizResult } from '../../lib/quiz';
   import { quiz } from '../../data/tools/diagnostico';
-  import { whatsapp, leadCapture, web3formsKey } from '../../config';
+  import { whatsapp, leadChannel, leadMessage, emailLeadUrl } from '../../config';
 
   const STATUS_LABEL: Record<string, string> = {
     critical: 'Red Alert',
@@ -635,51 +635,57 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
     });
 
     const leadForm = root.querySelector<HTMLFormElement>('[data-lead-form]');
-    leadForm?.addEventListener('submit', async (event) => {
+    leadForm?.addEventListener('submit', (event) => {
       event.preventDefault();
       const note = root.querySelector<HTMLElement>('[data-lead-note]');
+      const fallback = root.querySelector<HTMLElement>('[data-lead-fallback]');
       if (!leadForm.reportValidity()) return;
 
       const data = new FormData(leadForm);
+      const typeLabel = quiz.businessTypes.find((item) => item.id === businessType)?.label ?? '';
+      const layers = lastResult
+        ? lastResult.layers.map((row) => `${row.layer.short} ${row.percent}%`).join(' · ')
+        : '';
       const lead = {
-        name: String(data.get('name') ?? ''),
-        email: String(data.get('email') ?? ''),
-        phone: String(data.get('phone') ?? ''),
-        type: businessType,
+        name: String(data.get('name') ?? '').trim(),
+        email: String(data.get('email') ?? '').trim(),
+        phone: String(data.get('phone') ?? '').trim(),
+        businessType: typeLabel,
         percent: lastResult?.percent ?? null,
-        summary: lastResult ? summaryText(quiz, lastResult) : '',
-        date: new Date().toISOString(),
+        bandLabel: lastResult?.bandLabel ?? null,
+        layers,
       };
 
-      // 1) guardado local (siempre)
+      // 1) Respaldo local: sirve para no reescribir datos y para reenviar después.
       try {
         const key = `sad:leads:${quiz.slug}`;
         const previous = JSON.parse(window.localStorage.getItem(key) ?? '[]');
-        window.localStorage.setItem(key, JSON.stringify([...previous, lead]));
+        window.localStorage.setItem(
+          key,
+          JSON.stringify([...previous, { ...lead, date: new Date().toISOString() }]),
+        );
         window.localStorage.setItem(gateKey, '1');
       } catch {
         /* sin almacenamiento */
       }
 
-      // 2) envío remoto (solo si está activado y hay clave)
-      let sent = false;
-      if (leadCapture === 'remote' && web3formsKey) {
-        try {
-          const payload = new FormData();
-          payload.append('access_key', web3formsKey);
-          payload.append('subject', `Diagnóstico de ecosistema digital — ${lead.percent ?? 0}%`);
-          payload.append('from_name', 'Soluciones · Soy Arquitecto Digital');
-          payload.append('name', lead.name);
-          payload.append('email', lead.email);
-          payload.append('phone', lead.phone);
-          payload.append('message', lead.summary || 'Sin resumen');
-          const response = await fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: payload,
-          });
-          sent = response.ok;
-        } catch {
-          sent = false;
+      // 2) Envío sin APIs ni claves: abre WhatsApp (o el correo) con todo ya escrito.
+      if (leadChannel !== 'local') {
+        const url = leadChannel === 'whatsapp' ? whatsapp(leadMessage(lead)) : emailLeadUrl(lead);
+        const opened = window.open(url, '_blank', 'noopener');
+        if (!opened && fallback) {
+          fallback.hidden = false;
+          fallback.textContent = '';
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.className = 'font-semibold text-brand-light underline underline-offset-2';
+          link.textContent =
+            leadChannel === 'whatsapp'
+              ? 'Pulsa aquí para enviarme tus datos por WhatsApp'
+              : 'Pulsa aquí para enviarme tus datos por correo';
+          fallback.append(link);
         }
       }
 
@@ -687,17 +693,18 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       const nameEl = root.querySelector<HTMLElement>('[data-report-name]');
       if (nameEl && lead.name) nameEl.textContent = lead.name;
       if (note) {
-        note.dataset.state = sent ? 'ok' : 'local';
-        note.textContent = sent
-          ? 'Datos enviados. Abriendo el PDF…'
-          : 'Datos guardados. Abriendo el PDF…';
+        note.dataset.state = 'ok';
+        note.textContent =
+          leadChannel === 'local'
+            ? 'Datos guardados. Abriendo el PDF…'
+            : 'Datos enviados. Abriendo el PDF…';
       }
       const submit = leadForm.querySelector<HTMLButtonElement>('button[type="submit"]');
       if (submit) {
         submit.textContent = 'PDF desbloqueado';
         submit.disabled = true;
       }
-      window.setTimeout(() => window.print(), 420);
+      window.setTimeout(() => window.print(), 520);
     });
 
     const saved = restore();
@@ -708,6 +715,18 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
         resumeButton.hidden = false;
         resumeButton.addEventListener('click', () => showQuestion(saved.index ?? 0));
       }
+    }
+
+    // Si ya envió sus datos antes, la descarga queda desbloqueada.
+    if (gateComplete && gate) {
+      gate.dataset.state = 'done';
+      const note = gate.querySelector<HTMLElement>('[data-lead-note]');
+      if (note) {
+        note.dataset.state = 'ok';
+        note.textContent = 'Datos ya registrados. Puedes descargar el PDF cuando quieras.';
+      }
+      const submit = gate.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submit) submit.textContent = 'Descargar de nuevo el PDF';
     }
   }
 </script>

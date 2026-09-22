@@ -163,18 +163,27 @@ La sección de la landing, el catálogo, el sitemap y el schema se actualizan so
 ### Puerta de descarga del PDF
 
 El informe completo se ve siempre en pantalla, pero **la descarga en PDF requiere nombre, correo y
-teléfono** (más el consentimiento). Al completar el formulario se guarda el lead con el resultado del
-diagnóstico y se abre el diálogo de impresión (`Guardar como PDF`).
+teléfono** (más el consentimiento). Al enviar, el sitio:
 
-El envío de esos datos se controla con `leadCapture` en `src/config.ts`:
+1. Guarda una copia en el navegador del visitante (para no reescribir datos y poder reenviar).
+2. **Abre WhatsApp con todos los datos ya escritos** — el visitante solo pulsa enviar y tú recibes el
+   lead en tu chat con su puntaje y su desglose por capa. Si el navegador bloquea la ventana, se
+   muestra un enlace de respaldo.
+3. Desbloquea y abre el diálogo para guardar el informe en PDF.
+
+**Sin APIs, sin claves y sin backend**: no hay base de datos ni servidores intermedios. Se configura
+con una constante en `src/config.ts`:
 
 ```ts
-export const leadCapture: 'local' | 'remote' = 'local';
+export const leadChannel: 'whatsapp' | 'email' | 'local' = 'whatsapp';
 ```
 
-- `'local'` → los datos quedan solo en el navegador del visitante (situación actual). La propia página lo avisa.
-- `'remote'` → además se envían por Web3Forms usando `web3formsKey`. Para activarlo hay que pegar la
-  clave y publicar la página de privacidad.
+- `'whatsapp'` → abre WhatsApp con el mensaje prellenado (recomendado y activo).
+- `'email'` → abre el cliente de correo del visitante con los datos escritos a `site.email`.
+- `'local'` → no se envía nada; los datos quedan solo en su navegador.
+
+El mensaje incluye nombre, correo, teléfono, tipo de negocio, puntaje, nivel y el resumen por capa
+(`leadMessage()` en `src/config.ts`, reutilizable desde cualquier formulario futuro).
 
 ---
 
@@ -244,11 +253,11 @@ public/              # favicon.svg, og-default.png, robots.txt
 ### Conversión e infraestructura
 
 - [x] **Sección Herramientas** con motor de cuestionarios modular y primera herramienta: Diagnóstico de Ecosistema Digital (17 preguntas, semáforo por capa, informe en PDF).
-- [ ] **Activar el envío de leads** (`leadCapture: 'remote'` + Web3Forms) y publicar la página de privacidad.
+- [x] **Entrega de leads sin infraestructura**: el formulario abre WhatsApp con los datos y el resultado del diagnóstico ya escritos (`leadChannel` en `src/config.ts`).
 - [ ] **Siguientes herramientas**: calculadora del coste oculto, checklist de 7 señales y auditoría express de rendimiento.
-- [ ] **Formulario de contacto** + página `/gracias` (autoresponder y checkbox de privacidad).
+- [ ] **Formulario de contacto** en la landing (mismo canal de WhatsApp) y página `/gracias`.
 - [ ] **Analítica sin cookies** (Plausible/Umami) + eventos por CTA, servicio y profundidad de scroll.
-- [ ] **Páginas legales**: aviso legal, política de privacidad y cookies.
+- [x] **Páginas legales**: privacidad, aviso legal y cookies, enlazadas desde el footer y desde el consentimiento del formulario.
 - [ ] **Versión en inglés** (`/en`) para el mercado de EE.UU.
 - [ ] **Core Web Vitals**: preconnect a Calendly/WhatsApp, preload de fuentes y auditoría Lighthouse + accesibilidad (axe).
 - [x] **Email profesional del dominio** — contacto público: `ayuda@soyarquitectodigital.info`.

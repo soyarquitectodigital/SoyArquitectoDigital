@@ -68,10 +68,43 @@ export function bookingUrl(message: string): string {
 }
 
 /**
- * Captura de leads de las herramientas.
- * 'off'    → no se pide ningún dato.
- * 'local'  → se guarda solo en el navegador del visitante (nada sale de su equipo).
- * 'remote' → se envía por Web3Forms usando web3formsKey (requiere página de privacidad).
+ * Destino de los datos del formulario de descarga del informe.
+ * Sin APIs, sin claves y sin configuración:
+ * - 'whatsapp': al enviar, se abre WhatsApp con todos los datos ya escritos. Tú recibes
+ *   el mensaje en tu número y el visitante desbloquea el PDF.
+ * - 'email': abre el cliente de correo del visitante con los datos escritos a site.email.
+ * - 'local': no se envía nada; los datos quedan solo en el navegador del visitante.
  */
-export const leadCapture: 'off' | 'local' | 'remote' = 'local';
-export const web3formsKey = '';
+export const leadChannel: 'whatsapp' | 'email' | 'local' = 'whatsapp';
+
+export interface LeadPayload {
+  name: string;
+  email: string;
+  phone: string;
+  businessType?: string | null;
+  percent?: number | null;
+  bandLabel?: string | null;
+  layers?: string;
+}
+
+export function leadMessage(lead: LeadPayload): string {
+  const lines = [
+    'Nuevo diagnóstico de ecosistema digital',
+    '',
+    `Nombre: ${lead.name}`,
+    `Email: ${lead.email}`,
+    `Teléfono: ${lead.phone}`,
+  ];
+  if (lead.businessType) lines.push(`Tipo de negocio: ${lead.businessType}`);
+  if (typeof lead.percent === 'number') {
+    lines.push(`Resultado: ${lead.percent}%${lead.bandLabel ? ` — ${lead.bandLabel}` : ''}`);
+  }
+  if (lead.layers) lines.push('', `Por capa: ${lead.layers}`);
+  lines.push('', 'Quiero revisar los resultados y las prioridades.');
+  return lines.join('\n');
+}
+
+export function emailLeadUrl(lead: LeadPayload): string {
+  const subject = `Diagnóstico de ecosistema digital — ${lead.name}`;
+  return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(leadMessage(lead))}`;
+}
