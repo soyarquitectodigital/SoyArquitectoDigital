@@ -101,6 +101,30 @@ Casi todo el contenido editable vive en dos lugares:
 
 ---
 
+## Firma de correo
+
+En `firma/` están las firmas listas para copiar y pegar en Gmail, Outlook o Apple Mail:
+
+| Archivo | Uso |
+| --- | --- |
+| `firma/firma-clara.html` | Versión clara (fondo blanco), la más legible en hilos de correo. |
+| `firma/firma-oscura.html` | Versión azul marino con los colores de marca. |
+| `firma/firma-texto-plano.txt` | Alternativa en texto plano para clientes sin HTML. |
+| `firma/preview-clara.png` / `preview-oscura.png` | Vistas previas para elegir de un vistazo. |
+
+**Cómo instalarla**: abre el HTML en el navegador, copia el bloque entre `INICIO FIRMA` y `FIN FIRMA`
+(Ctrl+C) y pégalo en la configuración de firmas de tu cliente de correo.
+
+- **Gmail**: Configuración → General → Firma → Crear nueva → pegar.
+- **Outlook**: Archivo → Opciones → Correo → Firmas → pegar (o importar el `.htm`).
+- **Apple Mail**: Preferencias → Firmas → pegar y desmarcar "usar tipografía por defecto".
+
+Está construida con tablas y estilos en línea (sin CSS externo ni imágenes remotas) para que se vea
+igual en Gmail, Outlook y Apple Mail, y no se bloquee nada al cargar. No depende del sitio: si cambias
+teléfono, enlaces o cargo, se edita directamente en el HTML de la firma.
+
+---
+
 ## Estructura
 
 ```
@@ -116,6 +140,7 @@ src/
     404.astro        # página de error brandeada (noindex)
   styles/global.css  # tokens, utilidades y todas las animaciones
 docker/nginx/        # configuración de nginx para producción
+firma/               # firmas de correo (clara, oscura, texto plano y previews)
 scripts/generate-og.mjs
 public/              # favicon.svg, og-default.png, robots.txt
 ```
