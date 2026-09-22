@@ -33,7 +33,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <rect width="1200" height="630" fill="url(#dots)"/>
 
   <g transform="translate(72, 96)">
-    <text x="0" y="0" font-family="${font}" font-size="30" font-weight="600" fill="#ffffff">soy<tspan fill="#7cb4ff">arquitecto</tspan>digital</text>
+    <text x="0" y="0" font-family="${font}" font-size="30" font-weight="600" fill="#ffffff">Soy <tspan fill="#7cb4ff">arquitecto</tspan> digital</text>
   </g>
 
   <g transform="translate(72, 208)">
