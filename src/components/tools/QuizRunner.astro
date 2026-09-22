@@ -594,8 +594,56 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       gateComplete = false;
     }
 
-    function askForData() {
-      if (!gate) {
+    // Panel de desarrollo: leads guardados en este navegador y exportación a CSV
+    function readLeads(): Array<Record<string, unknown>> {
+      try {
+        return JSON.parse(window.localStorage.getItem(`sad:leads:${quiz.slug}`) ?? '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function paintLeadsCount() {
+      const counter = root.querySelector<HTMLElement>('[data-leads-count]');
+      if (counter) counter.textContent = String(readLeads().length);
+    }
+
+    function exportLeadsCsv() {
+      const rows = readLeads();
+      if (!rows.length) return;
+      const headers = ['fecha', 'nombre', 'email', 'telefono', 'tipo', 'puntaje', 'nivel', 'simulado'];
+      const csv = [
+        headers.join(';'),
+        ...rows.map((row) =>
+          [
+            row.date,
+            row.name,
+            row.email,
+            row.phone,
+            row.businessType,
+            row.percent,
+            row.bandLabel,
+            row.simulated ? 'si' : 'no',
+          ]
+            .map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`)
+            .join(';'),
+        ),
+      ].join('\n');
+      const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `leads-${quiz.slug}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    root
+      .querySelector<HTMLButtonElement>('[data-leads-export]')
+      ?.addEventListener('click', exportLeadsCsv);
+    paintLeadsCount();
+
+    function askForData() {      if (!gate) {
         window.print();
         return;
       }
@@ -662,15 +710,19 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
         const previous = JSON.parse(window.localStorage.getItem(key) ?? '[]');
         window.localStorage.setItem(
           key,
-          JSON.stringify([...previous, { ...lead, date: new Date().toISOString() }]),
+          JSON.stringify([
+            ...previous,
+            { ...lead, simulated: leadChannel === 'simulate', date: new Date().toISOString() },
+          ]),
         );
         window.localStorage.setItem(gateKey, '1');
       } catch {
         /* sin almacenamiento */
       }
+      paintLeadsCount();
 
-      // 2) Envío sin APIs ni claves: abre WhatsApp (o el correo) con todo ya escrito.
-      if (leadChannel !== 'local') {
+      // 2) Entrega según el canal configurado (simulación, WhatsApp o correo).
+      if (leadChannel === 'whatsapp' || leadChannel === 'email') {
         const url = leadChannel === 'whatsapp' ? whatsapp(leadMessage(lead)) : emailLeadUrl(lead);
         const opened = window.open(url, '_blank', 'noopener');
         if (!opened && fallback) {
@@ -695,9 +747,11 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
       if (note) {
         note.dataset.state = 'ok';
         note.textContent =
-          leadChannel === 'local'
-            ? 'Datos guardados. Abriendo el PDF…'
-            : 'Datos enviados. Abriendo el PDF…';
+          leadChannel === 'simulate'
+            ? 'Datos enviados. Abriendo el PDF…'
+            : leadChannel === 'local'
+              ? 'Datos guardados. Abriendo el PDF…'
+              : 'Datos enviados. Abriendo el PDF…';
       }
       const submit = leadForm.querySelector<HTMLButtonElement>('button[type="submit"]');
       if (submit) {

@@ -70,12 +70,15 @@ export function bookingUrl(message: string): string {
 /**
  * Destino de los datos del formulario de descarga del informe.
  * Sin APIs, sin claves y sin configuración:
- * - 'whatsapp': al enviar, se abre WhatsApp con todos los datos ya escritos. Tú recibes
- *   el mensaje en tu número y el visitante desbloquea el PDF.
+ * - 'simulate': modo simulación. El visitante ve el flujo normal (datos enviados + PDF)
+ *   pero no se abre ningún canal; el lead se guarda en el navegador y se puede exportar
+ *   desde el panel de desarrollo de la herramienta. Usar solo mientras se decide el
+ *   canal real y el sitio no esté publicado.
+ * - 'whatsapp': al enviar, se abre WhatsApp con todos los datos ya escritos.
  * - 'email': abre el cliente de correo del visitante con los datos escritos a site.email.
  * - 'local': no se envía nada; los datos quedan solo en el navegador del visitante.
  */
-export const leadChannel: 'whatsapp' | 'email' | 'local' = 'whatsapp';
+export const leadChannel: 'simulate' | 'whatsapp' | 'email' | 'local' = 'simulate';
 
 export interface LeadPayload {
   name: string;

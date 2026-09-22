@@ -2,6 +2,10 @@
 import { leadChannel } from '../../config';
 
 const channelCopy = {
+  simulate: {
+    hint: 'El informe se genera en tu navegador y la descarga se desbloquea al instante.',
+    button: 'Enviar y descargar el PDF',
+  },
   whatsapp: {
     hint: 'Se abrirá WhatsApp con tus datos ya escritos: solo tienes que pulsar enviar.',
     button: 'Enviar y descargar el PDF',
@@ -15,6 +19,8 @@ const channelCopy = {
     button: 'Descargar informe en PDF',
   },
 }[leadChannel];
+
+const isSimulation = leadChannel === 'simulate';
 ---
 
 <section
@@ -166,18 +172,40 @@ const channelCopy = {
         <p class="text-center text-[11px] text-dim-dark">{channelCopy.hint}</p>
       </form>
 
-      <p
-        class="mt-4 text-xs leading-relaxed text-dim-dark"
-        data-lead-note
-        role="status"
-        aria-live="polite"
-      >
+      <p class="mt-4 text-xs leading-relaxed text-dim-dark" data-lead-note role="status" aria-live="polite">
         {leadChannel === 'local'
           ? 'Tus datos se guardan solo en este navegador; no se envían a ningún servidor.'
           : 'Tus datos viajan únicamente en el mensaje que tú envías. Nada se guarda en servidores.'}
       </p>
 
       <p class="mt-3 hidden text-xs leading-relaxed" data-lead-fallback></p>
+
+      {
+        import.meta.env.DEV && (
+          <div class="mt-5 rounded-2xl border border-dashed border-brand-light/40 bg-brand/8 p-4">
+            <p class="font-mono text-[10px] tracking-[0.18em] text-brand-light uppercase">
+              Panel de desarrollo · {isSimulation ? 'modo simulación' : 'canal ' + leadChannel}
+            </p>
+            <p class="mt-2 text-xs leading-relaxed text-copy-dark">
+              {isSimulation
+                ? 'No se abre ningún canal: los leads se guardan en este navegador para que puedas revisarlos antes de decidir el definitivo.'
+                : 'Los leads se entregan por el canal configurado en src/config.ts.'}
+            </p>
+            <div class="mt-3 flex flex-wrap items-center gap-3">
+              <span class="font-mono text-[11px] text-brand-light">
+                <span data-leads-count>0</span> leads capturados
+              </span>
+              <button
+                type="button"
+                data-leads-export
+                class="inline-flex h-8 items-center rounded-full border border-brand-light/40 px-3.5 text-[11px] font-semibold text-brand-light transition hover:bg-brand-light/12"
+              >
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </section>

@@ -165,22 +165,30 @@ La sección de la landing, el catálogo, el sitemap y el schema se actualizan so
 El informe completo se ve siempre en pantalla, pero **la descarga en PDF requiere nombre, correo y
 teléfono** (más el consentimiento). Al enviar, el sitio:
 
-1. Guarda una copia en el navegador del visitante (para no reescribir datos y poder reenviar).
-2. **Abre WhatsApp con todos los datos ya escritos** — el visitante solo pulsa enviar y tú recibes el
-   lead en tu chat con su puntaje y su desglose por capa. Si el navegador bloquea la ventana, se
-   muestra un enlace de respaldo.
+1. Guarda el lead en el navegador del visitante (respaldo, para no reescribir datos y para reenviar).
+2. Lo entrega por el **canal configurado** (ver abajo).
 3. Desbloquea y abre el diálogo para guardar el informe en PDF.
 
 **Sin APIs, sin claves y sin backend**: no hay base de datos ni servidores intermedios. Se configura
 con una constante en `src/config.ts`:
 
 ```ts
-export const leadChannel: 'whatsapp' | 'email' | 'local' = 'whatsapp';
+export const leadChannel: 'simulate' | 'whatsapp' | 'email' | 'local' = 'simulate';
 ```
 
-- `'whatsapp'` → abre WhatsApp con el mensaje prellenado (recomendado y activo).
-- `'email'` → abre el cliente de correo del visitante con los datos escritos a `site.email`.
-- `'local'` → no se envía nada; los datos quedan solo en su navegador.
+| Valor | Comportamiento |
+| --- | --- |
+| `'simulate'` | **Modo actual.** El visitante ve el flujo normal (datos enviados + PDF) pero no se abre ningún canal: el lead queda guardado en el navegador. |
+| `'whatsapp'` | Abre WhatsApp con el mensaje prellenado; el visitante solo pulsa enviar y el lead llega al chat. |
+| `'email'` | Abre el cliente de correo del visitante con los datos escritos a `site.email`. |
+| `'local'` | No se envía nada y la página lo dice con transparencia. |
+
+> **Antes de publicar el sitio hay que elegir un canal real** (`whatsapp` o `email`): en `'simulate'`
+> los leads no salen del navegador del visitante.
+
+En desarrollo, la propia puerta muestra un **panel de desarrollo** con el número de leads capturados y
+un botón **Exportar CSV** (fecha, nombre, email, teléfono, tipo, puntaje, nivel y si fue simulado), útil
+para revisar los datos mientras se decide el canal definitivo.
 
 El mensaje incluye nombre, correo, teléfono, tipo de negocio, puntaje, nivel y el resumen por capa
 (`leadMessage()` en `src/config.ts`, reutilizable desde cualquier formulario futuro).
