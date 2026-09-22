@@ -1,0 +1,124 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { bookingUrl, whatsappDefault } from '../config';
+import { notFor, forYou } from '../data/qualification';
+
+const diagnosisUrl = bookingUrl(
+  'Hola Oswaldo, quiero agendar la llamada de diagnóstico para ver si encajamos.',
+);
+---
+
+<section id="para-quien" class="section-pad tint-brand scroll-mt-24 bg-paper">
+  <div class="container-page">
+    <Eyebrow number="05">Filtro honesto</Eyebrow>
+
+    <div class="mt-8 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div data-reveal>
+        <h2 class="font-heading display-lg font-semibold text-text">
+          Esto no es para <span class="text-gradient-brand">todo el mundo</span>
+        </h2>
+        <p class="mt-5 max-w-md leading-relaxed text-copy">
+          Trabajo con pocos clientes a la vez, así que el encaje importa más que el presupuesto.
+          Prefiero decirlo antes de la primera llamada y no después de firmar.
+        </p>
+
+        <figure class="card mt-8 p-6">
+          <blockquote class="font-heading text-lg leading-snug text-text">
+            «Si algo no encaja con tu situación, te lo digo antes de que firmes nada.»
+          </blockquote>
+          <figcaption class="mt-4 font-mono text-[11px] tracking-[0.18em] text-dim uppercase">
+            Oswaldo González
+          </figcaption>
+        </figure>
+
+        <p class="mt-8 text-sm leading-relaxed text-copy">
+          ¿Dudas de en qué lado estás? En la llamada de diagnóstico te lo digo con franqueza — y si
+          no encajamos, te oriento igual por dónde empezar.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            href={diagnosisUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-11 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-on-brand transition hover:-translate-y-0.5"
+          >
+            Agendar diagnóstico
+          </a>
+          <a
+            href={whatsappDefault}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-11 items-center gap-2 rounded-full border border-line bg-surface px-5 text-sm font-semibold text-text transition hover:-translate-y-0.5 hover:border-line-strong"
+          >
+            Preguntar antes
+          </a>
+        </div>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div class="card hairline spotlight relative p-6" data-reveal data-glow>
+          <p class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">
+            No es para ti si…
+          </p>
+          <ul class="mt-6 space-y-4">
+            {
+              notFor.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-paper text-dim">
+                    <svg viewBox="0 0 20 20" class="size-3" fill="none" aria-hidden="true">
+                      <path
+                        d="M6 6l8 8M14 6l-8 8"
+                        stroke="currentColor"
+                        stroke-width="1.9"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block text-sm font-semibold text-text">{item.title}</span>
+                    <span class="mt-1 block text-sm leading-relaxed text-copy">{item.detail}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div
+          class="card card-positive hairline spotlight relative border-brand/25 p-6 shadow-lift"
+          data-reveal
+          data-glow
+          style="--delay:120ms"
+        >
+          <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
+            Sí es para ti si…
+          </p>
+          <ul class="mt-6 space-y-4">
+            {
+              forYou.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand/12 text-brand-ink">
+                    <svg viewBox="0 0 20 20" class="size-3" fill="none" aria-hidden="true">
+                      <path
+                        d="m5 10.5 3.2 3.2L15 6.5"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block text-sm font-semibold text-text">{item.title}</span>
+                    <span class="mt-1 block text-sm leading-relaxed text-copy">{item.detail}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

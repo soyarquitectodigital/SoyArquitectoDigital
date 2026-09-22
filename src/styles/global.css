@@ -299,6 +299,11 @@ html.reduce-motion .pulse-dot::after {
   @apply rounded-card border border-line-dark bg-white/5 shadow-soft backdrop-blur-xl;
 }
 
+/* Variante con tinte azul muy leve para la tarjeta positiva del filtro */
+.card-positive {
+  background-color: color-mix(in srgb, var(--color-brand) 4%, var(--color-surface));
+}
+
 @utility bg-grid-dark {
   background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
   background-size: 22px 22px;
