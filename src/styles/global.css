@@ -24,7 +24,10 @@
   --color-line-strong: rgba(9, 25, 51, 0.22);
   --color-text: #0a1b33;
   --color-copy: #46586e;
-  --color-dim: #7c8da3;
+  /* Antes #7c8da3: daba 3,16:1 sobre --color-paper y 3,39:1 sobre --color-surface,
+     por debajo del 4,5:1 que exige WCAG AA para texto normal. Este tono sube a
+     4,65:1 y 4,99:1 manteniendo el mismo matiz apagado. */
+  --color-dim: #5f7189;
 
   /* Marca: azul corporativo sobre azul marino */
   --color-brand: #2563eb;
@@ -37,6 +40,9 @@
   --color-ok-ink: #177a45;
   --color-warn: #b45309;
   --color-danger: #b91c1c;
+  /* Variante de peligro para textos sobre fondos oscuros: #b91c1c solo alcanza
+     2,65:1 sobre --color-ink, este rojo llega a 6,19:1. */
+  --color-danger-on-dark: #f87171;
 
   --radius-card: 1.75rem;
   --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.55);
@@ -1403,6 +1409,53 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
 .qc-input:focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 1px;
+}
+
+.qc-textarea {
+  width: 100%;
+  min-height: 7.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.9rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.qc-textarea::placeholder {
+  color: var(--color-dim);
+}
+
+.qc-textarea:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 1px;
+}
+
+/* Estado de error de un campo del formulario */
+.field-invalid {
+  border-color: var(--color-danger) !important;
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.field-error:empty {
+  display: none;
+}
+
+/* El formulario de contacto vive sobre una tarjeta oscura: el rojo de error
+   necesita la variante clara para mantener el contraste. */
+.contact-form .field-error {
+  color: var(--color-danger-on-dark);
 }
 
 /* Anillo de puntaje */

@@ -83,13 +83,20 @@ const headline = [
           }
         </h1>
 
-        <p class="mt-7 flex items-center gap-2.5 font-mono text-sm text-copy-dark sm:text-[15px]">
+        <p
+          class="mt-6 max-w-xl text-xl leading-snug font-medium text-white sm:text-2xl"
+        >
+          Ayudo a empresas a escalar su tecnología <span class="text-brand-light">sin caos</span>:
+          unifico sistemas, automatizo procesos y respondo por toda tu arquitectura.
+        </p>
+
+        <p class="mt-5 flex items-center gap-2.5 font-mono text-sm text-copy-dark sm:text-[15px]">
           <span class="text-brand-light" aria-hidden="true">&gt;</span>
           <span class="text-white" data-typewriter data-words="Integro tus sistemas: APIs, CRM y ERP|Automatizo procesos con n8n e IA|Desarrollo aplicaciones web a medida|Dirijo tu tecnología como CTO externo">Integro tus sistemas: APIs, CRM y ERP</span>
           <span class="type-caret text-brand-light" aria-hidden="true">&nbsp;</span>
         </p>
 
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-copy-dark">
+        <p class="mt-5 max-w-xl leading-relaxed text-copy-dark">
           Diseño e implemento la infraestructura, desarrollo las aplicaciones y automatizo tus
           procesos para conectar la tecnología directamente con los objetivos de tu negocio.
         </p>
@@ -218,10 +225,13 @@ const headline = [
 </section>
 
 <script>
-  const canvas = document.getElementById('ecosystem-canvas') as HTMLCanvasElement | null;
-  const hero = document.getElementById('inicio');
-
-  if (canvas && hero) {
+  // Con View Transitions el módulo se evalúa una sola vez en toda la sesión, así
+  // que el arranque se repite en cada `astro:page-load`.
+  function initHeroCanvas() {
+    const canvas = document.getElementById('ecosystem-canvas') as HTMLCanvasElement | null;
+    const hero = document.getElementById('inicio');
+    if (!canvas || !hero || canvas.dataset.ready === '1') return;
+    canvas.dataset.ready = '1';
     const ctx = canvas.getContext('2d');
     const prefersReduced = window.__motion
       ? !window.__motion.allowed
@@ -231,6 +241,7 @@ const headline = [
     let height = 0;
     let raf = 0;
     let visible = true;
+    let observer: IntersectionObserver | null = null;
     let time = 0;
     let nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
     const pointer = { x: -9999, y: -9999 };
@@ -390,13 +401,14 @@ const headline = [
     start();
 
     let resizeTimer = 0;
-    window.addEventListener('resize', () => {
+    const onResize = () => {
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         resize();
         start();
       }, 160);
-    });
+    };
+    window.addEventListener('resize', onResize);
 
     hero.addEventListener('pointermove', (event) => {
       const rect = hero.getBoundingClientRect();
@@ -410,7 +422,7 @@ const headline = [
     });
 
     if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         (entries) => {
           visible = entries[0]?.isIntersecting ?? true;
           if (visible) {
@@ -423,5 +435,22 @@ const headline = [
       );
       observer.observe(hero);
     }
+
+    // Al salir de la página hay que parar el bucle y soltar observador y
+    // listener: si no, el rAF seguiría dibujando sobre un canvas ya
+    // desconectado y cada visita acumularía un listener de `resize`.
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        window.clearTimeout(resizeTimer);
+        cancelAnimationFrame(raf);
+        window.removeEventListener('resize', onResize);
+        observer?.disconnect();
+      },
+      { once: true },
+    );
   }
+
+  document.addEventListener('astro:page-load', initHeroCanvas);
+  initHeroCanvas();
 </script>

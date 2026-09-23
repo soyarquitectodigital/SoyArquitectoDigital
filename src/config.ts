@@ -111,3 +111,35 @@ export function emailLeadUrl(lead: LeadPayload): string {
   const subject = `Diagnóstico de ecosistema digital — ${lead.name}`;
   return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(leadMessage(lead))}`;
 }
+
+/**
+ * Canal de entrega del formulario de contacto de la landing.
+ * - 'whatsapp': al enviar, se abre WhatsApp con todos los datos ya escritos.
+ * - 'email': abre el cliente de correo del visitante con los datos escritos a site.email.
+ * En ambos casos no hay backend: el mensaje sale desde el dispositivo del visitante.
+ */
+export const contactChannel: 'whatsapp' | 'email' = 'whatsapp';
+
+export interface ContactPayload {
+  name: string;
+  email: string;
+  company?: string | null;
+  message: string;
+}
+
+export function contactMessage(contact: ContactPayload): string {
+  const lines = [
+    'Contacto desde la web',
+    '',
+    `Nombre: ${contact.name}`,
+    `Email: ${contact.email}`,
+  ];
+  if (contact.company) lines.push(`Empresa: ${contact.company}`);
+  lines.push('', 'Qué necesita:', contact.message);
+  return lines.join('\n');
+}
+
+export function emailContactUrl(contact: ContactPayload): string {
+  const subject = `Contacto desde la web — ${contact.name}`;
+  return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(contactMessage(contact))}`;
+}

@@ -2,18 +2,21 @@
 import Wordmark from './Wordmark.astro';
 import SocialLinks from './SocialLinks.astro';
 import { bookingUrl, whatsappDefault } from '../config';
+import { cases } from '../data/cases';
 
 const diagnosisUrl = bookingUrl(
   'Hola Oswaldo, quiero agendar una llamada de diagnóstico para revisar mi ecosistema digital.',
 );
 
 // El orden del menú sigue el orden real de las secciones de la landing.
+// Los casos de estudio solo aparecen cuando hay casos cargados.
 const links = [
   { href: '/#problema', label: 'El problema' },
   { href: '/soluciones', label: 'Soluciones' },
   { href: '/#servicios', label: 'Servicios' },
   { href: '/#enfoque', label: 'Enfoque' },
   { href: '/#trayectoria', label: 'Trayectoria' },
+  ...(cases.length > 0 ? [{ href: '/#casos', label: 'Casos' }] : []),
   { href: '/#para-quien', label: 'Para quién', secondary: true },
   { href: '/#preguntas', label: 'Preguntas', secondary: true },
 ];
@@ -32,7 +35,17 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
         <Wordmark />
       </a>
 
-      <nav class="hidden items-center gap-0.5 lg:flex" aria-label="Secciones">
+      {/*
+        En escritorio el menú ocupa el hueco central y se centra entre el logo y
+        los botones. Los huecos crecen con el ancho, pero acotados: medido con
+        Chrome, `justify-between` repartía el espacio y dejaba 74 px entre
+        enlaces (se veían descolgados), mientras que con estos valores el texto
+        queda a 40-48 px y nunca desborda ni a 1024 px.
+      */}
+      <nav
+        class="hidden flex-1 items-center justify-center gap-3 lg:flex xl:gap-5"
+        aria-label="Secciones"
+      >
         {
           links.map((link) => (
             <a

@@ -199,13 +199,18 @@ const layerName = (id: string) => quiz.layers.find((layer) => layer.id === id)?.
     healthy: 'Healthy',
   };
 
-  const root = document.querySelector<HTMLElement>('[data-quiz]');
-
-  // Evita doble inicialización (recargas de HMR en desarrollo).
-  if (root && root.dataset.quizReady !== '1') {
+  // Con View Transitions el módulo se evalúa una sola vez en toda la sesión, así
+  // que el arranque se repite en cada `astro:page-load`. El guard evita
+  // reinicializar el mismo cuestionario (también en recargas de HMR).
+  function initQuiz() {
+    const root = document.querySelector<HTMLElement>('[data-quiz]');
+    if (!root || root.dataset.quizReady === '1') return;
     root.dataset.quizReady = '1';
     startQuiz(root);
   }
+
+  document.addEventListener('astro:page-load', initQuiz);
+  initQuiz();
 
   function startQuiz(root: HTMLElement) {
     const storageKey = `sad:${quiz.slug}`;

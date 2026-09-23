@@ -2,6 +2,7 @@
 import Eyebrow from './Eyebrow.astro';
 import Button from './Button.astro';
 import SocialLinks from './SocialLinks.astro';
+import ContactForm from './ContactForm.astro';
 import { site, socialHandle, bookingUrl, whatsappDefault } from '../config';
 
 const diagnosisUrl = bookingUrl(
@@ -67,6 +68,8 @@ const headline = [
             Prefiero escribir por WhatsApp
           </Button>
         </div>
+
+        <ContactForm />
 
         <div class="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-line-dark pt-8 text-sm text-copy-dark">
           <a

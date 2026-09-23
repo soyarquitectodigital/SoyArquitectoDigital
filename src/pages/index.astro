@@ -7,15 +7,16 @@ import ToolsSection from '../components/ToolsSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
 import ApproachSection from '../components/ApproachSection.astro';
 import ExperienceSection from '../components/ExperienceSection.astro';
+import CaseStudiesSection from '../components/CaseStudiesSection.astro';
 import QualificationSection from '../components/QualificationSection.astro';
 import CtaSection from '../components/CtaSection.astro';
 import FaqSection from '../components/FaqSection.astro';
 import { site, socials, calendarAuditUrl } from '../config';
 import { faqs } from '../data/faq';
 
-const title = 'Arquitectura de Ecosistemas Digitales y CTO-as-a-Service';
+const title = 'CTO externo para PYMEs y arquitectura de software';
 const description =
-  'Diseño e implemento la infraestructura, desarrollo las aplicaciones y automatizo tus procesos para conectar la tecnología con los objetivos de tu negocio. Auditoría de 5 días, proyectos de 4–12 semanas y CTO externo.';
+  'CTO externo y consultoría de arquitectura de software para PYMEs y startups: unifico sistemas, integro APIs, automatizo procesos y dirijo tu tecnología. Auditoría de ecosistema digital en 5 días.';
 
 const socialUrls = socials.map((social) => social.url);
 
@@ -107,6 +108,7 @@ const faqSchema = {
   <ServicesSection />
   <ApproachSection />
   <ExperienceSection />
+  <CaseStudiesSection />
   <QualificationSection />
   <CtaSection />
   <FaqSection />

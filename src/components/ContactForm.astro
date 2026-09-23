@@ -1,0 +1,319 @@
+---
+import { contactChannel, site } from '../config';
+
+const isWhatsApp = contactChannel === 'whatsapp';
+
+const submitLabel = isWhatsApp ? 'Enviar por WhatsApp' : 'Enviar por correo';
+const channelHint = isWhatsApp
+  ? 'Se abrirá WhatsApp con tus datos ya escritos: solo tienes que pulsar enviar.'
+  : 'Se abrirá tu correo con los datos ya escritos: solo tienes que pulsar enviar.';
+---
+
+<div
+  class="contact-form card-dark mx-auto mt-12 max-w-2xl p-6 text-left sm:p-8"
+  data-contact
+  data-channel={contactChannel}
+>
+  <p class="font-mono text-[11px] tracking-[0.2em] text-brand-light uppercase">
+    O escríbeme aquí
+  </p>
+  <h3 class="font-heading mt-3 text-xl leading-tight font-semibold text-white sm:text-2xl">
+    Cuéntame qué se está atascando
+  </h3>
+  <p class="mt-3 text-sm leading-relaxed text-copy-dark">
+    Si prefieres no agendar todavía, déjame los datos y te contesto yo. Sin llamadas y sin
+    compromiso.
+  </p>
+
+  <form data-contact-form class="mt-6 grid gap-4" novalidate>
+    <!-- Trampa antispam: invisible para las personas, los bots la rellenan. -->
+    <div class="hidden" aria-hidden="true">
+      <label for="contact-website">No rellenes este campo</label>
+      <input
+        id="contact-website"
+        name="website"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+        data-contact-honeypot
+      />
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label for="contact-name" class="block text-sm font-medium text-white">
+          Nombre y apellido <span class="text-brand-light" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          class="qc-input mt-1.5"
+          autocomplete="name"
+          placeholder="Ana Pérez"
+          required
+          aria-describedby="contact-name-error"
+        />
+        <span id="contact-name-error" class="field-error" data-error-for="name" role="alert"></span>
+      </div>
+
+      <div>
+        <label for="contact-email" class="block text-sm font-medium text-white">
+          Correo electrónico <span class="text-brand-light" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          class="qc-input mt-1.5"
+          autocomplete="email"
+          placeholder="ana@tuempresa.com"
+          required
+          aria-describedby="contact-email-error"
+        />
+        <span
+          id="contact-email-error"
+          class="field-error"
+          data-error-for="email"
+          role="alert"
+        ></span>
+      </div>
+    </div>
+
+    <div>
+      <label for="contact-company" class="block text-sm font-medium text-white">
+        Empresa <span class="text-dim-dark">(opcional)</span>
+      </label>
+      <input
+        id="contact-company"
+        name="company"
+        type="text"
+        class="qc-input mt-1.5"
+        autocomplete="organization"
+        placeholder="Nombre de tu empresa"
+      />
+    </div>
+
+    <div>
+      <label for="contact-message" class="block text-sm font-medium text-white">
+        ¿Qué necesitas? <span class="text-brand-light" aria-hidden="true">*</span>
+      </label>
+      <textarea
+        id="contact-message"
+        name="message"
+        class="qc-textarea mt-1.5"
+        rows="4"
+        placeholder="Tengo tres herramientas que no se hablan entre sí y el equipo pierde horas copiando datos a mano."
+        required
+        aria-describedby="contact-message-error"
+      ></textarea>
+      <span
+        id="contact-message-error"
+        class="field-error"
+        data-error-for="message"
+        role="alert"
+      ></span>
+    </div>
+
+    <div>
+      <label class="flex items-start gap-2.5 text-xs leading-relaxed text-copy-dark">
+        <input
+          type="checkbox"
+          name="consent"
+          class="mt-0.5 size-4 shrink-0 accent-[#7cb4ff]"
+          required
+          aria-describedby="contact-consent-error"
+        />
+        <span>
+          Autorizo el uso de mis datos para que me respondas a esta consulta, según la
+          <a
+            href="/legal/privacidad"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline decoration-brand-light/60 underline-offset-2 transition-colors hover:text-white"
+          >
+            política de privacidad
+          </a>.
+        </span>
+      </label>
+      <span
+        id="contact-consent-error"
+        class="field-error"
+        data-error-for="consent"
+        role="alert"
+      ></span>
+    </div>
+
+    <button
+      type="submit"
+      class="qc-btn-primary btn-shine mt-1 w-full justify-center text-base"
+      data-contact-submit
+    >
+      {submitLabel}
+      <svg viewBox="0 0 20 20" class="size-5" fill="none" aria-hidden="true">
+        <path
+          d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <p class="text-center text-[11px] leading-relaxed text-dim-dark">{channelHint}</p>
+  </form>
+
+  <div
+    class="mt-5 hidden rounded-2xl border border-ok/40 bg-ok/10 p-4"
+    data-contact-done
+    role="status"
+    aria-live="polite"
+  >
+    <p class="text-sm font-semibold text-white">Listo. Solo falta un paso.</p>
+    <p class="mt-1.5 text-sm leading-relaxed text-copy-dark" data-contact-done-copy></p>
+    <p class="mt-3 text-xs leading-relaxed text-dim-dark">
+      ¿No se abrió nada? Escríbeme directamente a
+      <a
+        href={`mailto:${site.email}`}
+        class="underline decoration-brand-light/60 underline-offset-2 transition-colors hover:text-white"
+      >
+        {site.email}
+      </a>.
+    </p>
+  </div>
+
+  <p class="mt-4 text-xs leading-relaxed text-dim-dark">
+    Tus datos viajan únicamente en el mensaje que tú envías. Nada se guarda en servidores.
+  </p>
+</div>
+
+<script>
+  import { contactMessage, emailContactUrl, whatsapp } from '../config';
+
+  // Con View Transitions el módulo se evalúa una sola vez en toda la sesión, así
+  // que el arranque se repite en cada `astro:page-load`. El guard evita que el
+  // mismo formulario se enganche dos veces.
+  function initContactForm() {
+    const root = document.querySelector<HTMLElement>('[data-contact]');
+    const form = root?.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!root || !form || root.dataset.ready === '1') return;
+    root.dataset.ready = '1';
+
+    const done = root.querySelector<HTMLElement>('[data-contact-done]');
+    const doneCopy = root.querySelector<HTMLElement>('[data-contact-done-copy]');
+    const channel = root.dataset.channel === 'email' ? 'email' : 'whatsapp';
+    type FieldName = 'name' | 'email' | 'message' | 'consent';
+
+    const rules: Record<FieldName, (value: string, checked: boolean) => string> = {
+      name: (value) => (value.trim().length < 2 ? 'Escribe tu nombre para que sepa con quién hablo.' : ''),
+      email: (value) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
+          ? ''
+          : 'Necesito un correo válido para poder responderte.',
+      message: (value) =>
+        value.trim().length < 10
+          ? 'Cuéntame un poco más (al menos una frase) para poder ayudarte.'
+          : '',
+      consent: (_value, checked) =>
+        checked ? '' : 'Necesito tu consentimiento para poder usar tus datos.',
+    };
+
+    function fieldOf(name: string): HTMLInputElement | HTMLTextAreaElement | null {
+      return form!.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${name}"]`);
+    }
+
+    function errorNode(name: FieldName): HTMLElement | null {
+      return form!.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+    }
+
+    function setError(name: FieldName, message: string) {
+      const field = fieldOf(name);
+      const node = errorNode(name);
+      if (node) node.textContent = message;
+      if (!field) return;
+      if (message) {
+        field.classList.add('field-invalid');
+        field.setAttribute('aria-invalid', 'true');
+      } else {
+        field.classList.remove('field-invalid');
+        field.removeAttribute('aria-invalid');
+      }
+    }
+
+    function validate(): FieldName[] {
+      const failed: FieldName[] = [];
+      (Object.keys(rules) as FieldName[]).forEach((name) => {
+        const field = fieldOf(name);
+        if (!field) return;
+        const value = field instanceof HTMLInputElement && field.type === 'checkbox'
+          ? ''
+          : field.value;
+        const checked = field instanceof HTMLInputElement && field.type === 'checkbox'
+          ? field.checked
+          : false;
+        const message = rules[name](value, checked);
+        setError(name, message);
+        if (message) failed.push(name);
+      });
+      return failed;
+    }
+
+    // Quita el error en cuanto la persona corrige el campo.
+    (Object.keys(rules) as FieldName[]).forEach((name) => {
+      const field = fieldOf(name);
+      if (!field) return;
+      const event = field instanceof HTMLInputElement && field.type === 'checkbox' ? 'change' : 'input';
+      field.addEventListener(event, () => {
+        if (field.getAttribute('aria-invalid') === 'true') setError(name, '');
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // Bot detectado: se finge éxito y no se envía nada.
+      const honeypot = form.querySelector<HTMLInputElement>('[data-contact-honeypot]');
+      if (honeypot && honeypot.value.trim() !== '') return;
+
+      const failed = validate();
+      if (failed.length) {
+        const first = fieldOf(failed[0]);
+        first?.focus();
+        return;
+      }
+
+      const payload = {
+        name: (fieldOf('name') as HTMLInputElement).value.trim(),
+        email: (fieldOf('email') as HTMLInputElement).value.trim(),
+        company: (fieldOf('company') as HTMLInputElement | null)?.value.trim() || null,
+        message: (fieldOf('message') as HTMLTextAreaElement).value.trim(),
+      };
+
+      const url =
+        channel === 'email'
+          ? emailContactUrl(payload)
+          : whatsapp(contactMessage(payload));
+
+      if (channel === 'email') {
+        window.location.href = url;
+      } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+
+      form.classList.add('hidden');
+      if (done) {
+        done.classList.remove('hidden');
+        done.classList.add('flex', 'flex-col');
+      }
+      if (doneCopy) {
+        doneCopy.textContent =
+          channel === 'email'
+            ? 'Se ha abierto tu programa de correo con el mensaje preparado: envíalo y te contesto.'
+            : 'Se ha abierto WhatsApp con tu mensaje preparado: envíalo y te contesto el mismo día.';
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactForm);
+  initContactForm();
+</script>
