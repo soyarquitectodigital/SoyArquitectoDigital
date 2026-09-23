@@ -36,14 +36,13 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
       </a>
 
       {/*
-        En escritorio el menú ocupa el hueco central y se centra entre el logo y
-        los botones. Los huecos crecen con el ancho, pero acotados: medido con
-        Chrome, `justify-between` repartía el espacio y dejaba 74 px entre
-        enlaces (se veían descolgados), mientras que con estos valores el texto
-        queda a 40-48 px y nunca desborda ni a 1024 px.
+        El menú ocupa todo el ancho disponible entre el logo y los botones y
+        reparte ese espacio entre los enlaces (justify-between). `gap-3` es solo
+        el mínimo de seguridad: si el hueco calculado fuese menor, los enlaces
+        se separan 12 px en vez de solaparse.
       */}
       <nav
-        class="hidden flex-1 items-center justify-center gap-3 lg:flex xl:gap-5"
+        class="hidden flex-1 items-center justify-between gap-3 lg:flex"
         aria-label="Secciones"
       >
         {
