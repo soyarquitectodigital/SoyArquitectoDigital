@@ -1,0 +1,477 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WaButton from '../components/WaButton.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Wordmark from '../components/Wordmark.astro';
+import { site, whatsapp, whatsappNumber } from '../config';
+import {
+  confianza,
+  problemas,
+  cierreProblema,
+  pilares,
+  diagnosticoPuntos,
+  pasos,
+  faqs,
+  programaPiloto,
+  testimonio,
+  caso,
+} from '../data/salud';
+
+const path = '/salud';
+const title = 'Páginas web y automatización para clínicas en Venezuela';
+const description =
+  'Ayudo a médicos y clínicas en Venezuela a captar más pacientes, recuperar tiempo de gestión y construir una marca que genere confianza. Diagnóstico gratuito de 15 minutos con checklist de 5 puntos críticos.';
+
+// Un solo mensaje para todos los CTA de diagnóstico: el que definiste en el brief.
+const waDiagnostico = whatsapp(
+  'Hola, vi la página de arquitectura digital para clínicas y quiero mi diagnóstico gratuito de 15 minutos.',
+);
+const waEmpezar = whatsapp(
+  'Hola, quiero empezar. Te cuento mi especialidad y en qué ciudad estoy.',
+);
+
+const telDisplay = `+${whatsappNumber.slice(0, 2)} ${whatsappNumber.slice(2, 5)} ${whatsappNumber.slice(5, 8)} ${whatsappNumber.slice(8)}`;
+
+const checkPath = 'm5 10.5 3.2 3.2L15 6.5';
+const warnPath = 'M10 3.6 17.2 16.4H2.8L10 3.6ZM10 8.2v3.2M10 13.9h.01';
+
+const pilarIcons: Record<string, string> = {
+  presencia: 'M12 3.4a8.6 8.6 0 1 0 0 17.2 8.6 8.6 0 0 0 0-17.2ZM3.4 12h17.2M12 3.4c2.3 2.4 3.5 5.4 3.5 8.6S14.3 18.2 12 20.6c-2.3-2.4-3.5-5.4-3.5-8.6S9.7 5.8 12 3.4Z',
+  operacion: 'M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2ZM12 2.8v2.2M12 19v2.2M4.8 12H2.6M21.4 12h-2.2M6.9 6.9 5.3 5.3M18.7 18.7l-1.6-1.6M17.1 6.9l1.6-1.6M5.3 18.7l1.6-1.6',
+  crecimiento: 'M3.6 17.6l5.2-6.6 4 3 7.6-9.4M15.2 4.6h5.2v5.2',
+};
+
+const hayPrueba = Boolean(testimonio || caso);
+const year = new Date().getFullYear();
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Arquitectura digital para clínicas y consultorios',
+  description:
+    'Presencia digital, automatización de agenda y crecimiento para médicos, clínicas y consultorios en Venezuela. Incluye diagnóstico gratuito de 15 minutos.',
+  serviceType: 'Arquitectura digital y automatización para el sector salud',
+  provider: {
+    '@type': 'Person',
+    name: site.person,
+    jobTitle: site.role,
+    url: site.url,
+    email: `mailto:${site.email}`,
+  },
+  areaServed: { '@type': 'Country', name: 'Venezuela' },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Médicos, clínicas y consultorios',
+  },
+  availableLanguage: 'es',
+  url: new URL(path, site.url).href,
+  offers: {
+    '@type': 'Offer',
+    name: 'Diagnóstico gratuito de 15 minutos',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.pregunta,
+    acceptedAnswer: { '@type': 'Answer', text: faq.respuesta },
+  })),
+};
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Salud', item: new URL(path, site.url).href },
+  ],
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  schema={[serviceSchema, faqSchema, breadcrumbs]}
+  bare
+>
+  <header
+    slot="above"
+    class="sticky top-0 z-40 border-b border-line bg-surface/92 backdrop-blur-md"
+  >
+    <div class="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-5 sm:px-6">
+      <a href="/" class="text-text" aria-label="Soy Arquitecto Digital — ir al sitio principal">
+        <Wordmark />
+      </a>
+      <a
+        href="#diagnostico"
+        class="rounded-full bg-wa-soft px-3.5 py-2 text-xs font-semibold whitespace-nowrap text-wa transition hover:bg-wa-line sm:text-sm"
+      >
+        Diagnóstico gratis
+      </a>
+    </div>
+  </header>
+
+  {/* BLOQUE 1 · Hero */}
+  <section class="bg-surface pt-12 pb-14 sm:pt-16 sm:pb-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      <p
+        class="inline-flex items-center gap-2 rounded-full border border-wa-line bg-wa-soft px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-wa uppercase"
+      >
+        <span class="size-1.5 rounded-full bg-wa" aria-hidden="true"></span>
+        Arquitectura digital para clínicas
+      </p>
+
+      <h1
+        class="mt-5 font-heading text-[1.75rem] leading-[1.14] font-semibold text-text sm:text-4xl lg:text-[2.6rem]"
+      >
+        Tu clínica merece una presencia digital tan profesional como tu práctica médica.
+      </h1>
+
+      <p class="mt-5 text-base leading-relaxed text-copy sm:text-lg">
+        Ayudo a médicos y clínicas en Venezuela a captar más pacientes, recuperar tiempo perdido en
+        gestión y construir una marca que genere confianza.
+      </p>
+
+      <div class="mt-8">
+        <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito de 15 minutos</WaButton>
+      </div>
+
+      <p class="mt-4 max-w-md text-sm leading-relaxed text-dim">
+        Sin compromiso. Te llevas un checklist de 5 puntos críticos de tu presencia digital, lo uses
+        conmigo o no.
+      </p>
+    </div>
+  </section>
+
+  {/* BLOQUE 2 · Barra de confianza */}
+  <section class="border-y border-line bg-paper py-6 sm:py-7">
+    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        {
+          confianza.map((item) => (
+            <li class="flex items-start gap-2.5 text-sm leading-snug text-copy">
+              <svg viewBox="0 0 20 20" class="mt-0.5 size-4 shrink-0 text-wa" fill="none" aria-hidden="true">
+                <path
+                  d={checkPath}
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* BLOQUE 3 · El problema */}
+  <section class="bg-surface py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">¿Te suena familiar?</h2>
+
+      <ul class="mt-7 space-y-3">
+        {
+          problemas.map((item) => (
+            <li class="flex gap-3 rounded-card border border-line bg-paper p-4 sm:p-5">
+              <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-warn/12 text-warn">
+                <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                  <path
+                    d={warnPath}
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span class="text-[15px] leading-relaxed text-copy">{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-9 font-heading text-xl leading-snug font-semibold text-text sm:text-2xl">
+        {cierreProblema.antes}<span class="text-wa">{cierreProblema.destacado}</span>{cierreProblema.despues}
+      </p>
+    </div>
+  </section>
+
+  {/* BLOQUE 4 · La solución */}
+  <section class="border-y border-line bg-paper py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
+        No vendo páginas web. Construyo <span class="text-wa">ecosistemas digitales</span> para
+        profesionales de la salud.
+      </h2>
+      <p class="mt-5 max-w-2xl leading-relaxed text-copy">
+        Mi trabajo es ordenar el caos digital de tu clínica en tres capas. Empezamos por lo que más
+        te duele y menos te cuesta.
+      </p>
+
+      <ol class="mt-10 grid gap-5 lg:grid-cols-3">
+        {
+          pilares.map((pilar, index) => (
+            <li class="flex flex-col rounded-card border border-line bg-surface p-6 shadow-card">
+              <span class="grid size-11 place-items-center rounded-2xl bg-wa-soft text-wa">
+                <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
+                  <path
+                    d={pilarIcons[pilar.icono]}
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <p class="mt-5 font-mono text-[11px] tracking-[0.2em] text-wa uppercase">
+                Pilar {index + 1}
+              </p>
+              <h3 class="mt-2 font-heading text-lg leading-snug font-semibold text-text">
+                {pilar.titulo}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-copy">{pilar.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* BLOQUE 5 · El diagnóstico de 15 minutos */}
+  <section id="diagnostico" class="scroll-mt-20 bg-wa-soft py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
+        ¿Qué pasa en esos 15 minutos?
+      </h2>
+      <p class="mt-5 leading-relaxed text-copy">
+        No es una llamada de ventas. Es una auditoría express donde revisamos juntos:
+      </p>
+
+      <ul class="mt-7 space-y-3">
+        {
+          diagnosticoPuntos.map((item) => (
+            <li class="flex items-start gap-3 text-[15px] leading-relaxed text-copy">
+              <svg viewBox="0 0 20 20" class="mt-1 size-4 shrink-0 text-wa" fill="none" aria-hidden="true">
+                <path
+                  d={checkPath}
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-8 leading-relaxed font-semibold text-text">
+        Te llevas un checklist de 5 puntos críticos y una idea clara de por dónde empezar. Sin
+        compromiso.
+      </p>
+
+      <div class="mt-8">
+        <WaButton href={waDiagnostico}>Agendar mi diagnóstico gratuito</WaButton>
+      </div>
+    </div>
+  </section>
+
+  {/* BLOQUE 6 · Prueba social honesta */}
+  <section class="bg-surface py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      {
+        hayPrueba && (
+          <>
+            <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
+              Lo que dicen quienes ya han trabajado conmigo
+            </h2>
+
+            {testimonio && (
+              <figure class="mt-7 rounded-card border border-line bg-paper p-6">
+                <blockquote class="font-heading text-lg leading-snug text-text">
+                  «{testimonio.cita}»
+                </blockquote>
+                <figcaption class="mt-4 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+                  {testimonio.autor} · {testimonio.cargo}
+                </figcaption>
+              </figure>
+            )}
+
+            {caso && (
+              <div class="mt-5 rounded-card border border-line bg-paper p-6">
+                <p class="font-mono text-[11px] tracking-[0.18em] text-wa uppercase">
+                  Análisis reciente
+                </p>
+                <h3 class="mt-2 font-heading text-lg font-semibold text-text">
+                  Consultorio de {caso.especialidad} · {caso.ciudad}
+                </h3>
+                <p class="mt-3 text-sm leading-relaxed text-copy">{caso.situacion}</p>
+                <p class="mt-3 text-sm leading-relaxed font-semibold text-text">
+                  {caso.proyeccion}
+                </p>
+              </div>
+            )}
+          </>
+        )
+      }
+
+      <div
+        class:list={[
+          'rounded-card border border-wa-line bg-wa-soft p-6 sm:p-8',
+          hayPrueba && 'mt-10',
+        ]}
+      >
+        <p class="font-mono text-[11px] tracking-[0.2em] text-wa uppercase">
+          Programa de casos piloto
+        </p>
+        <h2 class="mt-3 font-heading text-xl font-semibold text-text sm:text-2xl">
+          Solo 3 cupos disponibles
+        </h2>
+        <p class="mt-4 leading-relaxed text-copy">{programaPiloto}</p>
+        <div class="mt-6">
+          <WaButton href={waDiagnostico} size="md">Quiero uno de los 3 cupos</WaButton>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* BLOQUE 7 · Cómo funciona */}
+  <section class="border-y border-line bg-paper py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">Así de simple</h2>
+
+      <ol class="mt-8 space-y-4">
+        {
+          pasos.map((paso, index) => (
+            <li class="flex gap-4 rounded-card border border-line bg-surface p-5">
+              <span class="grid size-9 shrink-0 place-items-center rounded-full bg-wa text-sm font-semibold text-white">
+                {index + 1}
+              </span>
+              <div class="min-w-0">
+                <h3 class="font-heading text-base leading-snug font-semibold text-text sm:text-lg">
+                  {paso.titulo}
+                </h3>
+                <p class="mt-1.5 text-sm leading-relaxed text-copy">{paso.texto}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-8">
+        <WaButton href={waEmpezar}>Empezar por WhatsApp</WaButton>
+      </div>
+    </div>
+  </section>
+
+  {/* BLOQUE 8 · Preguntas frecuentes */}
+  <section class="bg-surface py-14 sm:py-20">
+    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
+        Preguntas frecuentes
+      </h2>
+
+      <div class="mt-7 space-y-3">
+        {
+          faqs.map((faq) => (
+            <details class="group rounded-card border border-line bg-paper px-5 py-4 transition-colors open:border-line-strong">
+              <summary class="flex cursor-pointer items-center justify-between gap-4">
+                <h3 class="font-heading text-base leading-snug font-semibold text-text">
+                  {faq.pregunta}
+                </h3>
+                <span
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-surface text-base leading-none text-copy transition duration-300 group-open:rotate-45 group-open:bg-wa group-open:text-white"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-copy">{faq.respuesta}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* BLOQUE 9 · CTA final */}
+  <section class="grain relative overflow-hidden bg-ink py-14 sm:py-20">
+    <div
+      class="pointer-events-none absolute -top-32 left-1/2 size-[32rem] -translate-x-1/2 rounded-full bg-wa/18 blur-[130px]"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="relative mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
+      <h2 class="font-heading text-2xl font-semibold text-white sm:text-3xl">
+        Tu clínica puede verse y operar mejor. Empecemos hoy.
+      </h2>
+      <p class="mx-auto mt-5 max-w-xl leading-relaxed text-copy-dark">
+        Agenda tu diagnóstico gratuito de 15 minutos. Te llevas un checklist de 5 puntos críticos,
+        lo uses conmigo o no.
+      </p>
+      <div class="mt-8 flex justify-center">
+        <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito</WaButton>
+      </div>
+      <p class="mt-6 text-sm text-dim-dark">
+        También puedes escribirme directo:
+        <a
+          href={waDiagnostico}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-semibold text-white underline decoration-wa-line underline-offset-4 transition hover:text-wa-line"
+        >
+          {telDisplay}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  {/* BLOQUE 10 · Pie */}
+  <footer slot="below" class="border-t border-line bg-paper py-10">
+    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
+      <div class="flex flex-col gap-7 sm:flex-row sm:items-start sm:justify-between">
+        <div class="max-w-sm">
+          <a href="/" class="text-text" aria-label="Soy Arquitecto Digital — ir al sitio principal">
+            <Wordmark />
+          </a>
+          <p class="mt-4 text-sm leading-relaxed text-copy">
+            Arquitectura digital para clínicas y consultorios en Venezuela. Una firma de
+            {site.studio}.
+          </p>
+        </div>
+
+        <nav class="flex flex-col gap-2.5 text-sm sm:items-end" aria-label="Enlaces">
+          <a
+            href={site.url}
+            class="font-semibold text-text underline decoration-wa decoration-2 underline-offset-4 transition hover:text-wa"
+          >
+            soyarquitectodigital.info
+          </a>
+          <a href="/legal/privacidad" class="text-copy transition hover:text-text">
+            Aviso de privacidad
+          </a>
+          <a href={`mailto:${site.email}`} class="text-copy transition hover:text-text">
+            {site.email}
+          </a>
+        </nav>
+      </div>
+
+      <p class="mt-8 border-t border-line pt-6 text-xs text-dim">
+        © {year} {site.name} · {site.studio}
+      </p>
+    </div>
+  </footer>
+
+  <Fragment slot="below">
+    <WhatsAppFloat tone="wa" href={waDiagnostico} label="Diagnóstico gratis" />
+  </Fragment>
+</BaseLayout>

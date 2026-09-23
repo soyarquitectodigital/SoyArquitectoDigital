@@ -21,6 +21,11 @@ interface Props {
   noindex?: boolean;
   /** true solo en páginas cuyo hero es oscuro: el nav arranca transparente. */
   navOnDark?: boolean;
+  /**
+   * true en landings satélite (por ejemplo /salud): se omiten el nav, el pie y
+   * el flotante del sitio principal, y la propia página aporta los suyos.
+   */
+  bare?: boolean;
 }
 
 const {
@@ -31,6 +36,7 @@ const {
   schema = [],
   noindex = false,
   navOnDark = false,
+  bare = false,
 } = Astro.props;
 
 const siteName = site.name;
@@ -115,12 +121,15 @@ const ogImage = new URL(image, Astro.site);
     >
       Saltar al contenido
     </a>
-    <Nav />
+    {!bare && <Nav />}
+    {/* Slots para landings satélite: su cabecera y su pie van fuera de <main>. */}
+    <slot name="above" />
     <main id="contenido">
       <slot />
     </main>
-    <Footer />
-    <WhatsAppFloat />
+    {!bare && <Footer />}
+    <slot name="below" />
+    {!bare && <WhatsAppFloat />}
     {
       isDev && (
         <div
