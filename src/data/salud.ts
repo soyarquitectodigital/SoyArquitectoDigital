@@ -1,20 +1,26 @@
 /**
- * Contenido de la landing satélite /salud (arquitectura digital para clínicas
- * y consultorios en Venezuela).
+ * Contenido de la landing satélite /salud: arquitectura digital para todo el
+ * sector salud en Venezuela (médicos, odontólogos, psicólogos, nutricionistas,
+ * fisioterapeutas, clínicas y consultorios).
  */
+
+/** A quién va dirigida la página. Se muestra en el hero para que nadie se
+ *  descarte por pensar que esto es solo para clínicas. */
+export const publico =
+  'Médicos, odontólogos, psicólogos, nutricionistas, fisioterapeutas, clínicas y consultorios';
 
 export const confianza = [
   'Arquitecto Digital con experiencia en múltiples sectores',
   'Metodología probada, adaptada al sector salud',
-  'Especializándome en clínicas y consultorios en Venezuela',
-  'Seleccionando 3 casos piloto con precio preferencial',
+  'Especializándome en profesionales de la salud en Venezuela',
+  '3 plazas de prueba como caso de éxito',
 ];
 
 export const problemas = [
   'Tus pacientes te buscan en Google, pero lo que encuentran no transmite la calidad de tu consulta.',
   'Pierdes entre 8 y 15 citas al mes porque no hay recordatorios automáticos.',
-  'Tu recepcionista pasa horas reagendando por WhatsApp en lugar de atender a quien está en sala.',
-  'Tu marca se ve igual que la de cien consultorios más. No hay nada que te diferencie.',
+  'Reagendar citas por WhatsApp se come horas que deberían ir a atender a quien tienes delante.',
+  'Tu marca se ve igual que la de cien colegas más. No hay nada que te diferencie.',
   'Tienes redes sociales, pero no sabes si realmente te están trayendo pacientes.',
 ];
 
@@ -55,7 +61,7 @@ export const pilares: Pilar[] = [
 export const diagnosticoPuntos = [
   'Cómo apareces en Google cuando un paciente busca tu especialidad en tu ciudad.',
   'Qué está frenando tu agenda (ausentismo, falta de recordatorios, procesos manuales).',
-  'Cómo se ve tu marca frente a otras clínicas de tu zona.',
+  'Cómo se ve tu marca frente a otros profesionales de tu zona.',
   'Qué herramientas ya tienes y cuáles te faltan para digitalizar sin gastar de más.',
   'Un plan por fases con prioridades claras, lo trabajemos juntos o no.',
 ];
@@ -77,9 +83,9 @@ export const pasos = [
 
 export const faqs = [
   {
-    pregunta: '¿Han trabajado antes con clínicas o médicos?',
+    pregunta: '¿Han trabajado antes con profesionales de la salud?',
     respuesta:
-      'He trabajado en arquitectura digital para otros sectores, y ahora estoy especializándome en el sector salud. Mi metodología está probada y la estoy adaptando a las particularidades de clínicas y consultorios en Venezuela. Por eso estoy seleccionando 3 casos piloto con condiciones preferenciales.',
+      'He trabajado en arquitectura digital para otros sectores, y ahora estoy especializándome en el sector salud. Mi metodología está probada y la estoy adaptando a las particularidades de médicos, odontólogos, psicólogos, clínicas y consultorios en Venezuela. Por eso estoy seleccionando 3 plazas de prueba como caso de éxito.',
   },
   {
     pregunta: '¿Cuánto tiempo toma implementar?',
@@ -93,7 +99,8 @@ export const faqs = [
   },
   {
     pregunta: '¿Funciona para mi especialidad?',
-    respuesta: 'Sí. El proceso se adapta a cualquier práctica médica o clínica.',
+    respuesta:
+      'Sí. El proceso se adapta a cualquier especialidad y a cualquier tamaño: desde una consulta individual hasta una clínica con varios especialistas.',
   },
   {
     pregunta: '¿Qué inversión requiere?',
@@ -101,15 +108,33 @@ export const faqs = [
       'Te lo explico en el diagnóstico, porque depende de tu punto de partida. Empezamos por lo que más impacto tiene y menos cuesta.',
   },
   {
-    pregunta: '¿Esto reemplaza a mi recepcionista?',
+    pregunta: '¿Esto reemplaza a mi personal?',
     respuesta:
-      'No. La libera de tareas repetitivas para que se enfoque en lo que sí requiere trato humano.',
+      'No. Lo libera de tareas repetitivas para que se enfoque en lo que sí requiere trato humano. Y si trabajas solo, te quita a ti esas tareas de encima.',
   },
 ];
 
-/** Programa de casos piloto: es real y verificable, se muestra siempre. */
-export const programaPiloto =
-  'Estoy seleccionando 3 clínicas o consultorios en Venezuela para trabajar como casos piloto. A cambio de un precio preferencial y toda mi atención personalizada, te pido retroalimentación y, si quedas satisfecho, un testimonio. Solo 3 cupos.';
+/**
+ * Oferta de captación: 3 plazas de prueba que se documentan como caso de éxito.
+ *
+ * OJO: aquí están los términos comerciales que se publican. Si cambias el
+ * alcance de la prueba (por ejemplo, el proyecto completo en vez de la primera
+ * fase), edita `intro` e `incluye` para que digan lo mismo.
+ */
+export const oferta = {
+  etiqueta: 'Programa de casos de éxito',
+  titulo: '3 plazas de prueba',
+  intro:
+    'Estoy seleccionando 3 profesionales o centros de salud en Venezuela para trabajar como caso de éxito. Las 3 plazas entran en prueba: la primera fase no te cuesta nada.',
+  incluye: [
+    'Primera fase sin coste: presencia y confianza (Google Business, identidad y web).',
+    'Trabajo directo conmigo, sin intermediarios ni agencias de por medio.',
+    'Plan por fases con prioridades claras desde el primer día.',
+  ],
+  contrapartida:
+    'A cambio te pido dos cosas: que me dejes documentar el antes y el después con datos reales, y que si el resultado te convence, me des un testimonio.',
+  cta: 'Quiero una de las 3 plazas',
+};
 
 /* ---------------------------------------------------------------------------
  * PRUEBA SOCIAL: pendiente de datos reales.

@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import WaButton from '../components/WaButton.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { site, whatsapp, whatsappNumber } from '../config';
 import {
+  publico,
   confianza,
   problemas,
   cierreProblema,
@@ -12,19 +14,19 @@ import {
   diagnosticoPuntos,
   pasos,
   faqs,
-  programaPiloto,
+  oferta,
   testimonio,
   caso,
 } from '../data/salud';
 
 const path = '/salud';
-const title = 'Páginas web y automatización para clínicas en Venezuela';
+const title = 'Páginas web para profesionales de la salud en Venezuela';
 const description =
-  'Ayudo a médicos y clínicas en Venezuela a captar más pacientes, recuperar tiempo de gestión y construir una marca que genere confianza. Diagnóstico gratuito de 15 minutos con checklist de 5 puntos críticos.';
+  'Ayudo a profesionales de la salud en Venezuela a captar más pacientes y ahorrar tiempo de gestión. Diagnóstico gratuito y 3 plazas de prueba.';
 
 // Un solo mensaje para todos los CTA de diagnóstico: el que definiste en el brief.
 const waDiagnostico = whatsapp(
-  'Hola, vi la página de arquitectura digital para clínicas y quiero mi diagnóstico gratuito de 15 minutos.',
+  'Hola, vi la página de arquitectura digital para profesionales de la salud y quiero mi diagnóstico gratuito de 15 minutos.',
 );
 const waEmpezar = whatsapp(
   'Hola, quiero empezar. Te cuento mi especialidad y en qué ciudad estoy.',
@@ -41,15 +43,31 @@ const pilarIcons: Record<string, string> = {
   crecimiento: 'M3.6 17.6l5.2-6.6 4 3 7.6-9.4M15.2 4.6h5.2v5.2',
 };
 
+// Titular troceado para la animación palabra a palabra, igual que el hero del sitio.
+const headline = [
+  { text: 'Tu' },
+  { text: 'presencia', accent: true },
+  { text: 'digital', accent: true },
+  { text: 'merece' },
+  { text: 'ser' },
+  { text: 'tan' },
+  { text: 'profesional' },
+  { text: 'como' },
+  { text: 'la' },
+  { text: 'atención' },
+  { text: 'que' },
+  { text: 'das.' },
+];
+
 const hayPrueba = Boolean(testimonio || caso);
 const year = new Date().getFullYear();
 
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  name: 'Arquitectura digital para clínicas y consultorios',
+  name: 'Arquitectura digital para profesionales de la salud',
   description:
-    'Presencia digital, automatización de agenda y crecimiento para médicos, clínicas y consultorios en Venezuela. Incluye diagnóstico gratuito de 15 minutos.',
+    'Presencia digital, automatización de agenda y crecimiento para médicos, odontólogos, psicólogos, nutricionistas, clínicas y consultorios en Venezuela. Incluye diagnóstico gratuito de 15 minutos.',
   serviceType: 'Arquitectura digital y automatización para el sector salud',
   provider: {
     '@type': 'Person',
@@ -61,7 +79,7 @@ const serviceSchema = {
   areaServed: { '@type': 'Country', name: 'Venezuela' },
   audience: {
     '@type': 'Audience',
-    audienceType: 'Médicos, clínicas y consultorios',
+    audienceType: 'Profesionales de la salud, clínicas y consultorios',
   },
   availableLanguage: 'es',
   url: new URL(path, site.url).href,
@@ -97,147 +115,256 @@ const breadcrumbs = {
   title={title}
   description={description}
   schema={[serviceSchema, faqSchema, breadcrumbs]}
+  navOnDark
   bare
 >
-  <header
-    slot="above"
-    class="sticky top-0 z-40 border-b border-line bg-surface/92 backdrop-blur-md"
-  >
-    <div class="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-5 sm:px-6">
-      <a href="/" class="text-text" aria-label="Soy Arquitecto Digital — ir al sitio principal">
-        <Wordmark />
-      </a>
-      <a
-        href="#diagnostico"
-        class="rounded-full bg-wa-soft px-3.5 py-2 text-xs font-semibold whitespace-nowrap text-wa transition hover:bg-wa-line sm:text-sm"
+  {/*
+    Misma barra flotante que el sitio principal: reutiliza #site-nav y
+    .nav-shell, así que hereda el fondo translúcido sobre el hero oscuro y se
+    vuelve sólida al bajar, sin CSS nuevo.
+  */}
+  <header slot="above" id="site-nav" class="fixed inset-x-0 top-0 z-50">
+    <div class="container-page pt-3 sm:pt-4">
+      <div
+        class="nav-shell flex items-center justify-between gap-4 rounded-full border px-4 py-2.5 sm:px-5"
       >
-        Diagnóstico gratis
-      </a>
+        <a href="/" class="nav-logo shrink-0" aria-label="Soy Arquitecto Digital — ir al inicio">
+          <Wordmark />
+        </a>
+
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <a
+            href="#diagnostico"
+            class="nav-cta-ghost hidden h-10 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition sm:inline-flex"
+          >
+            Diagnóstico gratis
+          </a>
+          <a
+            href={waDiagnostico}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-10 items-center gap-2 rounded-full bg-wa px-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-wa-strong sm:px-4"
+          >
+            <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"
+              ></path>
+            </svg>
+            <span class="hidden sm:inline">Hablemos</span>
+          </a>
+        </div>
+      </div>
     </div>
   </header>
 
-  {/* BLOQUE 1 · Hero */}
-  <section class="bg-surface pt-12 pb-14 sm:pt-16 sm:pb-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
-      <p
-        class="inline-flex items-center gap-2 rounded-full border border-wa-line bg-wa-soft px-3.5 py-1.5 text-[11px] font-semibold tracking-[0.14em] text-wa uppercase"
-      >
-        <span class="size-1.5 rounded-full bg-wa" aria-hidden="true"></span>
-        Arquitectura digital para clínicas
-      </p>
-
-      <h1
-        class="mt-5 font-heading text-[1.75rem] leading-[1.14] font-semibold text-text sm:text-4xl lg:text-[2.6rem]"
-      >
-        Tu clínica merece una presencia digital tan profesional como tu práctica médica.
-      </h1>
-
-      <p class="mt-5 text-base leading-relaxed text-copy sm:text-lg">
-        Ayudo a médicos y clínicas en Venezuela a captar más pacientes, recuperar tiempo perdido en
-        gestión y construir una marca que genere confianza.
-      </p>
-
-      <div class="mt-8">
-        <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito de 15 minutos</WaButton>
-      </div>
-
-      <p class="mt-4 max-w-md text-sm leading-relaxed text-dim">
-        Sin compromiso. Te llevas un checklist de 5 puntos críticos de tu presencia digital, lo uses
-        conmigo o no.
-      </p>
+  {/* BLOQUE 1 · Hero oscuro, con el mismo tratamiento del sitio principal */}
+  <section id="inicio" class="grain vignette relative overflow-hidden bg-ink">
+    <div class="hero-aurora" aria-hidden="true">
+      <span class="aurora aurora-1"></span>
+      <span class="aurora aurora-2"></span>
+      <span class="aurora aurora-3"></span>
+      <span class="aurora aurora-4"></span>
     </div>
-  </section>
+    <div class="hero-sweep" aria-hidden="true"></div>
+    <div class="bg-mesh animate-mesh absolute inset-0" aria-hidden="true"></div>
+    <div
+      class="bg-grid-dark grid-drift absolute inset-0 opacity-35 [mask-image:radial-gradient(85%_65%_at_50%_18%,black,transparent_78%)]"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent to-ink"
+      aria-hidden="true"
+    >
+    </div>
 
-  {/* BLOQUE 2 · Barra de confianza */}
-  <section class="border-y border-line bg-paper py-6 sm:py-7">
-    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
-      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-        {
-          confianza.map((item) => (
-            <li class="flex items-start gap-2.5 text-sm leading-snug text-copy">
-              <svg viewBox="0 0 20 20" class="mt-0.5 size-4 shrink-0 text-wa" fill="none" aria-hidden="true">
-                <path
-                  d={checkPath}
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <span>{item}</span>
-            </li>
-          ))
-        }
-      </ul>
+    <div class="container-page relative pt-32 pb-14 sm:pt-36 lg:pt-44 lg:pb-20">
+      <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] xl:gap-20">
+        <div class="min-w-0">
+          <p class="pill animate-float text-white">
+            <span class="relative inline-flex size-2 text-brand-light">
+              <span class="pulse-dot absolute inset-0 rounded-full bg-brand-light"></span>
+              <span class="relative inline-block size-2 rounded-full bg-brand-light"></span>
+            </span>
+            Arquitectura digital para el sector salud
+          </p>
+
+          <h1 class="mt-6 max-w-2xl font-heading display-xl font-semibold text-white">
+            {
+              headline.map((token, index) => (
+                <>
+                  <span class="word-mask">
+                    <span
+                      class:list={['word-in', token.accent && 'text-gradient-light']}
+                      style={`--d:${120 + index * 70}ms`}
+                    >
+                      {token.text}
+                    </span>
+                  </span>{' '}
+                </>
+              ))
+            }
+          </h1>
+
+          <p class="mt-7 max-w-xl text-lg leading-relaxed text-copy-dark">
+            Ayudo a profesionales de la salud en Venezuela a captar más pacientes, recuperar tiempo
+            perdido en gestión y construir una marca que genere confianza.
+          </p>
+
+          <p class="mt-3 max-w-xl text-sm leading-relaxed text-dim-dark">{publico}.</p>
+
+          <div class="mt-9">
+            <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito de 15 minutos</WaButton>
+          </div>
+
+          <p class="mt-4 max-w-md text-sm leading-relaxed text-dim-dark">
+            Sin compromiso. Te llevas un checklist de 5 puntos críticos de tu presencia digital, lo
+            uses conmigo o no.
+          </p>
+        </div>
+
+        <div
+          class="card-dark spotlight spotlight-dark hairline hairline-dark relative min-w-0 p-6 sm:p-7"
+          data-reveal
+          data-glow
+        >
+          <div class="flex items-center justify-between gap-4">
+            <p class="font-mono text-[11px] tracking-[0.22em] text-dim-dark uppercase">
+              {oferta.etiqueta}
+            </p>
+            <span class="pill text-[11px] text-brand-light whitespace-nowrap">Solo 3</span>
+          </div>
+          <p class="font-heading mt-4 text-2xl leading-tight text-white sm:text-3xl">
+            {oferta.titulo}
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-copy-dark">{oferta.intro}</p>
+          <div class="mt-6">
+            <WaButton href={waDiagnostico} size="md">{oferta.cta}</WaButton>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* BLOQUE 2 · Barra de confianza, dentro del mismo bloque oscuro */}
+    <div class="relative border-t border-line-dark">
+      <div class="container-page py-6 sm:py-7">
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          {
+            confianza.map((item) => (
+              <li class="flex items-start gap-2.5 text-sm leading-snug text-copy-dark">
+                <svg
+                  viewBox="0 0 20 20"
+                  class="mt-0.5 size-4 shrink-0 text-brand-light"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d={checkPath}
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </section>
 
   {/* BLOQUE 3 · El problema */}
-  <section class="bg-surface py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">¿Te suena familiar?</h2>
+  <section id="problema" class="section-pad tint-brand scroll-mt-24 bg-paper">
+    <div class="container-page">
+      <Eyebrow number="01">El problema</Eyebrow>
 
-      <ul class="mt-7 space-y-3">
-        {
-          problemas.map((item) => (
-            <li class="flex gap-3 rounded-card border border-line bg-paper p-4 sm:p-5">
-              <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-warn/12 text-warn">
-                <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
-                  <path
-                    d={warnPath}
-                    stroke="currentColor"
-                    stroke-width="1.6"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </span>
-              <span class="text-[15px] leading-relaxed text-copy">{item}</span>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="mt-8 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
+        <div data-reveal>
+          <h2 class="font-heading display-lg font-semibold text-text">
+            ¿Te <span class="text-gradient-brand">suena familiar</span>?
+          </h2>
+          <p class="mt-5 max-w-md leading-relaxed text-copy">
+            Ninguna de estas cosas aparece de golpe. Se acumulan en silencio mientras la agenda se
+            llena de huecos y el equipo pierde horas en tareas que se pueden automatizar.
+          </p>
 
-      <p class="mt-9 font-heading text-xl leading-snug font-semibold text-text sm:text-2xl">
-        {cierreProblema.antes}<span class="text-wa">{cierreProblema.destacado}</span>{cierreProblema.despues}
-      </p>
+          <p class="mt-8 font-heading text-xl leading-snug font-semibold text-text sm:text-2xl">
+            {cierreProblema.antes}<span class="text-brand-ink">{cierreProblema.destacado}</span>{cierreProblema.despues}
+          </p>
+        </div>
+
+        <ul class="divide-y divide-line border-y border-line">
+          {
+            problemas.map((item, index) => (
+              <li class="flex gap-4 py-5" data-reveal style={`--delay:${index * 70}ms`}>
+                <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-warn/12 text-warn">
+                  <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                    <path
+                      d={warnPath}
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span class="text-[15px] leading-relaxed text-copy sm:text-base">{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </section>
 
   {/* BLOQUE 4 · La solución */}
-  <section class="border-y border-line bg-paper py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
-        No vendo páginas web. Construyo <span class="text-wa">ecosistemas digitales</span> para
-        profesionales de la salud.
-      </h2>
-      <p class="mt-5 max-w-2xl leading-relaxed text-copy">
-        Mi trabajo es ordenar el caos digital de tu clínica en tres capas. Empezamos por lo que más
-        te duele y menos te cuesta.
-      </p>
+  <section id="solucion" class="section-pad tint-brand scroll-mt-24 border-y border-line bg-surface">
+    <div class="container-page">
+      <Eyebrow number="02">La solución</Eyebrow>
 
-      <ol class="mt-10 grid gap-5 lg:grid-cols-3">
+      <div class="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16" data-reveal>
+        <h2 class="font-heading display-lg font-semibold text-text">
+          No vendo páginas web. Construyo
+          <span class="text-gradient-brand">ecosistemas digitales</span> para profesionales de la
+          salud.
+        </h2>
+        <p class="leading-relaxed text-copy lg:pb-1">
+          Mi trabajo es ordenar el caos digital de tu práctica en tres capas. Empezamos por lo que
+          más te duele y menos te cuesta.
+        </p>
+      </div>
+
+      <ol class="mt-12 grid gap-5 lg:grid-cols-3 xl:gap-6">
         {
           pilares.map((pilar, index) => (
-            <li class="flex flex-col rounded-card border border-line bg-surface p-6 shadow-card">
-              <span class="grid size-11 place-items-center rounded-2xl bg-wa-soft text-wa">
-                <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
-                  <path
-                    d={pilarIcons[pilar.icono]}
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </span>
-              <p class="mt-5 font-mono text-[11px] tracking-[0.2em] text-wa uppercase">
-                Pilar {index + 1}
-              </p>
-              <h3 class="mt-2 font-heading text-lg leading-snug font-semibold text-text">
+            <li
+              class="card hairline spotlight relative flex flex-col p-6 sm:p-7"
+              data-reveal
+              data-glow
+              style={`--delay:${index * 90}ms`}
+            >
+              <div class="flex items-center justify-between gap-4">
+                <span class="grid size-11 place-items-center rounded-2xl bg-paper text-brand-ink">
+                  <svg viewBox="0 0 24 24" class="size-5" fill="none" aria-hidden="true">
+                    <path
+                      d={pilarIcons[pilar.icono]}
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span class="font-mono text-[11px] tracking-[0.22em] text-brand-ink">
+                  Pilar {index + 1}
+                </span>
+              </div>
+              <h3 class="font-heading mt-6 text-xl leading-snug font-semibold text-text">
                 {pilar.titulo}
               </h3>
-              <p class="mt-3 text-sm leading-relaxed text-copy">{pilar.texto}</p>
+              <p class="mt-3 text-sm leading-relaxed text-copy sm:text-[15px]">{pilar.texto}</p>
             </li>
           ))
         }
@@ -245,59 +372,64 @@ const breadcrumbs = {
     </div>
   </section>
 
-  {/* BLOQUE 5 · El diagnóstico de 15 minutos */}
-  <section id="diagnostico" class="scroll-mt-20 bg-wa-soft py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
-        ¿Qué pasa en esos 15 minutos?
-      </h2>
-      <p class="mt-5 leading-relaxed text-copy">
-        No es una llamada de ventas. Es una auditoría express donde revisamos juntos:
-      </p>
+  {/* BLOQUE 5 · El diagnóstico, en bloque oscuro como la sección de enfoque */}
+  <section id="diagnostico" class="grain section-pad scroll-mt-24 relative overflow-hidden bg-ink-soft">
+    <div
+      class="pointer-events-none absolute -top-40 right-[-10%] size-[34rem] rounded-full bg-brand/25 blur-[140px]"
+      aria-hidden="true"
+    >
+    </div>
 
-      <ul class="mt-7 space-y-3">
-        {
-          diagnosticoPuntos.map((item) => (
-            <li class="flex items-start gap-3 text-[15px] leading-relaxed text-copy">
-              <svg viewBox="0 0 20 20" class="mt-1 size-4 shrink-0 text-wa" fill="none" aria-hidden="true">
-                <path
-                  d={checkPath}
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <span>{item}</span>
-            </li>
-          ))
-        }
-      </ul>
+    <div class="container-page relative">
+      <Eyebrow number="03" tone="dark">El diagnóstico</Eyebrow>
 
-      <p class="mt-8 leading-relaxed font-semibold text-text">
-        Te llevas un checklist de 5 puntos críticos y una idea clara de por dónde empezar. Sin
-        compromiso.
-      </p>
+      <div class="mt-8 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <div data-reveal>
+          <h2 class="font-heading display-lg font-semibold text-white">
+            ¿Qué pasa en esos <span class="text-gradient-light">15 minutos</span>?
+          </h2>
+          <p class="mt-5 max-w-md leading-relaxed text-copy-dark">
+            No es una llamada de ventas. Es una auditoría express donde revisamos juntos estos cinco
+            puntos.
+          </p>
+          <p class="mt-8 max-w-md leading-relaxed font-semibold text-white">
+            Te llevas un checklist de 5 puntos críticos y una idea clara de por dónde empezar. Sin
+            compromiso.
+          </p>
+          <div class="mt-8">
+            <WaButton href={waDiagnostico}>Agendar mi diagnóstico gratuito</WaButton>
+          </div>
+        </div>
 
-      <div class="mt-8">
-        <WaButton href={waDiagnostico}>Agendar mi diagnóstico gratuito</WaButton>
+        <div class="card-dark spotlight spotlight-dark hairline hairline-dark p-6 sm:p-8" data-reveal>
+          <ol class="divide-y divide-white/10">
+            {
+              diagnosticoPuntos.map((item, index) => (
+                <li class="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
+                  <span class="grid size-7 shrink-0 place-items-center rounded-full bg-white/8 font-mono text-[11px] font-semibold text-brand-light">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span class="text-[15px] leading-relaxed text-copy-dark">{item}</span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
       </div>
     </div>
   </section>
 
-  {/* BLOQUE 6 · Prueba social honesta */}
-  <section class="bg-surface py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
+  {/* BLOQUE 6 · Prueba social y oferta de las 3 plazas */}
+  <section id="plazas" class="section-pad tint-brand scroll-mt-24 bg-paper">
+    <div class="container-page">
+      <Eyebrow number="04">Las 3 plazas</Eyebrow>
+
       {
         hayPrueba && (
-          <>
-            <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
-              Lo que dicen quienes ya han trabajado conmigo
-            </h2>
-
+          <div class="mt-8 grid gap-6 lg:grid-cols-2 lg:gap-8">
             {testimonio && (
-              <figure class="mt-7 rounded-card border border-line bg-paper p-6">
-                <blockquote class="font-heading text-lg leading-snug text-text">
+              <figure class="card hairline relative p-6 sm:p-7" data-reveal>
+                <blockquote class="font-heading text-lg leading-snug text-text sm:text-xl">
                   «{testimonio.cita}»
                 </blockquote>
                 <figcaption class="mt-4 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
@@ -307,11 +439,9 @@ const breadcrumbs = {
             )}
 
             {caso && (
-              <div class="mt-5 rounded-card border border-line bg-paper p-6">
-                <p class="font-mono text-[11px] tracking-[0.18em] text-wa uppercase">
-                  Análisis reciente
-                </p>
-                <h3 class="mt-2 font-heading text-lg font-semibold text-text">
+              <div class="card hairline relative p-6 sm:p-7" data-reveal>
+                <p class="number-tag">Análisis reciente</p>
+                <h3 class="font-heading mt-3 text-lg font-semibold text-text sm:text-xl">
                   Consultorio de {caso.especialidad} · {caso.ciudad}
                 </h3>
                 <p class="mt-3 text-sm leading-relaxed text-copy">{caso.situacion}</p>
@@ -320,82 +450,153 @@ const breadcrumbs = {
                 </p>
               </div>
             )}
-          </>
+          </div>
         )
       }
 
       <div
         class:list={[
-          'rounded-card border border-wa-line bg-wa-soft p-6 sm:p-8',
-          hayPrueba && 'mt-10',
+          'card hairline spotlight relative overflow-hidden p-7 sm:p-10 lg:p-12',
+          hayPrueba && 'mt-8',
         ]}
+        data-reveal
+        data-glow
       >
-        <p class="font-mono text-[11px] tracking-[0.2em] text-wa uppercase">
-          Programa de casos piloto
-        </p>
-        <h2 class="mt-3 font-heading text-xl font-semibold text-text sm:text-2xl">
-          Solo 3 cupos disponibles
-        </h2>
-        <p class="mt-4 leading-relaxed text-copy">{programaPiloto}</p>
-        <div class="mt-6">
-          <WaButton href={waDiagnostico} size="md">Quiero uno de los 3 cupos</WaButton>
+        <div
+          class="gradient-secondary pointer-events-none absolute inset-0 opacity-15"
+          aria-hidden="true"
+        >
+        </div>
+        <div class="relative grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
+              {oferta.etiqueta}
+            </p>
+            <h2 class="font-heading mt-3 text-2xl font-semibold text-text sm:text-3xl lg:text-4xl">
+              {oferta.titulo}
+            </h2>
+            <p class="mt-4 leading-relaxed text-copy">{oferta.intro}</p>
+          </div>
+
+          <div>
+            <h3 class="number-tag">Qué incluye</h3>
+            <ul class="mt-4 space-y-3">
+              {
+                oferta.incluye.map((item) => (
+                  <li class="flex items-start gap-3 text-[15px] leading-relaxed text-copy">
+                    <svg
+                      viewBox="0 0 20 20"
+                      class="mt-1 size-4 shrink-0 text-brand-ink"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d={checkPath}
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <h3 class="number-tag mt-8">Qué te pido a cambio</h3>
+            <p class="mt-4 leading-relaxed text-copy">{oferta.contrapartida}</p>
+
+            <div class="mt-8">
+              <WaButton href={waDiagnostico}>{oferta.cta}</WaButton>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   {/* BLOQUE 7 · Cómo funciona */}
-  <section class="border-y border-line bg-paper py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">Así de simple</h2>
+  <section id="como" class="section-pad tint-brand scroll-mt-24 border-y border-line bg-surface">
+    <div class="container-page">
+      <Eyebrow number="05">Cómo funciona</Eyebrow>
 
-      <ol class="mt-8 space-y-4">
+      <div class="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16" data-reveal>
+        <h2 class="font-heading display-lg font-semibold text-text">
+          Así de <span class="text-gradient-brand">simple</span>
+        </h2>
+        <p class="leading-relaxed text-copy lg:pb-1">
+          Tres pasos. Ninguno te quita tiempo de consulta.
+        </p>
+      </div>
+
+      <ol class="mt-12 grid gap-5 lg:grid-cols-3 xl:gap-6">
         {
           pasos.map((paso, index) => (
-            <li class="flex gap-4 rounded-card border border-line bg-surface p-5">
-              <span class="grid size-9 shrink-0 place-items-center rounded-full bg-wa text-sm font-semibold text-white">
-                {index + 1}
-              </span>
-              <div class="min-w-0">
-                <h3 class="font-heading text-base leading-snug font-semibold text-text sm:text-lg">
-                  {paso.titulo}
-                </h3>
-                <p class="mt-1.5 text-sm leading-relaxed text-copy">{paso.texto}</p>
+            <li
+              class="card hairline spotlight relative flex flex-col p-6 sm:p-7"
+              data-reveal
+              data-glow
+              style={`--delay:${index * 90}ms`}
+            >
+              <div class="flex items-center gap-4">
+                <span class="grid size-10 place-items-center rounded-full bg-brand font-heading text-base font-semibold text-on-brand">
+                  {index + 1}
+                </span>
+                <span class="font-mono text-[11px] tracking-[0.22em] text-dim uppercase">
+                  Paso {index + 1}
+                </span>
               </div>
+              <h3 class="font-heading mt-5 text-lg leading-snug font-semibold text-text sm:text-xl">
+                {paso.titulo}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-copy sm:text-[15px]">{paso.texto}</p>
             </li>
           ))
         }
       </ol>
 
-      <div class="mt-8">
+      <div class="mt-10" data-reveal>
         <WaButton href={waEmpezar}>Empezar por WhatsApp</WaButton>
       </div>
     </div>
   </section>
 
   {/* BLOQUE 8 · Preguntas frecuentes */}
-  <section class="bg-surface py-14 sm:py-20">
-    <div class="mx-auto w-full max-w-3xl px-5 sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-text sm:text-3xl">
-        Preguntas frecuentes
-      </h2>
+  <section id="preguntas" class="section-pad tint-brand scroll-mt-24 bg-paper">
+    <div class="container-page grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
+      <div data-reveal>
+        <Eyebrow number="06">Preguntas frecuentes</Eyebrow>
+        <h2 class="mt-8 font-heading display-lg font-semibold text-text">
+          Dudas frecuentes, respuestas <span class="text-brand-ink">directas</span>
+        </h2>
+        <p class="mt-5 max-w-md leading-relaxed text-copy">
+          Si la tuya no está aquí, escríbeme por WhatsApp y te contesto sin compromiso.
+        </p>
+      </div>
 
-      <div class="mt-7 space-y-3">
+      <div class="space-y-3" data-reveal>
         {
-          faqs.map((faq) => (
-            <details class="group rounded-card border border-line bg-paper px-5 py-4 transition-colors open:border-line-strong">
+          faqs.map((faq, index) => (
+            <details
+              class="card hairline group px-5 py-4 transition-colors open:border-line-strong hover:border-line-strong sm:px-6"
+              data-reveal
+              style={`--delay:${index * 70}ms`}
+            >
               <summary class="flex cursor-pointer items-center justify-between gap-4">
-                <h3 class="font-heading text-base leading-snug font-semibold text-text">
+                <h3 class="font-heading text-base leading-snug font-semibold text-text sm:text-lg">
                   {faq.pregunta}
                 </h3>
                 <span
-                  class="grid size-7 shrink-0 place-items-center rounded-full bg-surface text-base leading-none text-copy transition duration-300 group-open:rotate-45 group-open:bg-wa group-open:text-white"
+                  class="grid size-7 shrink-0 place-items-center rounded-full bg-paper text-base leading-none text-copy transition duration-300 group-open:rotate-45 group-open:bg-brand group-open:text-on-brand"
                   aria-hidden="true"
                 >
                   +
                 </span>
               </summary>
-              <p class="mt-3 text-sm leading-relaxed text-copy">{faq.respuesta}</p>
+              <p class="mt-3 max-w-prose text-sm leading-relaxed text-copy sm:text-[15px]">
+                {faq.respuesta}
+              </p>
             </details>
           ))
         }
@@ -403,69 +604,108 @@ const breadcrumbs = {
     </div>
   </section>
 
-  {/* BLOQUE 9 · CTA final */}
-  <section class="grain relative overflow-hidden bg-ink py-14 sm:py-20">
-    <div
-      class="pointer-events-none absolute -top-32 left-1/2 size-[32rem] -translate-x-1/2 rounded-full bg-wa/18 blur-[130px]"
-      aria-hidden="true"
-    >
-    </div>
-    <div class="relative mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
-      <h2 class="font-heading text-2xl font-semibold text-white sm:text-3xl">
-        Tu clínica puede verse y operar mejor. Empecemos hoy.
-      </h2>
-      <p class="mx-auto mt-5 max-w-xl leading-relaxed text-copy-dark">
-        Agenda tu diagnóstico gratuito de 15 minutos. Te llevas un checklist de 5 puntos críticos,
-        lo uses conmigo o no.
-      </p>
-      <div class="mt-8 flex justify-center">
-        <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito</WaButton>
-      </div>
-      <p class="mt-6 text-sm text-dim-dark">
-        También puedes escribirme directo:
-        <a
-          href={waDiagnostico}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-white underline decoration-wa-line underline-offset-4 transition hover:text-wa-line"
+  {/* BLOQUE 9 · CTA final, con el mismo cierre del sitio principal */}
+  <section id="contacto" class="section-pad scroll-mt-24 bg-paper">
+    <div class="container-page">
+      <div class="gradient-close grain vignette animate-pan relative overflow-hidden rounded-card">
+        <div class="bg-grid-dark absolute inset-0 opacity-20" aria-hidden="true"></div>
+        <div
+          class="pointer-events-none absolute -top-40 left-[-10%] size-[38rem] rounded-full bg-brand-light/12 blur-[150px]"
+          aria-hidden="true"
         >
-          {telDisplay}
-        </a>
-      </p>
+        </div>
+
+        <div class="relative px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
+          <Eyebrow number="07" tone="dark">Siguiente paso</Eyebrow>
+
+          <div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
+            <div data-reveal>
+              <h2 class="font-heading display-lg font-semibold text-white">
+                Tu práctica puede verse y <span class="text-gradient-light">operar mejor</span>.
+                Empecemos hoy.
+              </h2>
+              <p class="mt-5 max-w-xl leading-relaxed text-copy-dark">
+                Agenda tu diagnóstico gratuito de 15 minutos. Te llevas un checklist de 5 puntos
+                críticos, lo uses conmigo o no.
+              </p>
+            </div>
+
+            <div class="lg:pl-4" data-reveal>
+              <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito</WaButton>
+              <p class="mt-5 text-sm text-dim-dark">
+                También puedes escribirme directo:
+                <a
+                  href={waDiagnostico}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-semibold text-white underline decoration-brand-light/60 underline-offset-4 transition hover:text-brand-light"
+                >
+                  {telDisplay}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  {/* BLOQUE 10 · Pie */}
-  <footer slot="below" class="border-t border-line bg-paper py-10">
-    <div class="mx-auto w-full max-w-5xl px-5 sm:px-6">
-      <div class="flex flex-col gap-7 sm:flex-row sm:items-start sm:justify-between">
+  {/* BLOQUE 10 · Pie, con el mismo tratamiento oscuro del sitio principal */}
+  <footer slot="below" class="grain on-dark relative bg-ink pt-16 pb-8 text-copy-dark">
+    <span
+      class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/16 to-transparent"
+      aria-hidden="true"></span>
+    <div class="container-page">
+      <div
+        class="flex flex-col gap-10 border-b border-line-dark pb-12 lg:flex-row lg:items-start lg:justify-between"
+      >
         <div class="max-w-sm">
-          <a href="/" class="text-text" aria-label="Soy Arquitecto Digital — ir al sitio principal">
-            <Wordmark />
+          <a href="/" class="text-white" aria-label="Soy Arquitecto Digital — ir al inicio">
+            <Wordmark size="lg" />
           </a>
-          <p class="mt-4 text-sm leading-relaxed text-copy">
-            Arquitectura digital para clínicas y consultorios en Venezuela. Una firma de
+          <p class="mt-5 text-sm leading-relaxed">
+            Arquitectura digital para profesionales de la salud en Venezuela. Una firma de
             {site.studio}.
+          </p>
+          <p class="mt-5 font-mono text-[11px] tracking-[0.18em] text-dim-dark uppercase">
+            {site.person} · {site.location}
           </p>
         </div>
 
-        <nav class="flex flex-col gap-2.5 text-sm sm:items-end" aria-label="Enlaces">
+        <nav class="flex flex-col gap-2.5 text-sm" aria-label="Enlaces">
           <a
             href={site.url}
-            class="font-semibold text-text underline decoration-wa decoration-2 underline-offset-4 transition hover:text-wa"
+            class="font-semibold text-white transition-colors hover:text-brand-light"
           >
             soyarquitectodigital.info
           </a>
-          <a href="/legal/privacidad" class="text-copy transition hover:text-text">
-            Aviso de privacidad
-          </a>
-          <a href={`mailto:${site.email}`} class="text-copy transition hover:text-text">
+          <a href={`mailto:${site.email}`} class="transition-colors hover:text-brand-light">
             {site.email}
           </a>
+          <a href="/legal/privacidad" class="transition-colors hover:text-brand-light">
+            Aviso de privacidad
+          </a>
         </nav>
+
+        <div class="flex flex-col gap-3">
+          <a
+            href={waDiagnostico}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-wa-strong"
+          >
+            Hablemos por WhatsApp
+          </a>
+          <a
+            href="#diagnostico"
+            class="inline-flex h-11 items-center justify-center rounded-full border border-line-dark px-5 text-sm font-semibold text-white transition hover:border-line-dark-strong"
+          >
+            Diagnóstico gratis
+          </a>
+        </div>
       </div>
 
-      <p class="mt-8 border-t border-line pt-6 text-xs text-dim">
+      <p class="pt-6 text-xs text-dim-dark">
         © {year} {site.name} · {site.studio}
       </p>
     </div>

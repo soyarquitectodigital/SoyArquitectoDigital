@@ -27,22 +27,31 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
 ---
 
 <header id="site-nav" class="fixed inset-x-0 top-0 z-50" data-nav>
-  <div class="container-page pt-3 sm:pt-4">
+  {/*
+    A todo lo ancho: la barra no usa el contenedor limitado del resto de la
+    página, sino el ancho completo del viewport con un margen mínimo. Así el
+    menú dispone de mucho más sitio para repartir.
+  */}
+  <div class="w-full px-3 pt-3 sm:px-4 sm:pt-4 lg:px-5">
     <div
-      class="nav-shell flex items-center justify-between gap-4 rounded-full border px-4 py-2.5 sm:px-5"
+      class="nav-shell flex items-center justify-between gap-4 rounded-full border px-4 py-2.5 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr]"
     >
-      <a href="/" class="nav-logo shrink-0" aria-label="Soy Arquitecto Digital — ir al inicio">
+      <a
+        href="/"
+        class="nav-logo shrink-0 lg:justify-self-start"
+        aria-label="Soy Arquitecto Digital — ir al inicio"
+      >
         <Wordmark />
       </a>
 
       {/*
-        El menú ocupa todo el ancho disponible entre el logo y los botones y
-        reparte ese espacio entre los enlaces (justify-between). `gap-3` es solo
-        el mínimo de seguridad: si el hueco calculado fuese menor, los enlaces
-        se separan 12 px en vez de solaparse.
+        Rejilla de tres columnas en escritorio: el logo y los botones ocupan las
+        columnas laterales (iguales, así que el centro queda centrado de verdad
+        respecto a la barra) y los enlaces van en la columna central, agrupados
+        y sin repartirse.
       */}
       <nav
-        class="hidden flex-1 items-center justify-between gap-3 lg:flex"
+        class="hidden items-center justify-center gap-4 lg:flex 2xl:gap-5"
         aria-label="Secciones"
       >
         {
@@ -63,7 +72,7 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
         }
       </nav>
 
-      <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <div class="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:justify-self-end">
         <a
           href={diagnosisUrl}
           target="_blank"
@@ -112,7 +121,7 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
   aria-modal="true"
   aria-label="Menú de navegación"
 >
-  <div class="container-page flex h-full flex-col pt-6 pb-10">
+  <div class="flex h-full w-full flex-col px-3 pt-6 pb-10 sm:px-4 lg:px-5">
     <div class="flex items-center justify-between">
       <span class="text-white">
         <Wordmark />
