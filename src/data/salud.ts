@@ -1,6 +1,6 @@
 /**
  * Contenido de la landing satélite /salud: arquitectura digital para todo el
- * sector salud en Venezuela (médicos, odontólogos, psicólogos, nutricionistas,
+ * sector salud (médicos, odontólogos, psicólogos, nutricionistas,
  * fisioterapeutas, clínicas y consultorios).
  */
 
@@ -14,8 +14,8 @@ export const publico =
  * experiencia real en una clínica, volumen de proyectos y método de trabajo.
  */
 export const confianza = [
-  'Experiencia real en salud: dirigí el marketing digital de una clínica dental en Venezuela.',
-  '+600 proyectos web entregados en España, EE.UU. y Venezuela.',
+  'Experiencia real en salud: dirigí el marketing digital de una clínica dental.',
+  '+600 proyectos web entregados en España y EE.UU.',
   'Arquitecto de ecosistemas digitales, no solo de páginas web.',
   '3 plazas fundadoras con la primera fase sin costo.',
 ];
@@ -89,7 +89,7 @@ export const faqs = [
   {
     pregunta: '¿Tienen experiencia en el sector salud?',
     respuesta:
-      'Sí. Entre 2018 y 2020 dirigí el marketing digital de M&M Odontoclínica en Venezuela: SEO, campañas, redes sociales y sitio web. Desde entonces he entregado más de 600 proyectos web y arquitecturas digitales para otros sectores, y ahora aplico ese mismo método al sector salud.',
+      'Sí. Entre 2018 y 2020 dirigí el marketing digital de M&M Odontoclínica: SEO, campañas, redes sociales y sitio web. Desde entonces he entregado más de 600 proyectos web y arquitecturas digitales para otros sectores, y ahora aplico ese mismo método al sector salud.',
   },
   {
     pregunta: '¿Funciona para mi especialidad?',
@@ -109,7 +109,7 @@ export const faqs = [
   {
     pregunta: '¿Atienden en mi ciudad?',
     respuesta:
-      'Sí. Trabajo 100% en remoto con profesionales y centros de toda Venezuela. La coordinación es por WhatsApp y videollamada, y todo lo que implemento es digital. Mi número de WhatsApp es internacional (+57), así que te atiendo igual desde cualquier ciudad.',
+      'Sí. Trabajo 100% en remoto, así que la ubicación no es un problema. La coordinación es por WhatsApp y videollamada, y todo lo que implemento es digital. Mi número de WhatsApp es internacional (+57), así que te atiendo igual desde cualquier ciudad.',
   },
   {
     pregunta: '¿Cuánto tiempo toma implementar?',
@@ -147,10 +147,11 @@ export const faqs = [
  */
 export const oferta = {
   etiqueta: 'Programa fundador',
-  titulo: '3 plazas fundadoras',
+  titulo: '3 plazas',
+  acento: 'fundadoras',
   teaser: 'Entras como caso de éxito: la primera fase no te cuesta nada.',
   intro:
-    'Busco 3 profesionales o centros de salud en Venezuela para entrar como caso de éxito. Las 3 plazas arrancan con la primera fase sin costo.',
+    'Busco 3 profesionales o centros de salud para entrar como caso de éxito. Las 3 plazas arrancan con la primera fase sin costo.',
   incluye: [
     'Primera fase sin costo: presencia y confianza (Google Business, identidad y web).',
     'Trabajo directo conmigo, sin intermediarios ni agencias de por medio.',
@@ -174,14 +175,14 @@ export const sinPrueba =
 export const sobreMi = {
   eyebrow: 'Quién está detrás',
   titulo: 'No empiezo de cero en salud.',
-  destacado: 'Ya dirigí el marketing digital de una clínica dental en Venezuela.',
+  destacado: 'Ya dirigí el marketing digital de una clínica dental.',
   intro:
     'Soy Oswaldo González Lucena, arquitecto de ecosistemas digitales. Entre 2018 y 2020 llevé el marketing digital de M&M Odontoclínica: SEO, campañas, redes y web. Ahí aprendí cómo decide un paciente y qué le quita el sueño a quien lleva un consultorio.',
   cuerpo:
-    'Después escalé esa disciplina a más de 600 proyectos web como Senior Project Manager en España y a la arquitectura de productos tecnológicos como CTO en EE.UU. Ahora aplico todo ese oficio al sector salud venezolano, con un método por fases que no depende de que sepas de tecnología.',
+    'Después escalé esa disciplina a más de 600 proyectos web como Senior Project Manager en España y a la arquitectura de productos tecnológicos como CTO en EE.UU. Ahora aplico todo ese oficio al sector salud, con un método por fases que no depende de que sepas de tecnología.',
   hitos: [
-    '2018–2020 · Director de Marketing Digital en M&M Odontoclínica (Venezuela).',
-    '+600 proyectos web entregados (España, EE.UU. y Venezuela).',
+    '2018–2020 · Director de Marketing Digital en M&M Odontoclínica.',
+    '+600 proyectos web entregados (España y EE.UU.).',
     'CTO de una empresa tecnológica en California, EE.UU.',
     'Licenciado en Informática (UBV) y certificado en Inbound Marketing (HubSpot).',
   ],

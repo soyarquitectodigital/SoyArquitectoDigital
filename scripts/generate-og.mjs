@@ -76,7 +76,7 @@ const ogSalud = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="63
 
   <g transform="translate(72, 472)">
     <text font-family="${font}" font-size="25" fill="#b4c6e0">Médicos · Odontólogos · Psicólogos · Nutricionistas · Fisioterapeutas</text>
-    <text y="42" font-family="${font}" font-size="22" fill="#7e93b4">Clínicas y consultorios · Venezuela · soyarquitectodigital.info/salud</text>
+    <text y="42" font-family="${font}" font-size="22" fill="#7e93b4">Clínicas y consultorios · soyarquitectodigital.info/salud</text>
   </g>
 
   <g transform="translate(72, 556)">

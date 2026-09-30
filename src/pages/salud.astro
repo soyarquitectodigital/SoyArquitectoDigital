@@ -24,9 +24,9 @@ import {
 } from '../data/salud';
 
 const path = '/salud';
-const title = 'Páginas web y automatización para profesionales de la salud en Venezuela';
+const title = 'Páginas web y automatización para profesionales de la salud';
 const description =
-  'Arquitectura digital para médicos, odontólogos y clínicas en Venezuela. Experiencia real en salud, diagnóstico gratuito y 3 plazas fundadoras.';
+  'Arquitectura digital para médicos, odontólogos y clínicas. Experiencia real en salud, diagnóstico gratuito y 3 plazas fundadoras.';
 
 // Un mensaje distinto por CTA para saber qué sección convierte. Todos llegan al
 // mismo WhatsApp: la diferencia es el texto, que se ve en el primer mensaje.
@@ -81,7 +81,7 @@ const serviceSchema = {
   '@type': 'Service',
   name: 'Arquitectura digital para profesionales de la salud',
   description:
-    'Presencia digital, automatización de agenda y crecimiento para médicos, odontólogos, psicólogos, nutricionistas, clínicas y consultorios en Venezuela. Con experiencia real en el sector salud. Incluye diagnóstico gratuito de 15 minutos.',
+    'Presencia digital, automatización de agenda y crecimiento para médicos, odontólogos, psicólogos, nutricionistas, clínicas y consultorios. Con experiencia real en el sector salud. Incluye diagnóstico gratuito de 15 minutos.',
   serviceType: 'Arquitectura digital y automatización para el sector salud',
   provider: {
     '@type': 'Person',
@@ -90,7 +90,6 @@ const serviceSchema = {
     url: site.url,
     email: `mailto:${site.email}`,
   },
-  areaServed: { '@type': 'Country', name: 'Venezuela' },
   audience: {
     '@type': 'Audience',
     audienceType: 'Profesionales de la salud, clínicas y consultorios',
@@ -227,13 +226,13 @@ const breadcrumbs = {
           </h1>
 
           <p class="mt-7 max-w-xl text-lg leading-relaxed text-copy-dark">
-            Ayudo a profesionales de la salud en Venezuela a captar más pacientes, recuperar tiempo
-            perdido en gestión y construir una marca que genere confianza.
+            Ayudo a profesionales de la salud a captar más pacientes, recuperar tiempo perdido en
+            gestión y construir una marca que genere confianza.
           </p>
 
           <p class="mt-3 max-w-xl text-sm leading-relaxed text-dim-dark">
             {publico}. Con experiencia real en el sector: dirigí el marketing digital de una clínica
-            dental en Venezuela.
+            dental.
           </p>
 
           <div class="mt-9">
@@ -260,7 +259,7 @@ const breadcrumbs = {
             <span class="pill text-[11px] text-brand-light whitespace-nowrap">Solo 3</span>
           </div>
           <p class="font-heading mt-4 text-2xl leading-tight text-white sm:text-3xl">
-            {oferta.titulo}
+            {oferta.titulo} {oferta.acento}
           </p>
           <p class="mt-3 text-sm leading-relaxed text-copy-dark">{oferta.teaser}</p>
           <div class="mt-6">
@@ -567,7 +566,7 @@ const breadcrumbs = {
 
       {
         !hayPrueba && (
-          <p class="mt-6 flex max-w-3xl items-start gap-3 rounded-2xl border border-line bg-surface p-5 text-sm leading-relaxed text-copy sm:text-[15px]">
+          <p class="mt-6 flex max-w-3xl items-start gap-3 rounded-2xl border border-brand/20 bg-brand/5 p-5 text-sm leading-relaxed text-copy sm:text-[15px]">
             <svg
               viewBox="0 0 20 20"
               class="mt-0.5 size-4 shrink-0 text-brand-ink"
@@ -588,59 +587,89 @@ const breadcrumbs = {
       }
 
       <div
-        class="card hairline spotlight relative mt-8 overflow-hidden p-7 sm:p-10 lg:p-12"
+        class="hairline hairline-dark spotlight spotlight-dark relative mt-8 rounded-card shadow-soft"
         data-reveal
         data-glow
       >
         <div
-          class="gradient-secondary pointer-events-none absolute inset-0 opacity-15"
+          class="pointer-events-none absolute inset-0 overflow-hidden rounded-card"
           aria-hidden="true"
         >
+          <div class="gradient-close absolute inset-0"></div>
+          <div class="grain vignette absolute inset-0"></div>
+          <div class="bg-grid-dark absolute inset-0 opacity-20"></div>
+          <div
+            class="absolute -top-32 right-[-8%] size-[28rem] rounded-full bg-brand-light/10 blur-[130px]"
+          >
+          </div>
         </div>
-        <div class="relative grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p class="font-mono text-[11px] tracking-[0.22em] text-brand-ink uppercase">
+
+        <div class="relative grid gap-10 p-7 sm:p-10 lg:grid-cols-2 lg:gap-16 lg:p-12">
+          <div class="lg:sticky lg:top-[calc(50vh_-_10rem)] lg:self-start">
+            <p
+              class="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/8 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.22em] text-brand-light uppercase"
+            >
+              <span class="relative flex size-2" aria-hidden="true">
+                <span
+                  class="absolute inline-flex size-full animate-ping rounded-full bg-brand-light opacity-60"
+                ></span>
+                <span class="relative inline-flex size-2 rounded-full bg-brand-light"></span>
+              </span>
               {oferta.etiqueta}
             </p>
-            <h2 class="font-heading mt-3 text-2xl font-semibold text-text sm:text-3xl lg:text-4xl">
-              {oferta.titulo}
+            <h2
+              class="mt-6 font-heading text-3xl leading-[1.05] font-semibold text-white sm:text-4xl lg:text-5xl"
+            >
+              {oferta.titulo} <span class="text-gradient-light">{oferta.acento}</span>
             </h2>
-            <p class="mt-4 leading-relaxed text-copy">{oferta.intro}</p>
+            <p class="mt-5 max-w-md leading-relaxed text-copy-dark">{oferta.intro}</p>
+            <p
+              class="mt-7 max-w-md border-l-2 border-brand-light/60 pl-4 font-heading text-lg leading-snug font-semibold text-white"
+            >
+              {oferta.teaser}
+            </p>
           </div>
 
           <div>
-            <h3 class="number-tag">Qué incluye</h3>
-            <ul class="mt-4 space-y-3">
+            <h3 class="font-mono text-[11px] tracking-[0.22em] text-brand-light uppercase">
+              Qué incluye
+            </h3>
+            <ul class="mt-5 space-y-4">
               {
                 oferta.incluye.map((item) => (
-                  <li class="flex items-start gap-3 text-[15px] leading-relaxed text-copy">
-                    <svg
-                      viewBox="0 0 20 20"
-                      class="mt-1 size-4 shrink-0 text-brand-ink"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d={checkPath}
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                  <li class="flex items-start gap-3.5 text-[15px] leading-relaxed text-copy-dark">
+                    <span class="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-brand-light/15 text-brand-light ring-1 ring-brand-light/25">
+                      <svg viewBox="0 0 20 20" class="size-3.5" fill="none" aria-hidden="true">
+                        <path
+                          d={checkPath}
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
                     <span>{item}</span>
                   </li>
                 ))
               }
             </ul>
 
-            <h3 class="number-tag mt-8">Qué te pido a cambio</h3>
-            <p class="mt-4 leading-relaxed text-copy">{oferta.contrapartida}</p>
+            <div class="mt-8 border-t border-white/10 pt-7">
+              <h3 class="font-mono text-[11px] tracking-[0.22em] text-brand-light uppercase">
+                Qué te pido a cambio
+              </h3>
+              <p class="mt-3.5 leading-relaxed text-copy-dark">{oferta.contrapartida}</p>
+            </div>
 
-            <h3 class="number-tag mt-8">Qué pasa después</h3>
-            <p class="mt-4 leading-relaxed text-copy">{oferta.despues}</p>
+            <div class="mt-8 border-t border-white/10 pt-7">
+              <h3 class="font-mono text-[11px] tracking-[0.22em] text-brand-light uppercase">
+                Qué pasa después
+              </h3>
+              <p class="mt-3.5 leading-relaxed text-copy-dark">{oferta.despues}</p>
+            </div>
 
-            <div class="mt-8">
+            <div class="mt-8 border-t border-white/10 pt-7">
               <WaButton href={waPlazas} cta="plazas_whatsapp">{oferta.cta}</WaButton>
             </div>
           </div>
@@ -782,8 +811,8 @@ const breadcrumbs = {
                 <span class="text-dim-dark">(WhatsApp internacional)</span>
               </p>
               <p class="mt-4 text-sm leading-relaxed text-copy-dark">
-                Atiendo en remoto a profesionales y centros de toda Venezuela: la coordinación es por
-                WhatsApp y videollamada, sin que tengas que moverte de tu consulta.
+                Atiendo en remoto a profesionales y centros de cualquier lugar: la coordinación es
+                por WhatsApp y videollamada, sin que tengas que moverte de tu consulta.
               </p>
             </div>
           </div>
@@ -817,7 +846,7 @@ const breadcrumbs = {
             <Wordmark size="lg" />
           </a>
           <p class="mt-5 text-sm leading-relaxed">
-            Arquitectura digital para profesionales de la salud en Venezuela.
+            Arquitectura digital para profesionales de la salud.
           </p>
           <p class="mt-5 font-mono text-[11px] tracking-[0.18em] text-dim-dark uppercase">
             {site.person} · {site.location}
