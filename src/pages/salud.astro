@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import CtaTracking from '../components/CtaTracking.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import WaButton from '../components/WaButton.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
@@ -15,21 +17,33 @@ import {
   pasos,
   faqs,
   oferta,
+  sinPrueba,
+  sobreMi,
   testimonio,
   caso,
 } from '../data/salud';
 
 const path = '/salud';
-const title = 'Páginas web para profesionales de la salud en Venezuela';
+const title = 'Páginas web y automatización para profesionales de la salud en Venezuela';
 const description =
-  'Ayudo a profesionales de la salud en Venezuela a captar más pacientes y ahorrar tiempo de gestión. Diagnóstico gratuito y 3 plazas de prueba.';
+  'Arquitectura digital para médicos, odontólogos y clínicas en Venezuela. Experiencia real en salud, diagnóstico gratuito y 3 plazas fundadoras.';
 
-// Un solo mensaje para todos los CTA de diagnóstico: el que definiste en el brief.
+// Un mensaje distinto por CTA para saber qué sección convierte. Todos llegan al
+// mismo WhatsApp: la diferencia es el texto, que se ve en el primer mensaje.
 const waDiagnostico = whatsapp(
   'Hola, vi la página de arquitectura digital para profesionales de la salud y quiero mi diagnóstico gratuito de 15 minutos.',
 );
+const waDiagnosticoSeccion = whatsapp(
+  'Hola, quiero agendar mi diagnóstico gratuito de 15 minutos. Te cuento mi especialidad y en qué ciudad estoy.',
+);
+const waPlazas = whatsapp(
+  'Hola, quiero una de las 3 plazas fundadoras para mi consulta. Te cuento mi especialidad y en qué ciudad estoy.',
+);
 const waEmpezar = whatsapp(
   'Hola, quiero empezar. Te cuento mi especialidad y en qué ciudad estoy.',
+);
+const waFinal = whatsapp(
+  'Hola, quiero mi diagnóstico gratuito para mi consulta. Te cuento mi especialidad y en qué ciudad estoy.',
 );
 
 const telDisplay = `+${whatsappNumber.slice(0, 2)} ${whatsappNumber.slice(2, 5)} ${whatsappNumber.slice(5, 8)} ${whatsappNumber.slice(8)}`;
@@ -67,7 +81,7 @@ const serviceSchema = {
   '@type': 'Service',
   name: 'Arquitectura digital para profesionales de la salud',
   description:
-    'Presencia digital, automatización de agenda y crecimiento para médicos, odontólogos, psicólogos, nutricionistas, clínicas y consultorios en Venezuela. Incluye diagnóstico gratuito de 15 minutos.',
+    'Presencia digital, automatización de agenda y crecimiento para médicos, odontólogos, psicólogos, nutricionistas, clínicas y consultorios en Venezuela. Con experiencia real en el sector salud. Incluye diagnóstico gratuito de 15 minutos.',
   serviceType: 'Arquitectura digital y automatización para el sector salud',
   provider: {
     '@type': 'Person',
@@ -114,10 +128,14 @@ const breadcrumbs = {
 <BaseLayout
   title={title}
   description={description}
+  image="/og-salud.png"
+  imageAlt="Soy Arquitecto Digital — presencia digital para profesionales de la salud"
   schema={[serviceSchema, faqSchema, breadcrumbs]}
   navOnDark
   bare
 >
+  <CtaTracking />
+
   {/*
     Misma barra flotante que el sitio principal: reutiliza #site-nav y
     .nav-shell, así que hereda el fondo translúcido sobre el hero oscuro y se
@@ -135,6 +153,7 @@ const breadcrumbs = {
         <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <a
             href="#diagnostico"
+            data-cta="nav_diagnostico"
             class="nav-cta-ghost hidden h-10 items-center rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition sm:inline-flex"
           >
             Diagnóstico gratis
@@ -143,6 +162,7 @@ const breadcrumbs = {
             href={waDiagnostico}
             target="_blank"
             rel="noopener noreferrer"
+            data-cta="nav_whatsapp"
             class="inline-flex h-10 items-center gap-2 rounded-full bg-wa px-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-wa-strong sm:px-4"
           >
             <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
@@ -211,10 +231,15 @@ const breadcrumbs = {
             perdido en gestión y construir una marca que genere confianza.
           </p>
 
-          <p class="mt-3 max-w-xl text-sm leading-relaxed text-dim-dark">{publico}.</p>
+          <p class="mt-3 max-w-xl text-sm leading-relaxed text-dim-dark">
+            {publico}. Con experiencia real en el sector: dirigí el marketing digital de una clínica
+            dental en Venezuela.
+          </p>
 
           <div class="mt-9">
-            <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito de 15 minutos</WaButton>
+            <WaButton href={waDiagnostico} cta="hero_diagnostico">
+              Quiero mi diagnóstico gratuito de 15 minutos
+            </WaButton>
           </div>
 
           <p class="mt-4 max-w-md text-sm leading-relaxed text-dim-dark">
@@ -237,10 +262,24 @@ const breadcrumbs = {
           <p class="font-heading mt-4 text-2xl leading-tight text-white sm:text-3xl">
             {oferta.titulo}
           </p>
-          <p class="mt-3 text-sm leading-relaxed text-copy-dark">{oferta.intro}</p>
+          <p class="mt-3 text-sm leading-relaxed text-copy-dark">{oferta.teaser}</p>
           <div class="mt-6">
-            <WaButton href={waDiagnostico} size="md">{oferta.cta}</WaButton>
+            <WaButton href={waPlazas} size="md" cta="hero_plaza">{oferta.cta}</WaButton>
           </div>
+          <a
+            href="#plazas"
+            class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-light transition hover:text-white"
+          >
+            Ver qué incluye y qué pido a cambio
+            <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+              <path
+                d="M10 4.2v11.6M4.2 10l5.8 5.8L15.8 10"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
         </div>
       </div>
     </div>
@@ -372,6 +411,76 @@ const breadcrumbs = {
     </div>
   </section>
 
+  {/* BLOQUE 4 · Quién está detrás: experiencia real en salud y método */}
+  <section id="sobre-mi" class="section-pad tint-brand scroll-mt-24 bg-paper">
+    <div class="container-page">
+      <Eyebrow number="03">{sobreMi.eyebrow}</Eyebrow>
+
+      <div class="mt-8 grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-24">
+        <div data-reveal>
+          <h2 class="font-heading display-lg font-semibold text-text">{sobreMi.titulo}</h2>
+          <p class="mt-5 font-heading text-xl leading-snug font-semibold text-brand-ink sm:text-2xl">
+            {sobreMi.destacado}
+          </p>
+          <p class="mt-6 max-w-md leading-relaxed text-copy">{sobreMi.intro}</p>
+          <p class="mt-4 max-w-md leading-relaxed text-copy">{sobreMi.cuerpo}</p>
+
+          <ul class="mt-8 flex flex-wrap gap-2.5">
+            {
+              sobreMi.principios.map((principio) => (
+                <li class="rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-copy">
+                  {principio}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="card hairline spotlight relative p-6 sm:p-8" data-reveal data-glow>
+          <p class="number-tag">Trayectoria</p>
+          <ol class="mt-5 divide-y divide-line">
+            {
+              sobreMi.hitos.map((hito) => (
+                <li class="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
+                  <svg
+                    viewBox="0 0 20 20"
+                    class="mt-1 size-4 shrink-0 text-brand-ink"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d={checkPath}
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="text-[15px] leading-relaxed text-copy">{hito}</span>
+                </li>
+              ))
+            }
+          </ol>
+          <a
+            href="#diagnostico"
+            data-cta="sobre_diagnostico"
+            class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-ink transition hover:text-text"
+          >
+            Ver qué revisamos en el diagnóstico
+            <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+              <path
+                d="M10 4.2v11.6M4.2 10l5.8 5.8L15.8 10"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   {/* BLOQUE 5 · El diagnóstico, en bloque oscuro como la sección de enfoque */}
   <section id="diagnostico" class="grain section-pad scroll-mt-24 relative overflow-hidden bg-ink-soft">
     <div
@@ -381,7 +490,7 @@ const breadcrumbs = {
     </div>
 
     <div class="container-page relative">
-      <Eyebrow number="03" tone="dark">El diagnóstico</Eyebrow>
+      <Eyebrow number="04" tone="dark">El diagnóstico</Eyebrow>
 
       <div class="mt-8 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
         <div data-reveal>
@@ -397,7 +506,9 @@ const breadcrumbs = {
             compromiso.
           </p>
           <div class="mt-8">
-            <WaButton href={waDiagnostico}>Agendar mi diagnóstico gratuito</WaButton>
+            <WaButton href={waDiagnosticoSeccion} cta="diagnostico_whatsapp">
+              Agendar mi diagnóstico gratuito
+            </WaButton>
           </div>
         </div>
 
@@ -422,7 +533,7 @@ const breadcrumbs = {
   {/* BLOQUE 6 · Prueba social y oferta de las 3 plazas */}
   <section id="plazas" class="section-pad tint-brand scroll-mt-24 bg-paper">
     <div class="container-page">
-      <Eyebrow number="04">Las 3 plazas</Eyebrow>
+      <Eyebrow number="05">Las 3 plazas</Eyebrow>
 
       {
         hayPrueba && (
@@ -454,11 +565,30 @@ const breadcrumbs = {
         )
       }
 
+      {
+        !hayPrueba && (
+          <p class="mt-6 flex max-w-3xl items-start gap-3 rounded-2xl border border-line bg-surface p-5 text-sm leading-relaxed text-copy sm:text-[15px]">
+            <svg
+              viewBox="0 0 20 20"
+              class="mt-0.5 size-4 shrink-0 text-brand-ink"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M10 17.2a7.2 7.2 0 1 0 0-14.4 7.2 7.2 0 0 0 0 14.4ZM10 6.6v3.6M10 13.4h.01"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span>{sinPrueba}</span>
+          </p>
+        )
+      }
+
       <div
-        class:list={[
-          'card hairline spotlight relative overflow-hidden p-7 sm:p-10 lg:p-12',
-          hayPrueba && 'mt-8',
-        ]}
+        class="card hairline spotlight relative mt-8 overflow-hidden p-7 sm:p-10 lg:p-12"
         data-reveal
         data-glow
       >
@@ -507,8 +637,11 @@ const breadcrumbs = {
             <h3 class="number-tag mt-8">Qué te pido a cambio</h3>
             <p class="mt-4 leading-relaxed text-copy">{oferta.contrapartida}</p>
 
+            <h3 class="number-tag mt-8">Qué pasa después</h3>
+            <p class="mt-4 leading-relaxed text-copy">{oferta.despues}</p>
+
             <div class="mt-8">
-              <WaButton href={waDiagnostico}>{oferta.cta}</WaButton>
+              <WaButton href={waPlazas} cta="plazas_whatsapp">{oferta.cta}</WaButton>
             </div>
           </div>
         </div>
@@ -519,7 +652,7 @@ const breadcrumbs = {
   {/* BLOQUE 7 · Cómo funciona */}
   <section id="como" class="section-pad tint-brand scroll-mt-24 border-y border-line bg-surface">
     <div class="container-page">
-      <Eyebrow number="05">Cómo funciona</Eyebrow>
+      <Eyebrow number="06">Cómo funciona</Eyebrow>
 
       <div class="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16" data-reveal>
         <h2 class="font-heading display-lg font-semibold text-text">
@@ -557,7 +690,7 @@ const breadcrumbs = {
       </ol>
 
       <div class="mt-10" data-reveal>
-        <WaButton href={waEmpezar}>Empezar por WhatsApp</WaButton>
+        <WaButton href={waEmpezar} cta="como_whatsapp">Empezar por WhatsApp</WaButton>
       </div>
     </div>
   </section>
@@ -566,7 +699,7 @@ const breadcrumbs = {
   <section id="preguntas" class="section-pad tint-brand scroll-mt-24 bg-paper">
     <div class="container-page grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16 xl:gap-24">
       <div data-reveal>
-        <Eyebrow number="06">Preguntas frecuentes</Eyebrow>
+        <Eyebrow number="07">Preguntas frecuentes</Eyebrow>
         <h2 class="mt-8 font-heading display-lg font-semibold text-text">
           Dudas frecuentes, respuestas <span class="text-brand-ink">directas</span>
         </h2>
@@ -616,7 +749,7 @@ const breadcrumbs = {
         </div>
 
         <div class="relative px-6 py-14 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
-          <Eyebrow number="07" tone="dark">Siguiente paso</Eyebrow>
+          <Eyebrow number="08" tone="dark">Siguiente paso</Eyebrow>
 
           <div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
             <div data-reveal>
@@ -631,19 +764,36 @@ const breadcrumbs = {
             </div>
 
             <div class="lg:pl-4" data-reveal>
-              <WaButton href={waDiagnostico}>Quiero mi diagnóstico gratuito</WaButton>
+              <WaButton href={waFinal} cta="final_whatsapp">Quiero mi diagnóstico gratuito</WaButton>
               <p class="mt-5 text-sm text-dim-dark">
                 También puedes escribirme directo:
                 <a
-                  href={waDiagnostico}
+                  href={waFinal}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-cta="final_telefono"
                   class="font-semibold text-white underline decoration-brand-light/60 underline-offset-4 transition hover:text-brand-light"
                 >
                   {telDisplay}
                 </a>
+                <span class="text-dim-dark">(WhatsApp internacional)</span>
+              </p>
+              <p class="mt-4 text-sm leading-relaxed text-copy-dark">
+                Atiendo en remoto a profesionales y centros de toda Venezuela: la coordinación es por
+                WhatsApp y videollamada, sin que tengas que moverte de tu consulta.
               </p>
             </div>
+          </div>
+
+          <div class="border-t border-line-dark">
+            <ContactForm
+              channel="email"
+              title="¿Prefieres que te escriba yo?"
+              intro="Si no quieres escribir por WhatsApp ahora, déjame tus datos y te respondo por correo. Sin llamadas y sin compromiso."
+              companyLabel="Consultorio o clínica"
+              companyPlaceholder="Nombre de tu consultorio o clínica"
+              messagePlaceholder="Quiero que mis pacientes me encuentren en Google y dejar de reagendar citas a mano."
+            />
           </div>
         </div>
       </div>
@@ -664,8 +814,7 @@ const breadcrumbs = {
             <Wordmark size="lg" />
           </a>
           <p class="mt-5 text-sm leading-relaxed">
-            Arquitectura digital para profesionales de la salud en Venezuela. Una firma de
-            {site.studio}.
+            Arquitectura digital para profesionales de la salud en Venezuela.
           </p>
           <p class="mt-5 font-mono text-[11px] tracking-[0.18em] text-dim-dark uppercase">
             {site.person} · {site.location}
@@ -692,12 +841,14 @@ const breadcrumbs = {
             href={waDiagnostico}
             target="_blank"
             rel="noopener noreferrer"
+            data-cta="footer_whatsapp"
             class="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-wa-strong"
           >
             Hablemos por WhatsApp
           </a>
           <a
             href="#diagnostico"
+            data-cta="footer_diagnostico"
             class="inline-flex h-11 items-center justify-center rounded-full border border-line-dark px-5 text-sm font-semibold text-white transition hover:border-line-dark-strong"
           >
             Diagnóstico gratis
@@ -706,12 +857,12 @@ const breadcrumbs = {
       </div>
 
       <p class="pt-6 text-xs text-dim-dark">
-        © {year} {site.name} · {site.studio}
+        © {year} {site.name}
       </p>
     </div>
   </footer>
 
   <Fragment slot="below">
-    <WhatsAppFloat tone="wa" href={waDiagnostico} label="Diagnóstico gratis" />
+    <WhatsAppFloat tone="wa" href={waDiagnostico} label="Diagnóstico gratis" cta="float_diagnostico" />
   </Fragment>
 </BaseLayout>

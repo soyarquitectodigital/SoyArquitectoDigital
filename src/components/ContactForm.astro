@@ -1,7 +1,28 @@
 ---
 import { contactChannel, site } from '../config';
 
-const isWhatsApp = contactChannel === 'whatsapp';
+interface Props {
+  /** Canal de envío. Por defecto, el configurado en `config.ts`. */
+  channel?: 'whatsapp' | 'email';
+  eyebrow?: string;
+  title?: string;
+  intro?: string;
+  companyLabel?: string;
+  companyPlaceholder?: string;
+  messagePlaceholder?: string;
+}
+
+const {
+  channel = contactChannel,
+  eyebrow = 'O escríbeme aquí',
+  title = 'Cuéntame qué se está atascando',
+  intro = 'Si prefieres no agendar todavía, déjame los datos y te contesto yo. Sin llamadas y sin compromiso.',
+  companyLabel = 'Empresa',
+  companyPlaceholder = 'Nombre de tu empresa',
+  messagePlaceholder = 'Tengo tres herramientas que no se hablan entre sí y el equipo pierde horas copiando datos a mano.',
+} = Astro.props;
+
+const isWhatsApp = channel === 'whatsapp';
 
 const submitLabel = isWhatsApp ? 'Enviar por WhatsApp' : 'Enviar por correo';
 const channelHint = isWhatsApp
@@ -12,17 +33,16 @@ const channelHint = isWhatsApp
 <div
   class="contact-form card-dark mx-auto mt-12 max-w-2xl p-6 text-left sm:p-8"
   data-contact
-  data-channel={contactChannel}
+  data-channel={channel}
 >
   <p class="font-mono text-[11px] tracking-[0.2em] text-brand-light uppercase">
-    O escríbeme aquí
+    {eyebrow}
   </p>
   <h3 class="font-heading mt-3 text-xl leading-tight font-semibold text-white sm:text-2xl">
-    Cuéntame qué se está atascando
+    {title}
   </h3>
   <p class="mt-3 text-sm leading-relaxed text-copy-dark">
-    Si prefieres no agendar todavía, déjame los datos y te contesto yo. Sin llamadas y sin
-    compromiso.
+    {intro}
   </p>
 
   <form data-contact-form class="mt-6 grid gap-4" novalidate>
@@ -82,7 +102,7 @@ const channelHint = isWhatsApp
 
     <div>
       <label for="contact-company" class="block text-sm font-medium text-white">
-        Empresa <span class="text-dim-dark">(opcional)</span>
+        {companyLabel} <span class="text-dim-dark">(opcional)</span>
       </label>
       <input
         id="contact-company"
@@ -90,7 +110,7 @@ const channelHint = isWhatsApp
         type="text"
         class="qc-input mt-1.5"
         autocomplete="organization"
-        placeholder="Nombre de tu empresa"
+        placeholder={companyPlaceholder}
       />
     </div>
 
@@ -98,12 +118,12 @@ const channelHint = isWhatsApp
       <label for="contact-message" class="block text-sm font-medium text-white">
         ¿Qué necesitas? <span class="text-brand-light" aria-hidden="true">*</span>
       </label>
-      <textarea
-        id="contact-message"
-        name="message"
-        class="qc-textarea mt-1.5"
-        rows="4"
-        placeholder="Tengo tres herramientas que no se hablan entre sí y el equipo pierde horas copiando datos a mano."
+        <textarea
+          id="contact-message"
+          name="message"
+          class="qc-textarea mt-1.5"
+          rows="4"
+          placeholder={messagePlaceholder}
         required
         aria-describedby="contact-message-error"
       ></textarea>

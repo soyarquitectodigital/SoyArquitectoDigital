@@ -9,16 +9,20 @@
 export const publico =
   'Médicos, odontólogos, psicólogos, nutricionistas, fisioterapeutas, clínicas y consultorios';
 
+/**
+ * Barra de confianza. Todos los puntos son verificables contra `cv.ts`:
+ * experiencia real en una clínica, volumen de proyectos y método de trabajo.
+ */
 export const confianza = [
-  'Arquitecto Digital con experiencia en múltiples sectores',
-  'Metodología probada, adaptada al sector salud',
-  'Especializándome en profesionales de la salud en Venezuela',
-  '3 plazas de prueba como caso de éxito',
+  'Experiencia real en salud: dirigí el marketing digital de una clínica dental en Venezuela.',
+  '+600 proyectos web entregados en España, EE.UU. y Venezuela.',
+  'Arquitecto de ecosistemas digitales, no solo de páginas web.',
+  '3 plazas fundadoras con la primera fase sin costo.',
 ];
 
 export const problemas = [
   'Tus pacientes te buscan en Google, pero lo que encuentran no transmite la calidad de tu consulta.',
-  'Pierdes entre 8 y 15 citas al mes porque no hay recordatorios automáticos.',
+  'Las citas se caen por olvidos y reagendados manuales, y dejan huecos en una agenda que podrías tener llena.',
   'Reagendar citas por WhatsApp se come horas que deberían ir a atender a quien tienes delante.',
   'Tu marca se ve igual que la de cien colegas más. No hay nada que te diferencie.',
   'Tienes redes sociales, pero no sabes si realmente te están trayendo pacientes.',
@@ -48,7 +52,7 @@ export const pilares: Pilar[] = [
     icono: 'operacion',
     titulo: 'Operación que no te roba tiempo',
     texto:
-      'Automatizo agendamiento, recordatorios y respuestas frecuentes por WhatsApp. Recuperas entre 8 y 15 citas al mes que hoy se pierden.',
+      'Automatizo el agendamiento, los recordatorios y las respuestas frecuentes por WhatsApp, para que las citas dejen de caerse por olvidos o cruces de horario.',
   },
   {
     icono: 'crecimiento',
@@ -69,7 +73,7 @@ export const diagnosticoPuntos = [
 export const pasos = [
   {
     titulo: 'Me escribes por WhatsApp',
-    texto: 'Tocas el botón, me cuentas tu especialidad y en qué ciudad estás.',
+    texto: 'Me cuentas tu especialidad y en qué ciudad estás, sin formularios largos.',
   },
   {
     titulo: 'Agendamos tu diagnóstico de 15 min',
@@ -83,9 +87,29 @@ export const pasos = [
 
 export const faqs = [
   {
-    pregunta: '¿Han trabajado antes con profesionales de la salud?',
+    pregunta: '¿Tienen experiencia en el sector salud?',
     respuesta:
-      'He trabajado en arquitectura digital para otros sectores, y ahora estoy especializándome en el sector salud. Mi metodología está probada y la estoy adaptando a las particularidades de médicos, odontólogos, psicólogos, clínicas y consultorios en Venezuela. Por eso estoy seleccionando 3 plazas de prueba como caso de éxito.',
+      'Sí. Entre 2018 y 2020 dirigí el marketing digital de M&M Odontoclínica en Venezuela: SEO, campañas, redes sociales y sitio web. Desde entonces he entregado más de 600 proyectos web y arquitecturas digitales para otros sectores, y ahora aplico ese mismo método al sector salud.',
+  },
+  {
+    pregunta: '¿Funciona para mi especialidad?',
+    respuesta:
+      'Sí. El proceso se adapta a cualquier especialidad y a cualquier tamaño: desde una consulta individual hasta una clínica con varios especialistas.',
+  },
+  {
+    pregunta: '¿Qué pasa con los datos de mis pacientes?',
+    respuesta:
+      'No toco datos clínicos de pacientes. Mi trabajo está en la presencia (web, Google, marca) y en la operación de la agenda y los canales de contacto. La historia clínica y los datos sensibles se quedan donde ya están; si algo requiriera tratarlos, se acuerda por escrito antes.',
+  },
+  {
+    pregunta: '¿Cuánto tiempo me quita a mí?',
+    respuesta:
+      'Poco. La primera fase arranca con una sesión de diagnóstico de 15 minutos y después solo necesito tus aprobaciones por WhatsApp. El trabajo pesado lo hago yo.',
+  },
+  {
+    pregunta: '¿Atienden en mi ciudad?',
+    respuesta:
+      'Sí. Trabajo 100% en remoto con profesionales y centros de toda Venezuela. La coordinación es por WhatsApp y videollamada, y todo lo que implemento es digital. Mi número de WhatsApp es internacional (+57), así que te atiendo igual desde cualquier ciudad.',
   },
   {
     pregunta: '¿Cuánto tiempo toma implementar?',
@@ -98,14 +122,14 @@ export const faqs = [
       'No. Yo me encargo de todo. Tú solo apruebas y sigues atendiendo a tus pacientes.',
   },
   {
-    pregunta: '¿Funciona para mi especialidad?',
-    respuesta:
-      'Sí. El proceso se adapta a cualquier especialidad y a cualquier tamaño: desde una consulta individual hasta una clínica con varios especialistas.',
-  },
-  {
     pregunta: '¿Qué inversión requiere?',
     respuesta:
-      'Te lo explico en el diagnóstico, porque depende de tu punto de partida. Empezamos por lo que más impacto tiene y menos cuesta.',
+      'Las 3 plazas fundadoras arrancan con la primera fase sin costo. Para seguir, cada fase se cotiza y la apruebas antes de que empiece: nunca hay cargos que no hayas autorizado. En el diagnóstico te digo qué haría primero y cuánto cuesta.',
+  },
+  {
+    pregunta: '¿Y si ya tengo página web?',
+    respuesta:
+      'Mejor. La revisamos en el diagnóstico: a veces no hace falta rehacerla, solo ordenar lo que ya tienes (velocidad, mensaje, citas y contacto). Si conviene rehacerla, te lo digo con razones.',
   },
   {
     pregunta: '¿Esto reemplaza a mi personal?',
@@ -115,32 +139,65 @@ export const faqs = [
 ];
 
 /**
- * Oferta de captación: 3 plazas de prueba que se documentan como caso de éxito.
+ * Oferta de captación: 3 plazas fundadoras que se documentan como caso de éxito.
  *
  * OJO: aquí están los términos comerciales que se publican. Si cambias el
  * alcance de la prueba (por ejemplo, el proyecto completo en vez de la primera
- * fase), edita `intro` e `incluye` para que digan lo mismo.
+ * fase), edita `intro`, `incluye` y `despues` para que digan lo mismo.
  */
 export const oferta = {
-  etiqueta: 'Programa de casos de éxito',
-  titulo: '3 plazas de prueba',
+  etiqueta: 'Programa fundador',
+  titulo: '3 plazas fundadoras',
+  teaser: 'Entras como caso de éxito: la primera fase no te cuesta nada.',
   intro:
-    'Estoy seleccionando 3 profesionales o centros de salud en Venezuela para trabajar como caso de éxito. Las 3 plazas entran en prueba: la primera fase no te cuesta nada.',
+    'Busco 3 profesionales o centros de salud en Venezuela para entrar como caso de éxito. Las 3 plazas arrancan con la primera fase sin costo.',
   incluye: [
-    'Primera fase sin coste: presencia y confianza (Google Business, identidad y web).',
+    'Primera fase sin costo: presencia y confianza (Google Business, identidad y web).',
     'Trabajo directo conmigo, sin intermediarios ni agencias de por medio.',
     'Plan por fases con prioridades claras desde el primer día.',
   ],
+  despues:
+    'Cuando termina la primera fase decidimos juntos qué sigue. Cada fase siguiente se cotiza y la apruebas antes de empezar: no hay cargos que no hayas autorizado.',
   contrapartida:
-    'A cambio te pido dos cosas: que me dejes documentar el antes y el después con datos reales, y que si el resultado te convence, me des un testimonio.',
+    'A cambio te pido dos cosas: que me dejes documentar el antes y el después con datos reales (sin tocar datos de pacientes) y que, si el resultado te convence, me des un testimonio.',
   cta: 'Quiero una de las 3 plazas',
+};
+
+/** Se muestra en la sección de plazas mientras no haya prueba social real. */
+export const sinPrueba =
+  'Aquí no vas a encontrar testimonios inventados. Los casos fundadores están en curso y, cuando cierren, vas a ver sus resultados con datos reales.';
+
+/**
+ * Bloque «Quién está detrás». Todo sale de `cv.ts`: no hay nada que no se pueda
+ * sostener en una conversación.
+ */
+export const sobreMi = {
+  eyebrow: 'Quién está detrás',
+  titulo: 'No empiezo de cero en salud.',
+  destacado: 'Ya dirigí el marketing digital de una clínica dental en Venezuela.',
+  intro:
+    'Soy Oswaldo González Lucena, arquitecto de ecosistemas digitales. Entre 2018 y 2020 llevé el marketing digital de M&M Odontoclínica: SEO, campañas, redes y web. Ahí aprendí cómo decide un paciente y qué le quita el sueño a quien lleva un consultorio.',
+  cuerpo:
+    'Después escalé esa disciplina a más de 600 proyectos web como Senior Project Manager en España y a la arquitectura de productos tecnológicos como CTO en EE.UU. Ahora aplico todo ese oficio al sector salud venezolano, con un método por fases que no depende de que sepas de tecnología.',
+  hitos: [
+    '2018–2020 · Director de Marketing Digital en M&M Odontoclínica (Venezuela).',
+    '+600 proyectos web entregados (España, EE.UU. y Venezuela).',
+    'CTO de una empresa tecnológica en California, EE.UU.',
+    'Licenciado en Informática (UBV) y certificado en Inbound Marketing (HubSpot).',
+  ],
+  principios: [
+    'Si algo no lo necesitas, te lo digo.',
+    'Si no se puede medir, no te lo vendo.',
+    'Cada decisión queda documentada y en tus manos.',
+  ],
 };
 
 /* ---------------------------------------------------------------------------
  * PRUEBA SOCIAL: pendiente de datos reales.
  *
  * No se rellena con nombres ni citas inventadas. En cuanto tengas los datos,
- * escribe aquí los objetos y la sección aparecerá sola.
+ * escribe aquí los objetos y la sección aparecerá sola (y el aviso de
+ * `sinPrueba` desaparece).
  *
  * Testimonio (de otro sector, transferible):
  *   testimonio = {

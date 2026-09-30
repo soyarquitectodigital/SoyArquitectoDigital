@@ -1,0 +1,105 @@
+---
+/**
+ * Atribución y medición de CTAs, sin dependencias ni cookies.
+ *
+ * Qué hace:
+ *  1. Guarda el origen de la visita (utm_source/utm_medium/utm_campaign) y lo
+ *     añade al texto de todos los enlaces de WhatsApp. Así el lead llega con su
+ *     procedencia dentro del propio mensaje, que es donde acaba la conversión.
+ *  2. Emite un evento `cta_click` por cada elemento con [data-cta] y uno de
+ *     `form_submit` al enviar el formulario de contacto, hacia `dataLayer`,
+ *     `gtag` y `plausible` si alguno existe en la página.
+ *
+ * No envía nada por sí mismo: si no hay herramienta de analítica instalada,
+ * los eventos no se guardan en ningún sitio. Sin cookies y sin datos personales.
+ */
+---
+
+<script>
+  type AnalyticsWindow = Window & {
+    dataLayer?: Record<string, unknown>[];
+    gtag?: (...args: unknown[]) => void;
+    plausible?: (event: string, options?: { props?: Record<string, unknown> }) => void;
+  };
+
+  const REF_KEY = 'sa-ref';
+
+  function track(event: string, props: Record<string, unknown>) {
+    const w = window as AnalyticsWindow;
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ event, ...props });
+    w.gtag?.('event', event, props);
+    w.plausible?.(event, { props });
+  }
+
+  function readRef(): string {
+    const params = new URLSearchParams(window.location.search);
+    const ref = [
+      params.get('utm_source'),
+      params.get('utm_medium'),
+      params.get('utm_campaign'),
+    ]
+      .filter(Boolean)
+      .join('/');
+    if (ref) {
+      try {
+        sessionStorage.setItem(REF_KEY, ref);
+      } catch {
+        /* sin almacenamiento: la referencia solo dura esta página */
+      }
+      return ref;
+    }
+    try {
+      return sessionStorage.getItem(REF_KEY) ?? '';
+    } catch {
+      return '';
+    }
+  }
+
+  function decorateWhatsAppLinks(ref: string) {
+    if (!ref) return;
+    document.querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"]').forEach((link) => {
+      if (link.dataset.refDone === '1') return;
+      link.dataset.refDone = '1';
+      try {
+        const url = new URL(link.href);
+        const text = url.searchParams.get('text');
+        if (!text || text.includes('(ref:')) return;
+        url.searchParams.set('text', `${text} (ref: ${ref})`);
+        link.href = url.toString();
+      } catch {
+        /* enlace no parseable: se deja como está */
+      }
+    });
+  }
+
+  function initTracking() {
+    const ref = readRef();
+    decorateWhatsAppLinks(ref);
+
+    document.querySelectorAll<HTMLElement>('[data-cta]').forEach((el) => {
+      if (el.dataset.ctaReady === '1') return;
+      const cta = el.getAttribute('data-cta');
+      if (!cta) return;
+      el.dataset.ctaReady = '1';
+      el.addEventListener('click', () => {
+        track('cta_click', { cta, page: window.location.pathname, ref: ref || null });
+      });
+    });
+  }
+
+  // El módulo se evalúa una sola vez por sesión con View Transitions: el
+  // listener de formularios es global y sobrevive a los cambios de página.
+  document.addEventListener(
+    'submit',
+    (event) => {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement) || !form.matches('[data-contact-form]')) return;
+      track('form_submit', { cta: 'formulario', page: window.location.pathname });
+    },
+    true,
+  );
+
+  document.addEventListener('astro:page-load', initTracking);
+  initTracking();
+</script>
