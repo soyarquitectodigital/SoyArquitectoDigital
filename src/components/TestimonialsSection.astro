@@ -1,0 +1,101 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { testimonials } from '../data/testimonials';
+
+const hasTestimonials = testimonials.length > 0;
+---
+
+{
+  hasTestimonials && (
+    <section
+      id="testimonios"
+      class="grain section-pad scroll-mt-24 relative overflow-hidden bg-ink-soft"
+      aria-label="Testimonios de clientes"
+    >
+      <div
+        class="pointer-events-none absolute -top-32 right-[-12%] size-[34rem] rounded-full bg-brand/10 blur-[130px]"
+        aria-hidden="true"
+      />
+
+      <div class="container-page relative">
+        <Eyebrow number="06" tone="dark">Testimonios</Eyebrow>
+
+        <div
+          class="mt-8 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-16 xl:gap-24"
+          data-reveal
+        >
+          <h2 class="font-heading display-lg font-semibold text-white">
+            Lo que dicen <span class="text-brand-light">quienes ya trabajan conmigo</span>
+          </h2>
+          <p class="max-w-xl leading-relaxed text-copy-dark">
+            Sin guion ni edición de agencia: un cliente contando el resultado en su propia voz y
+            una demo del sistema funcionando en producción.
+          </p>
+        </div>
+
+        <ul class="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
+          {testimonials.map((item) => (
+            <li
+              class="card-dark spotlight spotlight-dark hairline hairline-dark relative flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:p-6"
+              data-reveal
+              data-glow
+            >
+              <div class="mx-auto w-[230px] shrink-0 sm:mx-0 sm:w-[200px] lg:w-[230px]">
+                <video
+                  class="aspect-[9/16] w-full rounded-2xl border border-line-dark bg-black object-cover"
+                  controls
+                  preload="none"
+                  playsinline
+                  poster={item.poster}
+                >
+                  <source src={item.video} type="video/mp4" />
+                  Tu navegador no puede reproducir este video.
+                </video>
+              </div>
+
+              <div class="flex min-w-0 flex-1 flex-col">
+                <div class="flex flex-wrap items-center gap-2.5">
+                  <span class="pill border-brand-light/40 text-[11px] text-brand-light">
+                    {item.label}
+                  </span>
+                  <span class="font-mono text-[11px] tracking-[0.16em] text-dim-dark uppercase">
+                    {item.duration}
+                  </span>
+                </div>
+
+                <h3 class="font-heading mt-4 text-xl leading-tight font-semibold text-white sm:text-2xl">
+                  {item.title}
+                </h3>
+                {item.byline && (
+                  <p class="mt-1.5 font-mono text-[11px] tracking-[0.16em] text-brand-light uppercase">
+                    {item.byline}
+                  </p>
+                )}
+
+                {item.quote && (
+                  <blockquote class="mt-5 border-l-2 border-brand-light/50 pl-4 text-[15px] leading-relaxed text-copy-dark">
+                    «{item.quote}»
+                  </blockquote>
+                )}
+
+                {item.description && (
+                  <p class="mt-5 text-sm leading-relaxed text-copy-dark">{item.description}</p>
+                )}
+
+                {item.features && item.features.length > 0 && (
+                  <ul class="mt-5 flex flex-wrap gap-2">
+                    {item.features.map((feature) => (
+                      <li class="inline-flex items-center rounded-full border border-line-dark bg-white/6 px-3 py-1 text-xs font-medium text-copy-dark">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
