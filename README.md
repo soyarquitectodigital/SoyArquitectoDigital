@@ -12,6 +12,7 @@ Diseño full-width, mobile-first, con animaciones propias (sin librerías) y foc
 - **Hero** editorial: azul marino institucional, titular animado palabra por palabra con acento azul, red de nodos en canvas con pulsos de datos, texto typewriter y paralaje con el cursor.
 - **Identidad visual**: azul marino `#0a1f33`, blanco frío `#f7f8fa` y un único acento azul `#1e56a0` (registro de consultoría: las secciones claras mandan, el marino aparece donde da autoridad). Wordmark con símbolo propio («A» de plano con nodo) reutilizado en favicon y tarjetas OG. Contrastes WCAG AA verificados.
 - **Testimonios**: sección con material real — testimonio en video del fundador de WanKu Bb (Chile) y demo del sistema de WhatsApp en producción. Pósters extraídos de los propios videos y `preload="none"`: no pesan nada hasta que el visitante pulsa play.
+- **Estructura multipágina**: la home es corta (hero, prueba, soluciones, servicios, testimonios y cierre) y el contenido profundo vive en páginas propias: `/servicios` (+7 especialidades), `/enfoque`, `/trayectoria`, `/testimonios`, `/preguntas` y `/contacto`. El nav y el footer navegan por páginas, no por anclas.
 - **Secciones**: autoridad (marquesinas), problema (4 dolores), solución (3 servicios), enfoque integral (3 capas), trayectoria y resultados (contadores + timeline), CTA de cierre, FAQ y footer.
 - **Conversión**: botón flotante de WhatsApp, CTAs con mensaje prellenado por servicio y **agenda con Calendly** para la auditoría.
 - **SEO**: metadatos, Open Graph + imagen OG generada con `sharp`, `sitemap`, `robots.txt`, `canonical` y datos estructurados (`Person`, `ProfessionalService`, `WebSite`, `FAQPage`).
@@ -229,11 +230,16 @@ src/
   layouts/
     BaseLayout.astro # <head>, SEO, schema, badge dev, scripts globales
   pages/
-    index.astro      # ensambla la landing y declara los schemas
+    index.astro      # home corta: hero, prueba, soluciones, servicios, testimonios y cierre
     servicios.astro  # catálogo de servicios (3 formas + 7 especialidades)
     servicios/       # una página por especialidad (/servicios/<slug>)
     soluciones.astro # catálogo de herramientas (diagnóstico y próximas)
     soluciones/      # una página por herramienta
+    enfoque.astro    # método: el problema, las tres capas y el filtro honesto
+    trayectoria.astro# experiencia, CV, docencia y stack, con schema
+    testimonios.astro# videos de clientes y demo del sistema
+    preguntas.astro  # FAQ con schema FAQPage
+    contacto.astro   # agenda, WhatsApp, correo y formulario
     404.astro        # página de error brandeada (noindex)
   styles/global.css  # tokens, utilidades y todas las animaciones
 docker/nginx/        # configuración de nginx para producción

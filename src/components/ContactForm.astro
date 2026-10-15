@@ -10,6 +10,8 @@ interface Props {
   companyLabel?: string;
   companyPlaceholder?: string;
   messagePlaceholder?: string;
+  /** true cuando va embebido en una página propia: sin márgenes ni ancho forzados. */
+  bare?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   companyLabel = 'Empresa',
   companyPlaceholder = 'Nombre de tu empresa',
   messagePlaceholder = 'Tengo tres herramientas que no se hablan entre sí y el equipo pierde horas copiando datos a mano.',
+  bare = false,
 } = Astro.props;
 
 const isWhatsApp = channel === 'whatsapp';
@@ -31,7 +34,7 @@ const channelHint = isWhatsApp
 ---
 
 <div
-  class="contact-form card-dark mx-auto mt-12 max-w-2xl p-6 text-left sm:p-8"
+  class:list={['contact-form card-dark p-6 text-left sm:p-8', !bare && 'mx-auto mt-12 max-w-2xl']}
   data-contact
   data-channel={channel}
 >

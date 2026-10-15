@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Button from '../components/Button.astro';
+import TestimonialsSection from '../components/TestimonialsSection.astro';
+import { site, bookingUrl, whatsappDefault } from '../config';
+
+const path = '/testimonios';
+const title = 'Testimonios: clientes contando resultados reales';
+const description =
+  'Testimonios en video de clientes reales: el fundador de WanKu Bb (Chile) contando el resultado y una demo del sistema de WhatsApp multi-número funcionando en producción.';
+
+const auditUrl = bookingUrl(
+  'Hola Oswaldo, vi los testimonios y quiero la auditoría de 5 días para mi negocio.',
+);
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Testimonios', item: new URL(path, site.url).href },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} schema={[breadcrumbs]}>
+  <section class="tint-brand border-b border-line bg-paper pt-28 pb-14 sm:pt-32 sm:pb-16">
+    <div class="container-page">
+      <nav aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+          <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-text">Testimonios</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 max-w-3xl" data-reveal>
+        <Eyebrow number="—">Testimonios</Eyebrow>
+        <h1 class="mt-6 font-heading display-xl font-semibold text-text">
+          Clientes reales, <span class="text-gradient-brand">en su propia voz</span>
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-copy">
+          Sin guion ni edición de agencia: un cliente contando el resultado que obtuvo y una
+          grabación real del sistema funcionando en producción. Es la credibilidad que ninguna
+          landing puede fabricar.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <TestimonialsSection standalone />
+
+  <section class="bg-paper py-16 sm:py-20">
+    <div class="container-page">
+      <div
+        class="flex flex-wrap items-center justify-between gap-6 rounded-card border border-brand/25 card-positive p-6 sm:p-8"
+        data-reveal
+      >
+        <div class="max-w-xl">
+          <h2 class="font-heading text-xl font-semibold text-text sm:text-2xl">
+            ¿Quieres ser el próximo caso?
+          </h2>
+          <p class="mt-2 text-sm leading-relaxed text-copy">
+            Empezamos con una llamada de diagnóstico sin coste: salimos con una idea clara de por
+            dónde empezar, contrates o no después.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <Button href={auditUrl} external>Agendar diagnóstico</Button>
+          <Button href={whatsappDefault} variant="ghost-light" external>Hablemos por WhatsApp</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

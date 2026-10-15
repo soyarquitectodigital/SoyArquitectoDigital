@@ -5,6 +5,13 @@ import SocialLinks from './SocialLinks.astro';
 import ContactForm from './ContactForm.astro';
 import { site, socialHandle, bookingUrl, whatsappDefault } from '../config';
 
+interface Props {
+  /** true en /contacto: el cierre incluye el formulario dentro del bloque. */
+  withForm?: boolean;
+}
+
+const { withForm = false } = Astro.props;
+
 const diagnosisUrl = bookingUrl(
   'Hola Oswaldo, quiero agendar el diagnóstico gratuito para revisar mi ecosistema digital.',
 );
@@ -34,7 +41,7 @@ const headline = [
     <div class="container-page relative py-16 sm:py-20 lg:py-24">
       <div class="mx-auto max-w-3xl text-center">
         <div class="flex justify-center">
-          <Eyebrow number="08" tone="dark">Siguiente paso</Eyebrow>
+          <Eyebrow number="04" tone="dark">Siguiente paso</Eyebrow>
         </div>
 
         <h2
@@ -69,7 +76,21 @@ const headline = [
           </Button>
         </div>
 
-        <ContactForm />
+        {
+          !withForm && (
+            <p class="mt-6 text-sm text-copy-dark">
+              ¿Prefieres un formulario?{" "}
+              <a
+                href="/contacto"
+                class="font-semibold text-white underline decoration-brand-light/60 underline-offset-4 transition-colors hover:text-brand-light"
+              >
+                Escríbeme aquí
+              </a>
+            </p>
+          )
+        }
+
+        {withForm && <ContactForm />}
 
         <div class="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-line-dark pt-8 text-sm text-copy-dark">
           <a

@@ -2,23 +2,20 @@
 import Wordmark from './Wordmark.astro';
 import SocialLinks from './SocialLinks.astro';
 import { bookingUrl, whatsappDefault } from '../config';
-import { cases } from '../data/cases';
 
 const diagnosisUrl = bookingUrl(
   'Hola Oswaldo, quiero agendar una llamada de diagnóstico para revisar mi ecosistema digital.',
 );
 
-// El orden del menú sigue el orden real de las secciones de la landing.
-// Los casos de estudio solo aparecen cuando hay casos cargados.
+// Navegación por páginas: cada contenido vive en su página correspondiente.
 const links = [
-  { href: '/#problema', label: 'El problema' },
-  { href: '/soluciones', label: 'Soluciones' },
   { href: '/servicios', label: 'Servicios' },
-  { href: '/#enfoque', label: 'Enfoque' },
-  { href: '/#trayectoria', label: 'Trayectoria' },
-  ...(cases.length > 0 ? [{ href: '/#casos', label: 'Casos' }] : []),
-  { href: '/#para-quien', label: 'Para quién', secondary: true },
-  { href: '/#preguntas', label: 'Preguntas', secondary: true },
+  { href: '/soluciones', label: 'Soluciones' },
+  { href: '/enfoque', label: 'Enfoque' },
+  { href: '/trayectoria', label: 'Trayectoria' },
+  { href: '/testimonios', label: 'Testimonios' },
+  { href: '/contacto', label: 'Contacto' },
+  { href: '/preguntas', label: 'Preguntas', secondary: true },
 ];
 
 const currentPath = Astro.url.pathname;

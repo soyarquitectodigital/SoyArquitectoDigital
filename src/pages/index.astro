@@ -2,18 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import AuthorityBar from '../components/AuthorityBar.astro';
-import ProblemSection from '../components/ProblemSection.astro';
 import ToolsSection from '../components/ToolsSection.astro';
 import ServicesSection from '../components/ServicesSection.astro';
-import ApproachSection from '../components/ApproachSection.astro';
-import ExperienceSection from '../components/ExperienceSection.astro';
-import CaseStudiesSection from '../components/CaseStudiesSection.astro';
 import TestimonialsSection from '../components/TestimonialsSection.astro';
-import QualificationSection from '../components/QualificationSection.astro';
 import CtaSection from '../components/CtaSection.astro';
-import FaqSection from '../components/FaqSection.astro';
 import { site, socials, calendarAuditUrl } from '../config';
-import { faqs } from '../data/faq';
+
+/*
+ * Home corporativa y corta: hero → prueba → soluciones gratis → servicios →
+ * testimonios → cierre. El contenido profundo (enfoque, trayectoria,
+ * preguntas y contacto) vive en sus propias páginas.
+ */
 
 const title = 'CTO externo para PYMEs y arquitectura de software';
 const description =
@@ -84,34 +83,18 @@ const websiteSchema = {
   inLanguage: 'es',
   publisher: { '@type': 'Person', name: site.person },
 };
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-  })),
-};
 ---
 
 <BaseLayout
   title={title}
   description={description}
-  schema={[personSchema, businessSchema, websiteSchema, faqSchema]}
+  schema={[personSchema, businessSchema, websiteSchema]}
   navOnDark
 >
   <Hero />
   <AuthorityBar />
-  <ProblemSection />
   <ToolsSection />
   <ServicesSection />
-  <ApproachSection />
-  <ExperienceSection />
-  <CaseStudiesSection />
   <TestimonialsSection />
-  <QualificationSection />
   <CtaSection />
-  <FaqSection />
 </BaseLayout>

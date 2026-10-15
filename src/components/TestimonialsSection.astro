@@ -2,6 +2,12 @@
 import Eyebrow from './Eyebrow.astro';
 import { testimonials } from '../data/testimonials';
 
+interface Props {
+  /** true en la página /testimonios: sin cabecera propia (la página aporta su h1). */
+  standalone?: boolean;
+}
+
+const { standalone = false } = Astro.props;
 const hasTestimonials = testimonials.length > 0;
 ---
 
@@ -18,22 +24,26 @@ const hasTestimonials = testimonials.length > 0;
       />
 
       <div class="container-page relative">
-        <Eyebrow number="06" tone="dark">Testimonios</Eyebrow>
+        {!standalone && (
+          <>
+            <Eyebrow number="03" tone="dark">Testimonios</Eyebrow>
 
-        <div
-          class="mt-8 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-16 xl:gap-24"
-          data-reveal
-        >
-          <h2 class="font-heading display-lg font-semibold text-white">
-            Lo que dicen <span class="text-brand-light">quienes ya trabajan conmigo</span>
-          </h2>
-          <p class="max-w-xl leading-relaxed text-copy-dark">
-            Sin guion ni edición de agencia: un cliente contando el resultado en su propia voz y
-            una demo del sistema funcionando en producción.
-          </p>
-        </div>
+            <div
+              class="mt-8 grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-16 xl:gap-24"
+              data-reveal
+            >
+              <h2 class="font-heading display-lg font-semibold text-white">
+                Lo que dicen <span class="text-brand-light">quienes ya trabajan conmigo</span>
+              </h2>
+              <p class="max-w-xl leading-relaxed text-copy-dark">
+                Sin guion ni edición de agencia: un cliente contando el resultado en su propia voz y
+                una demo del sistema funcionando en producción.
+              </p>
+            </div>
+          </>
+        )}
 
-        <ul class="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
+        <ul class:list={['grid gap-6 lg:grid-cols-2 lg:gap-8', !standalone && 'mt-12']}>
           {testimonials.map((item) => (
             <li
               class="card-dark spotlight spotlight-dark hairline hairline-dark relative flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:p-6"

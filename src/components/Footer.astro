@@ -2,21 +2,18 @@
 import Wordmark from './Wordmark.astro';
 import SocialLinks from './SocialLinks.astro';
 import { site, socialHandle, whatsappDefault } from '../config';
-import { cases } from '../data/cases';
 
 const year = new Date().getFullYear();
 
-// Mismo orden que las secciones de la landing.
+// Mismo mapa de páginas que el nav.
 const links = [
-  { href: '/#problema', label: 'El problema' },
-  { href: '/soluciones', label: 'Soluciones' },
   { href: '/servicios', label: 'Servicios' },
-  { href: '/#enfoque', label: 'Enfoque' },
-  { href: '/#trayectoria', label: 'Trayectoria' },
-  ...(cases.length > 0 ? [{ href: '/#casos', label: 'Casos' }] : []),
-  { href: '/#para-quien', label: 'Para quién' },
-  { href: '/#preguntas', label: 'Preguntas' },
-  { href: '/#contacto', label: 'Contacto' },
+  { href: '/soluciones', label: 'Soluciones' },
+  { href: '/enfoque', label: 'Enfoque' },
+  { href: '/trayectoria', label: 'Trayectoria' },
+  { href: '/testimonios', label: 'Testimonios' },
+  { href: '/preguntas', label: 'Preguntas' },
+  { href: '/contacto', label: 'Contacto' },
 ];
 ---
 

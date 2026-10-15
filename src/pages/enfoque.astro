@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import ProblemSection from '../components/ProblemSection.astro';
+import ApproachSection from '../components/ApproachSection.astro';
+import QualificationSection from '../components/QualificationSection.astro';
+import { site } from '../config';
+
+const path = '/enfoque';
+const title = 'Enfoque: método, capas del ecosistema y con quién trabajo';
+const description =
+  'Cómo trabajo: un método por capas (infraestructura, aplicación y negocio), las señales de un ecosistema desordenado y el filtro honesto de con quién encaja trabajar así.';
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Enfoque', item: new URL(path, site.url).href },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} schema={[breadcrumbs]}>
+  <section class="tint-brand border-b border-line bg-paper pt-28 pb-14 sm:pt-32 sm:pb-16">
+    <div class="container-page">
+      <nav aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+          <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-text">Enfoque</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 max-w-3xl" data-reveal>
+        <Eyebrow number="—">Enfoque</Eyebrow>
+        <h1 class="mt-6 font-heading display-xl font-semibold text-text">
+          Un plano, tres capas y <span class="text-gradient-brand">cero humo</span>
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-copy">
+          Casi ningún problema tecnológico es de una herramienta: es de cómo se conectan. Por eso
+          trabajo con el ecosistema completo — lo físico, lo digital y lo que el negocio necesita
+          de ambos — y lo digo todo antes de que firmes: qué veo, cómo lo resolvería y con quién
+          encaja trabajar así.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <ProblemSection />
+  <ApproachSection />
+  <QualificationSection />
+</BaseLayout>

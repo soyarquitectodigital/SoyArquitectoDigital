@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Button from '../components/Button.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site, bookingUrl, whatsappDefault } from '../config';
+
+const path = '/contacto';
+const title = 'Contacto: agenda una llamada o escríbeme';
+const description =
+  'Hablemos de tu ecosistema digital: agenda una llamada de diagnóstico sin coste por Calendly, escríbeme por WhatsApp o déjame los datos en el formulario. Respuesta el mismo día.';
+
+const auditUrl = bookingUrl(
+  'Hola Oswaldo, quiero agendar la llamada de diagnóstico para revisar mi ecosistema digital.',
+);
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Contacto', item: new URL(path, site.url).href },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} schema={[breadcrumbs]}>
+  <section class="tint-brand border-b border-line bg-paper pt-28 pb-14 sm:pt-32 sm:pb-16">
+    <div class="container-page">
+      <nav aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+          <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-text">Contacto</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 max-w-3xl" data-reveal>
+        <Eyebrow number="—">Contacto</Eyebrow>
+        <h1 class="mt-6 font-heading display-xl font-semibold text-text">
+          Hablemos de <span class="text-gradient-brand">tu caso</span>
+        </h1>
+        <p class="mt-6 text-lg leading-relaxed text-copy">
+          Cuéntame qué se está atascando y te digo qué haría primero. Sin discurso de ventas y sin
+          compromiso: si no soy la persona adecuada, te oriento igual por dónde empezar.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="grain relative overflow-hidden bg-ink-soft py-16 sm:py-20">
+    <div
+      class="pointer-events-none absolute -top-32 right-[-12%] size-[32rem] rounded-full bg-brand/10 blur-[130px]"
+      aria-hidden="true"
+    ></div>
+
+    <div class="container-page relative grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-14">
+      <div class="text-white" data-reveal>
+        <Eyebrow number="01" tone="dark">Vías directas</Eyebrow>
+        <h2 class="mt-6 font-heading display-lg font-semibold text-white">
+          Elige cómo prefieres
+        </h2>
+
+        <div class="mt-8 grid gap-4">
+          <div class="card-dark hairline hairline-dark flex flex-wrap items-center justify-between gap-4 p-5">
+            <div class="min-w-0">
+              <p class="font-semibold text-white">Agendar llamada de diagnóstico</p>
+              <p class="mt-1 text-sm leading-relaxed text-copy-dark">
+                30 minutos por videollamada, sin coste.
+              </p>
+            </div>
+            <Button href={auditUrl} external>Agendar</Button>
+          </div>
+
+          <div class="card-dark hairline hairline-dark flex flex-wrap items-center justify-between gap-4 p-5">
+            <div class="min-w-0">
+              <p class="font-semibold text-white">Escribir por WhatsApp</p>
+              <p class="mt-1 text-sm leading-relaxed text-copy-dark">
+                Respuesta el mismo día, en horario de Venezuela.
+              </p>
+            </div>
+            <Button href={whatsappDefault} variant="ghost-dark" external>WhatsApp</Button>
+          </div>
+
+          <div class="card-dark hairline hairline-dark flex flex-wrap items-center justify-between gap-4 p-5">
+            <div class="min-w-0">
+              <p class="font-semibold text-white">Correo directo</p>
+              <p class="mt-1 text-sm leading-relaxed text-copy-dark">
+                Para propuestas, alianzas o temas formales.
+              </p>
+            </div>
+            <a
+              href={`mailto:${site.email}`}
+              class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line-dark bg-white/6 px-4 py-2 text-sm font-semibold whitespace-nowrap text-brand-light transition duration-300 hover:border-brand-light/45 hover:bg-brand-light/12"
+            >
+              {site.email}
+            </a>
+          </div>
+        </div>
+
+        <p class="mt-6 text-sm text-dim-dark">
+          {site.location} — respuesta el mismo día.{" "}
+          <a href="/preguntas" class="font-semibold text-brand-light underline decoration-brand-light/50 underline-offset-4 transition-colors hover:text-white">
+            Mira las preguntas frecuentes
+          </a>{" "}
+          antes si prefieres.
+        </p>
+      </div>
+
+      <div data-reveal style="--delay:120ms">
+        <ContactForm bare />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
