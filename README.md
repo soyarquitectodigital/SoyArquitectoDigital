@@ -197,18 +197,24 @@ El mensaje incluye nombre, correo, teléfono, tipo de negocio, puntaje, nivel y 
 
 ---
 
-## Soluciones
+## Soluciones y herramientas
 
-`/soluciones` es el catálogo de lo que ofreces, en dos bloques:
+`/soluciones` es el catálogo de las herramientas gratuitas (por ahora el Diagnóstico de
+Ecosistema Digital y tres más en preparación). El botón **Soluciones** vive en el nav y en el
+footer.
 
-1. **Tres formas de trabajar** — se genera desde `src/data/services.ts` (auditoría de 5 días, implementación e CTO externo), así que es la misma fuente que usa la landing.
-2. **Soluciones por capa** — las cinco capas del ecosistema (captación, experiencia, datos, automatización e infraestructura), definidas en `src/data/solutions.ts`.
+---
 
-Cada capa enlaza con WhatsApp para consultarla y con el diagnóstico para medir cómo está hoy.
-Para añadir o editar soluciones, se toca solo `src/data/solutions.ts`; la página y el schema
-(`OfferCatalog`) se actualizan solos.
+## Servicios específicos
 
-El botón **Soluciones** vive en el nav (marcado automáticamente como activo en esa página) y en el footer.
+`/servicios` es el catálogo de servicios, en dos bloques:
+
+1. **Tres formas de trabajar** — desde `src/data/services.ts` (auditoría de 5 días, implementación y CTO externo), la misma fuente que usa la landing.
+2. **Siete especialidades** — desde `src/data/specialties.ts` (integraciones, automatización con n8n e IA, apps a medida, webs y Kit Digital, datos, cloud y seguridad), cada una con **página propia** en `/servicios/<slug>`: qué incluye, para quién es, stack, FAQ con schema y WhatsApp prellenado por servicio.
+
+Para añadir o editar una especialidad se toca solo `src/data/specialties.ts`: aparecen el
+catálogo, la fila de chips de la landing y su página. El sitemap y los schemas se actualizan solos.
+El botón **Servicios** del nav y del footer apunta a este catálogo.
 
 ---
 
@@ -217,15 +223,17 @@ El botón **Soluciones** vive en el nav (marcado automáticamente como activo en
 ```
 src/
   components/        # Nav, Hero, AuthorityBar, ProblemSection, ServicesSection,
-                     # ApproachSection, ExperienceSection, CtaSection, FaqSection,
-                     # Footer, Button, Wordmark, Eyebrow, SocialLinks, WhatsAppFloat
-  data/              # contenido editable (servicios, soluciones, FAQ, CV, capas, herramientas…)
+                     # ApproachSection, ExperienceSection, TestimonialsSection, CtaSection,
+                     # FaqSection, Footer, Button, Wordmark, Eyebrow, SocialLinks, WhatsAppFloat
+  data/              # contenido editable (servicios, especialidades, testimonios, FAQ, CV, capas, herramientas…)
   layouts/
     BaseLayout.astro # <head>, SEO, schema, badge dev, scripts globales
   pages/
     index.astro      # ensambla la landing y declara los schemas
-    soluciones.astro # catálogo de soluciones (servicios + soluciones por capa)
-    herramientas/    # índice de herramientas y una página por herramienta
+    servicios.astro  # catálogo de servicios (3 formas + 7 especialidades)
+    servicios/       # una página por especialidad (/servicios/<slug>)
+    soluciones.astro # catálogo de herramientas (diagnóstico y próximas)
+    soluciones/      # una página por herramienta
     404.astro        # página de error brandeada (noindex)
   styles/global.css  # tokens, utilidades y todas las animaciones
 docker/nginx/        # configuración de nginx para producción

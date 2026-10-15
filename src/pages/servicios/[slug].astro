@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Eyebrow from '../../components/Eyebrow.astro';
+import Button from '../../components/Button.astro';
+import SpecialtyIcon from '../../components/icons/SpecialtyIcon.astro';
+import { specialties, type Specialty } from '../../data/specialties';
+import { site, bookingUrl, whatsapp } from '../../config';
+
+export function getStaticPaths() {
+  return specialties.map((specialty) => ({
+    params: { slug: specialty.slug },
+    props: { specialty },
+  }));
+}
+
+interface Props {
+  specialty: Specialty;
+}
+
+const { specialty } = Astro.props;
+const path = `/servicios/${specialty.slug}`;
+const waUrl = whatsapp(specialty.whatsapp);
+const auditUrl = bookingUrl(
+  `Hola Oswaldo, quiero la auditoría de 5 días. Me interesa sobre todo: ${specialty.name}.`,
+);
+
+const others = specialties.filter((item) => item.slug !== specialty.slug).slice(0, 3);
+const checkPath = 'm5 12.5 4.5 4.5L19 7.5';
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: specialty.name,
+  description: specialty.tagline,
+  url: new URL(path, site.url).href,
+  provider: { '@type': 'Person', name: site.person, url: site.url },
+  areaServed: ['España', 'Latinoamérica', 'Estados Unidos'],
+  availableLanguage: 'es',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: specialty.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Servicios', item: new URL('/servicios', site.url).href },
+    { '@type': 'ListItem', position: 3, name: specialty.name, item: new URL(path, site.url).href },
+  ],
+};
+---
+
+<BaseLayout title={specialty.metaTitle} description={specialty.metaDescription} schema={[serviceSchema, faqSchema, breadcrumbs]}>
+  <section class="tint-brand bg-paper pt-28 pb-16 sm:pt-32 sm:pb-20">
+    <div class="container-page">
+      <nav aria-label="Ruta de navegación">
+        <ol class="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] text-dim uppercase">
+          <li><a href="/" class="transition-colors hover:text-text">Inicio</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/servicios" class="transition-colors hover:text-text">Servicios</a></li>
+          <li aria-hidden="true">/</li>
+          <li class="text-text">{specialty.chip}</li>
+        </ol>
+      </nav>
+
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:gap-16" data-reveal>
+        <div>
+          <Eyebrow number="—">Servicio</Eyebrow>
+          <h1 class="mt-6 font-heading display-xl font-semibold text-text">
+            {specialty.name}
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-copy">
+            {specialty.problem}
+          </p>
+
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <Button href={waUrl} external>Contarlo por WhatsApp</Button>
+            <Button href={auditUrl} variant="ghost-light" external>Agendar diagnóstico</Button>
+          </div>
+        </div>
+
+        <div class="card hairline spotlight relative p-6 sm:p-7" data-glow>
+          <div class="flex items-center gap-4">
+            <span class="grid size-12 place-items-center rounded-2xl border border-line bg-paper text-brand-ink">
+              <SpecialtyIcon icon={specialty.icon} class="size-6" />
+            </span>
+            <div>
+              <p class="font-mono text-[10px] tracking-[0.2em] text-dim uppercase">Tecnología</p>
+              <p class="font-heading text-lg font-semibold text-text">{specialty.chip}</p>
+            </div>
+          </div>
+          <div class="mt-5 flex flex-wrap gap-2 border-t border-line pt-5">
+            {specialty.stack.map((tech) => <span class="chip">{tech}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad border-y border-line bg-surface">
+    <div class="container-page">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div data-reveal>
+          <Eyebrow number="01">Qué incluye</Eyebrow>
+          <h2 class="mt-6 font-heading display-lg font-semibold text-text">
+            Entregables <span class="text-gradient-brand">concretos</span>
+          </h2>
+          <ul class="mt-8 space-y-4">
+            {specialty.includes.map((item) => (
+              <li class="flex items-start gap-3">
+                <svg viewBox="0 0 24 24" class="mt-0.5 size-5 shrink-0 text-brand-ink" fill="none" aria-hidden="true">
+                  <path
+                    d={checkPath}
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span class="leading-relaxed text-copy">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div data-reveal style="--delay:120ms">
+          <Eyebrow number="02">Para quién</Eyebrow>
+          <h2 class="mt-6 font-heading display-lg font-semibold text-text">
+            Es para ti <span class="text-gradient-brand">si te suena</span>
+          </h2>
+          <ul class="mt-8 space-y-4">
+            {specialty.signs.map((sign) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-2 size-1.5 shrink-0 rounded-full bg-brand-2" aria-hidden="true"></span>
+                <span class="leading-relaxed text-copy">{sign}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="card card-positive hairline mt-8 border-brand/25 p-5">
+            <p class="text-sm leading-relaxed text-copy">
+              ¿Te reconoces en dos o más? Cuéntamelo por WhatsApp y en 15 minutos te digo qué
+              haría primero — contrates o no.
+            </p>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-ink transition-colors hover:text-text"
+            >
+              Contarlo por WhatsApp
+              <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+                <path
+                  d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad tint-brand bg-paper">
+    <div class="container-page">
+      <Eyebrow number="03">Preguntas</Eyebrow>
+      <h2 class="mt-6 max-w-2xl font-heading display-lg font-semibold text-text">
+        Dudas concretas, <span class="text-gradient-brand">respuestas directas</span>
+      </h2>
+
+      <div class="mt-10 grid max-w-3xl gap-3">
+        {specialty.faq.map((item) => (
+          <details
+            class="card hairline group px-5 py-4 transition-colors open:border-line-strong hover:border-line-strong sm:px-6"
+          >
+            <summary class="flex cursor-pointer items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+              <span class="font-heading text-base leading-snug font-semibold text-text sm:text-lg">
+                {item.q}
+              </span>
+              <span class="grid size-7 shrink-0 place-items-center rounded-full bg-paper text-base leading-none text-copy transition duration-300 group-open:rotate-45 group-open:bg-brand group-open:text-on-brand">
+                +
+              </span>
+            </summary>
+            <div class="faq-answer mt-3 border-t border-line pt-3">
+              <p class="text-sm leading-relaxed text-copy sm:text-[15px]">{item.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-paper pb-20 sm:pb-24">
+    <div class="container-page">
+      <div class="flex flex-wrap items-end justify-between gap-6 border-t border-line pt-10" data-reveal>
+        <div>
+          <p class="font-mono text-[11px] tracking-[0.2em] text-dim uppercase">Seguir explorando</p>
+          <h2 class="font-heading mt-3 text-2xl font-semibold text-text sm:text-3xl">
+            Otras especialidades
+          </h2>
+        </div>
+        <a
+          href="/servicios"
+          class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-ink transition-colors hover:text-text"
+        >
+          Ver todas
+          <svg viewBox="0 0 20 20" class="size-4" fill="none" aria-hidden="true">
+            <path
+              d="M4.2 10h11.6M10 4.2 15.8 10 10 15.8"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
+
+      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {others.map((item) => (
+          <a
+            href={`/servicios/${item.slug}`}
+            class="card hairline spotlight relative flex items-start gap-4 p-5 transition duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-lift"
+            data-glow
+          >
+            <span class="grid size-10 shrink-0 place-items-center rounded-xl border border-line bg-paper text-brand-ink">
+              <SpecialtyIcon icon={item.icon} class="size-5" />
+            </span>
+            <span class="min-w-0">
+              <span class="font-heading block text-base leading-snug font-semibold text-text">
+                {item.name}
+              </span>
+              <span class="mt-1 block text-sm leading-relaxed text-copy">{item.chip}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-12 rounded-card border border-brand/25 card-positive p-6 sm:p-8" data-reveal>
+        <div class="flex flex-wrap items-center justify-between gap-6">
+          <div class="max-w-xl">
+            <h2 class="font-heading text-xl font-semibold text-text sm:text-2xl">
+              ¿Hablamos de tu caso concreto?
+            </h2>
+            <p class="mt-2 text-sm leading-relaxed text-copy">
+              Sin compromiso y sin discurso de ventas: me cuentas qué se está atascando y te digo
+              qué haría primero.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <Button href={waUrl} external>Hablemos por WhatsApp</Button>
+            <Button href={auditUrl} variant="ghost-light" external>Agendar diagnóstico</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

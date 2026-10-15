@@ -1,7 +1,7 @@
 // Agenda real (Calendly). El CTA de auditoría y el de diagnóstico apuntan aquí.
 // primary_color hace que Calendly use el azul de la marca.
 export const calendarAuditUrl =
-  'https://calendly.com/soyarquitectodigital/auditoria-de-ecosistema-digital?primary_color=2563eb';
+  'https://calendly.com/soyarquitectodigital/auditoria-de-ecosistema-digital?primary_color=1e56a0';
 const calendarUrl: string = calendarAuditUrl;
 
 export const site = {

@@ -1,6 +1,7 @@
 ---
 import Eyebrow from './Eyebrow.astro';
 import { services } from '../data/services';
+import { specialties } from '../data/specialties';
 import { bookingUrl, whatsapp } from '../config';
 
 const checkPath = 'm5 12.5 4.5 4.5L19 7.5';
@@ -121,7 +122,26 @@ const serviceIcons = [
       }
     </div>
 
-    <p class="mt-10 text-center text-sm text-copy" data-reveal>
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-2.5" data-reveal>
+      <a
+        href="/servicios"
+        class="font-mono text-[11px] tracking-[0.18em] text-dim uppercase transition-colors hover:text-text"
+      >
+        ¿Buscas algo concreto?
+      </a>
+      {
+        specialties.map((item) => (
+          <a
+            href={`/servicios/${item.slug}`}
+            class="chip transition-colors hover:border-line-strong hover:text-text"
+          >
+            {item.chip}
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="mt-8 text-center text-sm text-copy" data-reveal>
       ¿No sabes cuál te toca?{" "}
       <a
         href={whatsapp('Hola Oswaldo, no sé qué servicio necesito. ¿Me ayudas a identificar por dónde empezar?')}
