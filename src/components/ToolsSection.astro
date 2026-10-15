@@ -12,7 +12,7 @@ const soon = upcomingTools;
     <Eyebrow number="02">Soluciones</Eyebrow>
 
     <div class="mt-8 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-      <div data-reveal>
+      <div class="min-w-0" data-reveal>
         <h2 class="font-heading display-lg font-semibold text-text">
           Entra en Soluciones y <span class="text-gradient-brand">mide tu ecosistema</span>
         </h2>
@@ -64,7 +64,7 @@ const soon = upcomingTools;
         </div>
       </div>
 
-      <ul class="grid gap-4">
+      <ul class="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
         {featured && <ToolCard tool={featured} variant="wide" />}
         {soon.map((tool, index) => <ToolCard tool={tool} variant="row" delay={(index + 1) * 70} />)}
       </ul>
