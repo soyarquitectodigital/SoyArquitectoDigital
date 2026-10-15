@@ -25,6 +25,9 @@ const devNoStore = {
 export default defineConfig({
   site: 'https://soyarquitectodigital.info',
   trailingSlash: 'ignore',
+  // La barra del servidor de Astro se superpone a los flotantes del sitio
+  // (WhatsApp, badge dev propio) y confunde al revisar el diseño: fuera.
+  devToolbar: { enabled: false },
   redirects: {
     '/herramientas': '/soluciones',
     '/herramientas/diagnostico-ecosistema-digital': '/soluciones/diagnostico-ecosistema-digital',

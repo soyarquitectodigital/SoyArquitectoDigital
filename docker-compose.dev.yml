@@ -12,9 +12,13 @@ services:
     image: node:24-alpine
     container_name: soyarquitectodigital-landing-dev
     working_dir: /app
+    # Instala dependencias la primera vez y cada vez que cambia package-lock.json:
+    # el volumen de node_modules vive aparte del proyecto y sin esta comprobación
+    # se quedaba con las dependencias viejas (error 500 al añadir un paquete).
     command: >
-      sh -c "if [ ! -x node_modules/.bin/astro ]; then
-               echo 'Instalando dependencias (solo la primera vez)...' && npm ci --no-audit --no-fund;
+      sh -c "hash=$(md5sum package-lock.json | cut -d' ' -f1);
+             if [ ! -x node_modules/.bin/astro ] || [ "$hash" != "$(cat node_modules/.lock-hash 2>/dev/null)" ]; then
+               echo 'Instalando dependencias...' && npm ci --no-audit --no-fund && echo "$hash" > node_modules/.lock-hash;
              fi;
              npm run dev -- --host 0.0.0.0 --port 80"
     environment:
