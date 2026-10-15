@@ -1,6 +1,7 @@
 ---
-import '@fontsource-variable/space-grotesk';
 import '@fontsource-variable/inter';
+// Tipografía tipo iPhone: la pila de sistema usa SF Pro real en dispositivos
+// Apple; en el resto, Inter (la alternativa libre más fiel a SF).
 // Solo el peso 400: ningún elemento del sitio usa la mono en 500 ni 600, y sus
 // @font-face nunca se descargaban. Con un único peso el build pasa de 30
 // archivos de fuente mono a 10 (el navegador sigue bajando solo el subset latin).
@@ -68,7 +69,7 @@ const ogImage = new URL(image, Astro.site);
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
-    <meta name="theme-color" content="#071b3a" />
+    <meta name="theme-color" content="#0a1f33" />
     <script is:inline>
       // Decide si se permiten animaciones: se respeta "reducir movimiento" del
       // sistema, salvo que se fuercen con ?motion=on o el interruptor del badge.
@@ -134,7 +135,7 @@ const ogImage = new URL(image, Astro.site);
       isDev && (
         <div
           data-dev-badge
-          class="fixed bottom-3 left-3 z-[90] rounded-full border border-brand-light/40 bg-ink/90 px-3 py-1 font-mono text-[10px] tracking-[0.14em] text-brand-light uppercase shadow-lift backdrop-blur-md sm:top-2.5 sm:bottom-auto sm:left-1/2 sm:-translate-x-1/2 sm:px-4 sm:py-1.5 sm:text-[11px]"
+          class="fixed bottom-3 left-3 z-[55] rounded-full border border-brand-light/40 bg-ink/90 px-3 py-1 font-mono text-[10px] tracking-[0.14em] text-brand-light uppercase shadow-lift backdrop-blur-md sm:bottom-4 sm:left-4 sm:px-4 sm:py-1.5 sm:text-[11px]"
         >
           <span class="mr-2 inline-block size-1.5 rounded-full bg-brand-light align-middle"></span>
           <span aria-hidden="true">dev · versión {devStamp} ·</span>
@@ -292,7 +293,8 @@ const ogImage = new URL(image, Astro.site);
           var bar = document.getElementById('scroll-progress');
 
           if (nav) {
-            nav.classList.toggle('is-solid', y > Math.max(320, window.innerHeight * 0.72));
+            // La barra se vuelve sólida justo cuando el hero (100svh) se agota.
+            nav.classList.toggle('is-solid', y > Math.max(320, window.innerHeight - 96));
           }
           if (float) float.classList.toggle('is-on', y > 480);
           if (bar) {

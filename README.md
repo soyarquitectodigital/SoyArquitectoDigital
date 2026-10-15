@@ -9,7 +9,9 @@ Diseño full-width, mobile-first, con animaciones propias (sin librerías) y foc
 
 ## Estado actual
 
-- **Hero** dinámico: auroras en movimiento, barrido de luz, retícula en deriva, red de nodos en canvas con pulsos de datos, titular palabra por palabra, texto typewriter y paralaje con el cursor.
+- **Hero** editorial: azul marino institucional, titular animado palabra por palabra con acento azul, red de nodos en canvas con pulsos de datos, texto typewriter y paralaje con el cursor.
+- **Identidad visual**: azul marino `#0a1f33`, blanco frío `#f7f8fa` y un único acento azul `#1e56a0` (registro de consultoría: las secciones claras mandan, el marino aparece donde da autoridad). Wordmark con símbolo propio («A» de plano con nodo) reutilizado en favicon y tarjetas OG. Contrastes WCAG AA verificados.
+- **Testimonios**: sección con material real — testimonio en video del fundador de WanKu Bb (Chile) y demo del sistema de WhatsApp en producción. Pósters extraídos de los propios videos y `preload="none"`: no pesan nada hasta que el visitante pulsa play.
 - **Secciones**: autoridad (marquesinas), problema (4 dolores), solución (3 servicios), enfoque integral (3 capas), trayectoria y resultados (contadores + timeline), CTA de cierre, FAQ y footer.
 - **Conversión**: botón flotante de WhatsApp, CTAs con mensaje prellenado por servicio y **agenda con Calendly** para la auditoría.
 - **SEO**: metadatos, Open Graph + imagen OG generada con `sharp`, `sitemap`, `robots.txt`, `canonical` y datos estructurados (`Person`, `ProfessionalService`, `WebSite`, `FAQPage`).
@@ -24,7 +26,7 @@ Diseño full-width, mobile-first, con animaciones propias (sin librerías) y foc
 | --- | --- |
 | Framework | Astro 7 (salida estática) |
 | Estilos | Tailwind CSS 4 (tokens propios en `src/styles/global.css`) |
-| Tipografía | Space Grotesk (títulos), Inter (texto), IBM Plex Mono (etiquetas) vía `@fontsource` |
+| Tipografía | Tipo iPhone: SF Pro real en dispositivos Apple vía `-apple-system`; Inter (la alternativa libre más fiel a SF) en el resto. IBM Plex Mono para etiquetas. Todo vía `@fontsource` |
 | Animación | CSS + JavaScript vanilla (canvas, IntersectionObserver, sin librerías) |
 | Imagen OG | `sharp` (`scripts/generate-og.mjs`) |
 | Servidor | nginx 1.29 (Docker) |
@@ -229,7 +231,7 @@ src/
 docker/nginx/        # configuración de nginx para producción
 firma/               # firmas de correo (clara, oscura, texto plano y previews)
 scripts/generate-og.mjs
-public/              # favicon.svg, og-default.png, robots.txt
+public/              # favicon.svg, og-default.png, testimonios/ (videos + pósters), robots.txt
 ```
 
 ---
@@ -248,7 +250,7 @@ public/              # favicon.svg, og-default.png, robots.txt
 
 ### Alto impacto en conversión
 
-- [ ] **Testimonios reales** (Adrirodrigo, Bestlifecoin, ViralSolutions, M&M) + franja de logos de clientes.
+- [x] **Primeros testimonios en video** (WanKu Bb, Chile: testimonio del fundador + demo del sistema de WhatsApp en producción). Pendiente: más testimonios (Adrirodrigo, Bestlifecoin, ViralSolutions, M&M) y franja de logos de clientes.
 - [ ] **Casos de éxito con cifras**: "problema → qué hice → resultado" (+600 proyectos, −35% tiempos, −40% incidentes, Kamgus).
 - [ ] **Rangos de inversión** por servicio (hoy los tres dicen "A convenir"), con qué incluye y formas de pago.
 - [ ] **Sección "para quién no es esto"** — refuerza el posicionamiento "cero humo" y filtra leads.

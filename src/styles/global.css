@@ -1,47 +1,48 @@
 @import "tailwindcss";
 
 @theme {
-  --font-heading: "Space Grotesk Variable", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Inter Variable", "Segoe UI", system-ui, sans-serif;
+  /* Tipografía tipo iPhone: SF Pro real en dispositivos Apple vía la pila del
+     sistema; en el resto, Inter (la alternativa libre más fiel a SF).
+     Las etiquetas técnicas siguen en IBM Plex Mono. */
+  --font-heading: -apple-system, BlinkMacSystemFont, "Inter Variable", "Segoe UI", system-ui, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Inter Variable", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 
-  /* Bloques oscuros (hero, enfoque, servicios, cierre) */
-  --color-ink: #071b3a;
-  --color-ink-soft: #0a2450;
-  --color-panel: #0e2e60;
-  --color-panel-2: #133a75;
-  --color-secondary: #123a6b;
+  /* Bloques oscuros (hero, enfoque, cierre): azul marino institucional. */
+  --color-ink: #0a1f33;
+  --color-ink-soft: #0e2942;
+  --color-panel: #10293f;
+  --color-panel-2: #14324c;
+  --color-secondary: #14324c;
   --color-line-dark: rgba(255, 255, 255, 0.12);
-  --color-line-dark-strong: rgba(255, 255, 255, 0.26);
+  --color-line-dark-strong: rgba(255, 255, 255, 0.28);
   --color-on-dark: #ffffff;
-  --color-copy-dark: #b4c6e0;
-  --color-dim-dark: #7e93b4;
+  --color-copy-dark: #b9c6d6;
+  --color-dim-dark: #7d8fa5;
 
-  /* Bloques claros */
-  --color-paper: #f4f7fc;
+  /* Bloques claros: blanco frío limpio, el registro de la consultoría clásica. */
+  --color-paper: #f7f8fa;
   --color-surface: #ffffff;
-  --color-line: rgba(9, 25, 51, 0.1);
-  --color-line-strong: rgba(9, 25, 51, 0.22);
-  --color-text: #0a1b33;
-  --color-copy: #46586e;
-  /* Antes #7c8da3: daba 3,16:1 sobre --color-paper y 3,39:1 sobre --color-surface,
-     por debajo del 4,5:1 que exige WCAG AA para texto normal. Este tono sube a
-     4,65:1 y 4,99:1 manteniendo el mismo matiz apagado. */
-  --color-dim: #5f7189;
+  --color-line: rgba(12, 27, 42, 0.1);
+  --color-line-strong: rgba(12, 27, 42, 0.22);
+  --color-text: #0c1b2a;
+  --color-copy: #4a5a6e;
+  /* #5d6b7d mantiene el contraste AA sobre papel y superficie. */
+  --color-dim: #5d6b7d;
 
-  /* Marca: azul corporativo sobre azul marino */
-  --color-brand: #2563eb;
-  --color-brand-2: #1d4ed8;
-  --color-brand-light: #7cb4ff;
-  --color-brand-ink: #1d4ed8;
+  /* Marca: azul institucional (registro de consultoría de estrategia).
+     Sobre fondos claros, --color-brand-ink es la variante legible. */
+  --color-brand: #1e56a0;
+  --color-brand-2: #17467f;
+  --color-brand-light: #7fa9e3;
+  --color-brand-ink: #1e56a0;
   --color-on-brand: #ffffff;
-  --color-cyan: #22d3ee;
   --color-ok: #34b46a;
   --color-ok-ink: #177a45;
   --color-warn: #b45309;
   --color-danger: #b91c1c;
-  /* Variante de peligro para textos sobre fondos oscuros: #b91c1c solo alcanza
-     2,65:1 sobre --color-ink, este rojo llega a 6,19:1. */
+  /* Variante de peligro para textos sobre fondos oscuros: #b91c1c no pasa AA
+     sobre --color-ink, este rojo sí. */
   --color-danger-on-dark: #f87171;
 
   /* WhatsApp para la landing de salud. El verde de marca (#25D366) da 1,98:1
@@ -73,9 +74,8 @@
   h4 {
     @apply font-heading;
     font-weight: 600;
-    letter-spacing: -0.022em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
-    font-synthesis-weight: none;
   }
 
   p {
@@ -181,21 +181,22 @@ html.reduce-motion .pulse-dot::after {
   opacity: 0;
 }
 
-/* Acento del logotipo: lo define el contenedor con .on-dark */
-.wordmark-accent {
+/* Símbolo y acento del logotipo: los define el contenedor con .on-dark */
+.logo-mark {
   color: var(--wordmark-accent, var(--color-brand-2));
 }
 
-.wordmark-dot {
-  background-color: var(--wordmark-accent, var(--color-brand-2));
+.wordmark-accent {
+  color: var(--wordmark-accent, var(--color-brand-2));
 }
 
 .on-dark {
   --wordmark-accent: var(--color-brand-light);
 }
 
-/* Nav: vidrio claro por defecto (visible sobre fondos claros).
-   En páginas con hero oscuro se marca <html class="nav-on-dark"> y arranca transparente. */
+/* Nav: barra sólida con hairline inferior (patrón de consultora).
+   Sobre fondos claros es blanca con desenfoque; en la landing, transparente
+   mientras se ve el hero oscuro. */
 #site-nav {
   transition:
     background-color 0.35s ease,
@@ -206,9 +207,8 @@ html.reduce-motion .pulse-dot::after {
 
 #site-nav .nav-shell {
   background: rgba(255, 255, 255, 0.92);
-  border-color: var(--color-line);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--shadow-card);
+  border-bottom: 1px solid var(--color-line);
+  backdrop-filter: blur(14px);
 }
 
 #site-nav .nav-logo {
@@ -243,7 +243,6 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-shell {
   background: transparent;
   border-color: transparent;
   backdrop-filter: none;
-  box-shadow: none;
   --wordmark-accent: var(--color-brand-light);
 }
 
@@ -298,15 +297,16 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
   @apply py-16 md:py-24 xl:py-32;
 }
 
-/* Tipografía fluida: escala con el ancho real de la pantalla */
+/* Tipografía fluida: escala con el ancho real de la pantalla.
+   La serif de Instrument tiene ojo pequeño, así que los titulares suben un punto. */
 @utility display-xl {
-  font-size: clamp(2.15rem, 4.4vw, 4.6rem);
-  line-height: 1.04;
+  font-size: clamp(2.25rem, 4.7vw, 4.8rem);
+  line-height: 1.05;
 }
 
 @utility display-lg {
-  font-size: clamp(1.9rem, 3vw, 3.25rem);
-  line-height: 1.08;
+  font-size: clamp(1.95rem, 3.2vw, 3.45rem);
+  line-height: 1.1;
 }
 
 @utility card {
@@ -329,19 +329,19 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
 
 @utility bg-mesh {
   background-image:
-    radial-gradient(52rem 30rem at 84% -14%, rgba(37, 99, 235, 0.38), transparent 62%),
-    radial-gradient(48rem 28rem at 6% -8%, rgba(18, 58, 107, 0.8), transparent 58%),
-    radial-gradient(42rem 26rem at 52% 122%, rgba(34, 211, 238, 0.14), transparent 62%);
+    radial-gradient(52rem 30rem at 84% -14%, rgba(30, 86, 160, 0.24), transparent 62%),
+    radial-gradient(48rem 28rem at 6% -8%, rgba(16, 41, 63, 0.9), transparent 58%),
+    radial-gradient(42rem 26rem at 52% 122%, rgba(127, 169, 227, 0.1), transparent 62%);
 }
 
 @utility gradient-secondary {
-  background-image: linear-gradient(135deg, #123a6b, #1d4ed8 55%, #3b82f6);
+  background-image: linear-gradient(135deg, rgba(30, 86, 160, 0.16), rgba(30, 86, 160, 0.42));
 }
 
 @utility gradient-close {
   background-image:
-    radial-gradient(40rem 24rem at 88% 0%, rgba(37, 99, 235, 0.42), transparent 62%),
-    linear-gradient(135deg, #071b3a, #0a2450 55%, #123a6b);
+    radial-gradient(40rem 24rem at 88% 0%, rgba(30, 86, 160, 0.38), transparent 62%),
+    linear-gradient(135deg, #0a1f33, #0e2942 55%, #14324c);
 }
 
 @utility pill {
@@ -396,16 +396,16 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
   transition: opacity 0.45s ease;
   background-image: radial-gradient(
     24rem circle at var(--mx, 50%) var(--my, 0%),
-    rgba(37, 99, 235, 0.15),
-    rgba(37, 99, 235, 0) 62%
+    rgba(30, 86, 160, 0.16),
+    rgba(30, 86, 160, 0) 62%
   );
 }
 
 .spotlight-dark::after {
   background-image: radial-gradient(
     26rem circle at var(--mx, 50%) var(--my, 0%),
-    rgba(124, 180, 255, 0.17),
-    rgba(124, 180, 255, 0) 62%
+    rgba(127, 169, 227, 0.16),
+    rgba(127, 169, 227, 0) 62%
   );
 }
 
@@ -432,12 +432,12 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
   right: 1.5rem;
   left: 1.5rem;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(30, 86, 160, 0.5), transparent);
   pointer-events: none;
 }
 
 .hairline-dark::before {
-  background: linear-gradient(90deg, transparent, rgba(124, 180, 255, 0.45), transparent);
+  background: linear-gradient(90deg, transparent, rgba(127, 169, 227, 0.4), transparent);
 }
 
 /* Separadores de sección con degradado */
@@ -446,30 +446,30 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-cta-ghost:hover {
   background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
 }
 
-/* Tinte azulado muy sutil en secciones claras (les da aire premium) */
+/* Tinte azul muy sutil en secciones claras (les da aire premium) */
 .tint-brand {
   background-image:
-    radial-gradient(60rem 32rem at 100% 0%, rgba(37, 99, 235, 0.055), transparent 68%),
-    radial-gradient(46rem 26rem at 0% 100%, rgba(37, 99, 235, 0.04), transparent 70%);
+    radial-gradient(60rem 32rem at 100% 0%, rgba(30, 86, 160, 0.05), transparent 68%),
+    radial-gradient(46rem 26rem at 0% 100%, rgba(30, 86, 160, 0.035), transparent 70%);
 }
 
 /* Números y palabras clave con degradado */
 .text-gradient-brand {
-  background-image: linear-gradient(115deg, #2563eb 10%, #7cb4ff 75%);
+  background-image: linear-gradient(115deg, #1b4d8f 10%, #2e6bc4 85%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .text-gradient-light {
-  background-image: linear-gradient(115deg, #7cb4ff 15%, #22d3ee 90%);
+  background-image: linear-gradient(115deg, #7fa9e3 15%, #cfe0f5 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .text-gradient-ink {
-  background-image: linear-gradient(115deg, #1d4ed8, #2563eb 55%, #60a5fa);
+  background-image: linear-gradient(115deg, #1b4d8f, #2e6bc4 75%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -533,33 +533,17 @@ details[open] .faq-answer {
   width: 100%;
   transform-origin: 0 50%;
   transform: scaleX(0);
-  background: linear-gradient(90deg, #1d4ed8, #7cb4ff 60%, #22d3ee);
+  background: linear-gradient(90deg, #1e56a0, #4c86d8 60%, #7fa9e3);
   pointer-events: none;
 }
 
-/* Enlace activo del nav (scrollspy) */
+/* Estado activo del nav: solo color, sin subrayados ni adornos */
 #site-nav .nav-link.is-active {
   color: var(--color-text);
 }
 
-#site-nav .nav-link.is-active::after {
-  content: "";
-  position: absolute;
-  bottom: 0.35rem;
-  left: 50%;
-  width: 1rem;
-  height: 2px;
-  border-radius: 9999px;
-  background: var(--color-brand);
-  transform: translateX(-50%);
-}
-
 html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active {
   color: #ffffff;
-}
-
-html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
-  background: var(--color-brand-light);
 }
 
 /* ============================================================
@@ -583,7 +567,7 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
   animation: mesh-drift 26s ease-in-out infinite alternate;
 }
 
-/* Auroras: manchas de luz que se mueven por el fondo del hero */
+/* Auroras: dos manchas de luz azul que respiran por el fondo del hero */
 .hero-aurora {
   position: absolute;
   inset: 0;
@@ -607,7 +591,7 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
   left: -10rem;
   width: 46rem;
   height: 30rem;
-  background: radial-gradient(circle at 35% 35%, rgba(37, 99, 235, 0.62), transparent 66%);
+  background: radial-gradient(circle at 35% 35%, rgba(30, 86, 160, 0.5), transparent 66%);
   animation: aurora-a 24s ease-in-out infinite alternate;
 }
 
@@ -616,26 +600,8 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
   right: -8rem;
   width: 40rem;
   height: 27rem;
-  background: radial-gradient(circle at 60% 40%, rgba(34, 211, 238, 0.4), transparent 66%);
+  background: radial-gradient(circle at 60% 40%, rgba(127, 169, 227, 0.28), transparent 66%);
   animation: aurora-b 31s ease-in-out infinite alternate;
-}
-
-.aurora-3 {
-  bottom: -18rem;
-  left: 18%;
-  width: 54rem;
-  height: 30rem;
-  background: radial-gradient(circle at 50% 50%, rgba(19, 58, 117, 0.85), transparent 68%);
-  animation: aurora-c 38s ease-in-out infinite alternate;
-}
-
-.aurora-4 {
-  top: 28%;
-  right: 14%;
-  width: 28rem;
-  height: 28rem;
-  background: radial-gradient(circle at 50% 50%, rgba(124, 180, 255, 0.32), transparent 68%);
-  animation: aurora-d 20s ease-in-out infinite alternate;
 }
 
 @keyframes aurora-a {
@@ -662,57 +628,6 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
   }
 }
 
-@keyframes aurora-c {
-  0% {
-    transform: translate3d(-4%, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(6%, -5%, 0) scale(1.1);
-  }
-  100% {
-    transform: translate3d(-2%, -9%, 0) scale(1.02);
-  }
-}
-
-@keyframes aurora-d {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-10%, -8%, 0) scale(1.22);
-  }
-  100% {
-    transform: translate3d(6%, 4%, 0) scale(0.96);
-  }
-}
-
-/* Barrido de luz en rotación lenta */
-.hero-sweep {
-  position: absolute;
-  top: -50%;
-  left: -25%;
-  width: 150%;
-  height: 200%;
-  pointer-events: none;
-  opacity: 0.38;
-  background: conic-gradient(
-    from 0deg at 50% 50%,
-    transparent 0deg,
-    rgba(37, 99, 235, 0.22) 26deg,
-    rgba(34, 211, 238, 0.16) 52deg,
-    transparent 96deg,
-    transparent 360deg
-  );
-  mask-image: radial-gradient(58% 52% at 50% 46%, black, transparent 76%);
-  animation: sweep-spin 46s linear infinite;
-}
-
-@keyframes sweep-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* Retícula en deriva */
 .grid-drift {
   animation: grid-drift 34s linear infinite;
@@ -725,7 +640,6 @@ html.nav-on-dark #site-nav:not(.is-solid) .nav-link.is-active::after {
 }
 
 html.reduce-motion .aurora,
-html.reduce-motion .hero-sweep,
 html.reduce-motion .grid-drift {
   animation: none !important;
 }
@@ -828,10 +742,10 @@ html.js [data-reveal].is-in .line-draw {
 @keyframes layer-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(124, 180, 255, 0);
+    box-shadow: 0 0 0 0 rgba(127, 169, 227, 0);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(124, 180, 255, 0.09);
+    box-shadow: 0 0 0 6px rgba(127, 169, 227, 0.1);
   }
 }
 
@@ -847,9 +761,9 @@ html.js [data-reveal].is-in .line-draw {
 }
 
 .layer-row.is-active .layer-icon {
-  border-color: rgba(124, 180, 255, 0.55);
+  border-color: rgba(127, 169, 227, 0.6);
   color: #ffffff;
-  background: rgba(37, 99, 235, 0.28);
+  background: rgba(30, 86, 160, 0.3);
   animation: layer-pulse 2.6s ease-in-out infinite;
 }
 
@@ -1206,7 +1120,7 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
 @media (min-width: 1024px) {
   html {
     scrollbar-width: thin;
-    scrollbar-color: rgba(37, 99, 235, 0.55) transparent;
+    scrollbar-color: rgba(30, 86, 160, 0.55) transparent;
   }
 
   ::-webkit-scrollbar {
@@ -1220,7 +1134,7 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
   ::-webkit-scrollbar-thumb {
     border: 3px solid var(--color-paper);
     border-radius: 9999px;
-    background: rgba(37, 99, 235, 0.5);
+    background: rgba(30, 86, 160, 0.5);
   }
 }
 
@@ -1238,7 +1152,7 @@ html.reduce-motion.js [data-reveal].is-in .line-draw {
   border: 0;
   border-radius: 9999px;
   background: var(--color-brand);
-  color: #ffffff;
+  color: var(--color-on-brand);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;

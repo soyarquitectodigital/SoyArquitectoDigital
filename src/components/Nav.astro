@@ -28,13 +28,14 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
 
 <header id="site-nav" class="fixed inset-x-0 top-0 z-50" data-nav>
   {/*
-    A todo lo ancho: la barra no usa el contenedor limitado del resto de la
-    página, sino el ancho completo del viewport con un margen mínimo. Así el
-    menú dispone de mucho más sitio para repartir.
+    Barra sólida de ancho completo con hairline inferior: el patrón clásico de
+    las consultoras. Sobre el hero arranca transparente y se vuelve blanca al
+    hacer scroll (clase `is-solid`). El contenido usa el mismo contenedor que
+    las secciones, así el logo queda alineado con el titular.
   */}
-  <div class="w-full px-3 pt-3 sm:px-4 sm:pt-4 lg:px-5">
+  <div class="nav-shell">
     <div
-      class="nav-shell flex items-center justify-between gap-4 rounded-full border px-4 py-2.5 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr]"
+      class="container-page flex h-16 items-center justify-between gap-4 lg:grid lg:h-[72px] lg:grid-cols-[1fr_auto_1fr]"
     >
       <a
         href="/"
@@ -51,7 +52,7 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
         y sin repartirse.
       */}
       <nav
-        class="hidden items-center justify-center gap-4 lg:flex 2xl:gap-5"
+        class="hidden items-center justify-center gap-0.5 lg:flex 2xl:gap-1"
         aria-label="Secciones"
       >
         {
@@ -59,7 +60,7 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
             <a
               href={link.href}
               class:list={[
-                'nav-link relative rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                'nav-link relative rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
                 link.secondary && 'hidden 2xl:inline-flex',
                 currentPath !== '/' && link.href.startsWith('/') && !link.href.includes('#') &&
                   currentPath.startsWith(link.href) &&
@@ -148,7 +149,7 @@ const waIcon = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.1
           <a
             href={link.href}
             data-menu-close
-            class="font-heading border-b border-line-dark py-4 text-2xl text-white transition-colors hover:text-brand-light"
+            class="font-heading border-b border-line-dark py-4 text-2xl font-semibold text-white transition-colors hover:text-brand-light"
           >
             {link.label}
           </a>

@@ -7,14 +7,22 @@ interface Props {
 const { class: className = '', size = 'md' } = Astro.props;
 
 const sizes = {
-  md: 'text-[17px]',
-  lg: 'text-xl',
+  md: 'text-[19px]',
+  lg: 'text-2xl',
 };
 ---
 
-<span class={`inline-flex items-baseline gap-0.5 leading-none font-body ${sizes[size]} ${className}`}>
-  <span class="font-semibold tracking-tight">Soy</span>
-  <span class="font-heading wordmark-accent font-semibold">arquitecto</span>
-  <span class="font-semibold tracking-tight">digital</span>
-  <span class="wordmark-dot ml-0.5 size-1.5 shrink-0 self-center rounded-full" aria-hidden="true"></span>
+<span class={`inline-flex items-center gap-[0.42em] leading-none ${sizes[size]} ${className}`}>
+  {/* Marca: una «A» de plano técnico con su nodo de conexión. */}
+  <svg class="logo-mark size-[1.12em] shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M5 19.5 12 4.5l7 15"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+    <path d="M7.7 13.7h8.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    <circle cx="12" cy="9.9" r="1.6" fill="currentColor"></circle>
+  </svg>
+  <span class="font-heading font-semibold tracking-[-0.01em]">Soy <span class="wordmark-accent">arquitecto</span> digital</span>
 </span>

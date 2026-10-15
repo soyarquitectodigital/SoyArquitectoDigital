@@ -54,7 +54,7 @@ const metrics = [
           >
             {metric.count ? (
               <p
-                class="font-heading text-gradient-brand text-3xl leading-none"
+                class="font-heading text-gradient-brand text-4xl leading-none font-semibold"
                 data-count={metric.count}
                 data-prefix={metric.prefix ?? ''}
                 data-suffix={metric.suffix ?? ''}
@@ -62,7 +62,7 @@ const metrics = [
                 {`${metric.prefix ?? ''}${metric.count}${metric.suffix ?? ''}`}
               </p>
             ) : (
-              <p class="font-heading text-gradient-brand text-3xl leading-none">{metric.value}</p>
+              <p class="font-heading text-gradient-brand text-4xl leading-none font-semibold">{metric.value}</p>
             )}
             <p class="mt-3 text-sm leading-relaxed text-copy">{metric.label}</p>
           </div>

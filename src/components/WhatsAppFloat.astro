@@ -13,10 +13,22 @@ interface Props {
 
 const { href = whatsappDefault, tone = 'brand', label = 'Hablemos', cta } = Astro.props;
 
+/*
+ * En escritorio es un círculo que se expande al pasar el cursor (con el
+ * nombre solo cuando hace falta); en móvil y tablet se queda como píldora
+ * porque ahí no existe el hover. El punto verde es la señal de «en línea».
+ */
 const tones = {
-  brand:
-    'bg-brand text-on-brand shadow-[0_18px_40px_-12px_rgba(37,99,235,0.7)] hover:shadow-[0_22px_48px_-12px_rgba(37,99,235,0.85)]',
-  wa: 'bg-wa text-white shadow-[0_18px_40px_-12px_rgba(11,122,62,0.75)] hover:bg-wa-strong hover:shadow-[0_22px_48px_-12px_rgba(11,122,62,0.9)]',
+  brand: {
+    button:
+      'bg-brand text-on-brand shadow-[0_18px_40px_-16px_rgba(10,31,51,0.6)] hover:shadow-[0_24px_50px_-18px_rgba(10,31,51,0.7)]',
+    dot: 'bg-ok ring-brand',
+  },
+  wa: {
+    button:
+      'bg-wa text-white shadow-[0_18px_40px_-16px_rgba(8,77,40,0.6)] hover:bg-wa-strong hover:shadow-[0_24px_50px_-18px_rgba(8,77,40,0.7)]',
+    dot: 'bg-ok ring-wa',
+  },
 };
 ---
 
@@ -28,12 +40,20 @@ const tones = {
   aria-label="Abrir conversación de WhatsApp"
   data-cta={cta}
   class:list={[
-    'fixed right-4 bottom-4 z-40 inline-flex h-14 items-center gap-3 rounded-full pr-5 pl-4 text-sm font-semibold ring-1 ring-white/20 transition hover:-translate-y-0.5 sm:right-6 sm:bottom-6',
-    tones[tone],
+    'group/wa fixed right-4 bottom-4 z-40 inline-flex h-14 items-center overflow-hidden rounded-full pr-4 transition-all duration-300 hover:-translate-y-0.5 sm:right-6 sm:bottom-6 lg:pr-0 lg:hover:pr-5',
+    tones[tone].button,
   ]}
 >
-  <span class="grid size-8 place-items-center rounded-full bg-white/15">
-    <WhatsAppIcon class="size-5" />
+  <span class="relative grid size-14 shrink-0 place-items-center">
+    <WhatsAppIcon class="size-6" />
+    <span
+      class:list={['absolute top-3 right-3 size-2.5 rounded-full ring-2', tones[tone].dot]}
+      aria-hidden="true"
+    ></span>
   </span>
-  <span>{label}</span>
+  <span
+    class="grid min-w-0 grid-cols-[1fr] transition-[grid-template-columns] duration-300 lg:grid-cols-[0fr] lg:group-hover/wa:grid-cols-[1fr] lg:group-focus-visible/wa:grid-cols-[1fr]"
+  >
+    <span class="min-w-0 overflow-hidden text-sm font-semibold whitespace-nowrap">{label}</span>
+  </span>
 </a>
